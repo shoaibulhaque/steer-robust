@@ -98,6 +98,8 @@ def main():
         if stop:
             break
     (a.out/'summary.json').write_text(json.dumps(results, indent=2)+'\n')
+    if stop:
+        p.exit(2, 'Evaluation blocked; partial results retained in the requested output directory.\n')
 
 
 if __name__ == '__main__':
