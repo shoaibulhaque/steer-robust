@@ -9,3 +9,16 @@ dist/
 *.pem
 *.key
 .DS_Store
+
+# Raw behavioral evaluations may include local paths and runtime context.
+eval-results/
+evals/results/
+
+# Project-local agent configuration is not authored package content.
+/.codex/
+/.claude/settings.local.json
+/.agents/settings.local.json
+*.log
+/coverage/
+/.cache/
+/worktrees/
