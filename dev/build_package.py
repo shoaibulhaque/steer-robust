@@ -1,64 +1,92 @@
 #!/usr/bin/env python3
-"""Build a validated distribution including selected skills and read-only helpers."""
+"""Build the portable instruction kit from an explicit allowlist; no runtime tooling."""
 from pathlib import Path
+import io
 import json
-import os
-import subprocess
-import sys
-from tempfile import TemporaryDirectory
-from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
-from validate_package import validate
-from package_contract import SCRIPT_ROOT, SKILL_ROOT, SKILLS, contents, mode
+import re
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[1]
+VERSION = "0.5.0-candidate"
+NAME = f"steer-robust-v{VERSION}"
+SKILLS = ("repository-engineering", "refactoring", "systematic-debugging",
+          "test-driven-development", "change-verification", "security-engineering")
+FILES = (
+    "AGENTS.md", "README.md", "LICENSE", "EVAL_PLAN.md", "research/README.md",
+    "templates/project-instructions.md",
+    *(f"skills/{name}/SKILL.md" for name in SKILLS),
+    "skills/test-driven-development/references/writing-good-tests.md",
+    "skills/repository-engineering/references/design-decisions.md",
+    "skills/repository-engineering/references/state-and-failure.md",
+    "skills/repository-engineering/references/performance-decisions.md",
+    "skills/refactoring/references/dependency-breaking.md",
+    "skills/change-verification/references/verification-boundaries.md",
+    "skills/test-driven-development/LICENSE.txt",
+    "skills/systematic-debugging/references/root-cause-tracing.md",
+    "skills/systematic-debugging/references/condition-based-waiting.md",
+    "skills/systematic-debugging/references/defense-in-depth.md",
+    "skills/systematic-debugging/LICENSE.txt",
+    "skills/security-engineering/references/threat-modeling.md",
+    "skills/security-engineering/references/security-controls-and-assets.md",
+    "skills/security-engineering/references/stack-guidance.md",
+    "skills/security-engineering/LICENSE.txt", "skills/security-engineering/NOTICE.md",
+    "research/skill-adaptation-review.md",
+)
 
 
-def smoke(root):
-    scripts = root / SCRIPT_ROOT
-    env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
-    discovery = subprocess.run([sys.executable, str(scripts / "discover_project.py"), str(root)],
-                               text=True, capture_output=True, check=True, env=env, timeout=30)
-    data = json.loads(discovery.stdout)
-    expected = {"AGENTS.md", *(f"{SKILL_ROOT}/{skill}/SKILL.md" for skill in SKILLS)}
-    missing = expected - {item["path"] for item in data["candidates"]}
-    if missing:
-        raise SystemExit(f"Extracted discovery helper missed instructions/skills: {sorted(missing)}")
-    excerpt = subprocess.run([sys.executable, str(scripts / "inspect_guidance.py"), str(root),
-                              "--glob", "AGENTS.md", "--heading", "^Authority and scope$"],
-                             text=True, capture_output=True, check=True, env=env, timeout=30)
-    if "explicit approval" not in excerpt.stdout or "omitted=0" not in excerpt.stdout:
-        raise SystemExit("Extracted retrieval helper lost required scope context")
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
 
 
-def main():
-    source = Path(__file__).resolve().parents[1]
-    package = source / "src"
-    errors, stats = validate(package)
-    if errors:
-        raise SystemExit("\n".join(errors))
-    manifest = contents(distribution=True)
-    output = source / "dist" / "Steer-robust.zip"
-    output.parent.mkdir(exist_ok=True)
-    with ZipFile(output, "w") as archive:
-        for name in sorted(manifest):
-            info = ZipInfo(name, (1980, 1, 1, 0, 0, 0))
-            info.compress_type = ZIP_DEFLATED
-            info.create_system = 3
-            info.external_attr = (0o100000 | mode(name, True)) << 16
-            archive.writestr(info, (package / manifest[name]).read_bytes())
-    with TemporaryDirectory() as temporary, ZipFile(output) as archive:
-        if set(archive.namelist()) != set(manifest):
-            raise SystemExit("Archive contents differ from the validated package")
-        archive.extractall(temporary)
-        for info in archive.infolist():
-            (Path(temporary) / info.filename).chmod(info.external_attr >> 16 & 0o777)
-        errors, _ = validate(Path(temporary), distribution=True)
-        if errors:
-            raise SystemExit("Extracted archive failed validation: " + "; ".join(errors))
-        for name in manifest:
-            if (Path(temporary) / name).read_bytes() != (package / manifest[name]).read_bytes():
-                raise SystemExit(f"Archive differs from source: {name}")
-        smoke(Path(temporary))
-    print(f"Built and verified {output}: {len(manifest)} files, {output.stat().st_size} bytes")
+def validate():
+    """Check required files and this kit's simple metadata/link syntax, not agent behavior."""
+    require({p.name for p in (ROOT / "skills").iterdir()} == set(SKILLS), "Unexpected skill")
+    require(len(FILES) == len(set(FILES)), "Duplicate distribution entry")
+    for name in SKILLS:
+        folder = ROOT / "skills" / name
+        require(not folder.is_symlink(), f"Linked skill directory: {name}")
+        expected = {p for p in FILES if p.startswith(f"skills/{name}/")}
+        resources = list(folder.rglob("*"))
+        require(not any(p.is_symlink() for p in resources), f"Linked skill resource: {name}")
+        actual = {p.relative_to(ROOT).as_posix() for p in resources if p.is_file()}
+        require(actual == expected, f"Missing or unlisted skill resources: {name}")
+        text = (folder / "SKILL.md").read_text(encoding="utf-8")
+        match = re.match(r"\A---\nname: ([a-z0-9-]+)\ndescription: (\"[^\n]+\")\n---\n", text)
+        require(match and match[1] == name, f"Invalid metadata: {name}")
+        require(bool(json.loads(match[2]).strip()), f"Empty description: {name}")
+    for name in FILES:
+        path = ROOT / name
+        require(path.is_file() and not path.is_symlink(), f"Missing or linked resource: {name}")
+        path.resolve().relative_to(ROOT)
+        if path.suffix != ".md":
+            continue
+        text = path.read_text(encoding="utf-8")
+        require(text.count("```") % 2 == 0, f"Unclosed code fence: {name}")
+        for target in re.findall(r"\]\(([^\s)]+)\)", text):
+            if re.match(r"[a-zA-Z][a-zA-Z0-9+.-]*:|#", target):
+                continue
+            destination = (path.parent / target.split("#", 1)[0]).resolve()
+            relative = destination.relative_to(ROOT).as_posix()
+            require(relative in FILES and destination.is_file(), f"Unpackaged link: {name}: {target}")
+
+
+def archive():
+    validate()
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as output:
+        for name in sorted(FILES):
+            entry = zipfile.ZipInfo(f"{NAME}/{name}", date_time=(2020, 1, 1, 0, 0, 0))
+            entry.create_system = 3
+            entry.external_attr = 0o100644 << 16
+            entry.compress_type = zipfile.ZIP_DEFLATED
+            output.writestr(entry, (ROOT / name).read_bytes(), compresslevel=9)
+    return buffer.getvalue()
 
 
 if __name__ == "__main__":
-    main()
+    data = archive()
+    destination = ROOT / "dist" / f"{NAME}.zip"
+    destination.parent.mkdir(exist_ok=True)
+    destination.write_bytes(data)
+    print(f"Validated and built {destination} ({len(FILES)} files; {len(data)} bytes)")
