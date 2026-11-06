@@ -21,11 +21,53 @@ each backed by source evidence. A plausible threat is not a verified vulnerabili
 | "Review this for security", "audit this service" | Security review | Validated, prioritized findings |
 | "Threat model this", "what could an attacker do?" | Threat model | The eight-stage [Threat Modeling](references/threat-modeling.md) workflow |
 
-Establish the actual languages, frameworks, and versions from repository evidence. For stack-specific
-controls, read only the matching rows of [Stack Guidance](references/stack-guidance.md), then the
-project's and framework's documentation for that version. No language is excluded: a stack without
-listed guidance is a coverage limit, not permission to invent secure defaults. In a review, do not
-report a generic checklist as demonstrated defects.
+## Stack Guidance
+
+Establish the actual languages, frameworks, versions, and deployment from repository evidence: lock
+files, build metadata, and configuration. Then read the manual for each stack in scope, covering both
+backend and frontend when the system has both. Read only the matching manuals.
+
+| Read when the repository uses | Manual |
+| --- | --- |
+| Django | [python-django-web-server-security.md](references/python-django-web-server-security.md) |
+| Flask | [python-flask-web-server-security.md](references/python-flask-web-server-security.md) |
+| FastAPI | [python-fastapi-web-server-security.md](references/python-fastapi-web-server-security.md) |
+| Express or a Node.js HTTP server | [javascript-express-web-server-security.md](references/javascript-express-web-server-security.md) |
+| Next.js | [javascript-typescript-nextjs-web-server-security.md](references/javascript-typescript-nextjs-web-server-security.md) |
+| React | [javascript-typescript-react-web-frontend-security.md](references/javascript-typescript-react-web-frontend-security.md) |
+| Vue | [javascript-typescript-vue-web-frontend-security.md](references/javascript-typescript-vue-web-frontend-security.md) |
+| jQuery | [javascript-jquery-web-frontend-security.md](references/javascript-jquery-web-frontend-security.md) |
+| Browser JavaScript or TypeScript without one of the frameworks above, or an unspecified frontend | [javascript-general-web-frontend-security.md](references/javascript-general-web-frontend-security.md) |
+| Go services | [golang-general-backend-security.md](references/golang-general-backend-security.md) |
+
+Before choosing a new mechanism, search the repository's security guidance and existing middleware;
+prefer the protection the project already uses.
+
+How to apply a manual:
+
+- **Its rules are a review checklist, not findings.** Each rule still needs a traced, reachable path
+  before it is reported as a vulnerability.
+- **Verify versions.** Each manual names the versions it was written for. Check defaults and APIs
+  against the project's installed version and that version's official documentation. Do not carry a
+  manual's version pin into a project that uses another version.
+- **Use it per mode.** For secure coding, apply the relevant existing protection. For review, verify its
+  actual configuration and bypass paths. For a threat model, separate what the framework guarantees
+  from what application code must still enforce.
+- **Scope follows this skill.** The manuals describe generation, passive review, and audit modes; apply
+  only the mode the user requested. Their passive mode applies while this skill is active, not to
+  unrelated work.
+- **Deployment controls may be invisible.** A protection absent from the repository may exist in a
+  proxy, gateway, or platform. Report it as "not visible in application code; verify in deployment".
+
+No language is excluded. For a stack without a manual, use the project's security guidance and the
+framework's official security documentation for the supported version, and inspect parsing, privilege,
+memory and resource ownership, and integration assumptions. A missing manual is a coverage limit, not
+permission to invent secure defaults. In a review, do not report a generic checklist as demonstrated
+defects.
+
+To find candidates, search for entry points and sensitive operations: routes, message consumers, file
+and archive handlers, subprocess calls, outbound HTTP clients, template and HTML sinks, deserializers,
+and permission checks. A search match is a lead, not a finding.
 
 ## Workflow
 
@@ -79,6 +121,26 @@ Follow the requested format. A full review report contains:
 
 Keep threat-model hypotheses separate from confirmed vulnerabilities. Write a report file only when
 asked or when the repository requires one. Never include secret values.
+
+## Example: Applying One Manual Rule
+
+The FastAPI manual's rule `FASTAPI-AUTHZ-001` names an insecure pattern: `GET /users/{id}` returns a
+user record without verifying that the caller can access that `id`. Applying it in a review:
+
+1. **Lead:** list endpoints that take an identifier from the path, query, or body, as the rule's
+   detection hint says.
+2. **Trace:** for each one, follow the handler from authentication to the data access. Is the record
+   compared with the caller's identity, role, or tenant before it is returned?
+3. **Falsify:** look for an owner filter in the query, a shared dependency or middleware, or a
+   database row-level policy that already enforces access.
+4. **Classify:** no check anywhere on the path means a confirmed finding. A check that depends on
+   deployment configuration you cannot see means a conditional one.
+5. **Report** with the fields from the Report step: location, the trigger (an authenticated caller
+   requests another user's `id`), the impact (another user's data is returned), the counterevidence
+   checked, and the rule's fix: an object-level ownership, ACL, or tenant check, plus a response model
+   that returns only allowed fields.
+6. **Verify a fix** with two tests through the real endpoint: another user's `id` is rejected, and the
+   owner's own request still succeeds.
 
 ## Assumptions and Project Overrides
 

@@ -94,6 +94,31 @@ Run the relevant suite and the repository's required checks. Review the diff as 
 behavior, changed error, reordered effect, or weakened assertion. Check performance only where it is
 part of the contract. Report the bugs you recorded.
 
+## Examples
+
+**Characterization test.** To learn what a page generator returns before changing it, assert a value
+you are sure is wrong:
+
+```java
+@Test void characterizesEmptyGenerator() {
+    PageGenerator generator = new PageGenerator();
+    assertEquals("fred", generator.generate());
+}
+```
+
+The failure reports the actual result, here an empty string. Change the expectation to `""`, and the
+test now documents current behavior. Repeat for the inputs your change will touch.
+
+**Preparatory refactoring.** Users want an existing plain-text statement printed in HTML. Copying the
+function would duplicate the charging rules, and every future rule change would then need two
+consistent edits. Instead, with tests in place:
+
+1. Extract the per-line charge and credit calculations into named functions, running the tests after
+   each extraction.
+2. Split the phases: one function computes the statement data, another renders it as text.
+3. Only then add an HTML renderer that consumes the same data. This step is a behavior change, so it
+   follows the testing workflow.
+
 ## Choosing a Refactoring
 
 | Signal | Consider |

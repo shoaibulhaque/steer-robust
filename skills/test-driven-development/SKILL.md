@@ -58,17 +58,39 @@ Keep a short list of required cases. Choose one behavior that teaches something.
 first, with an expectation derived by hand from the requirement. Exercise public behavior at the
 smallest useful boundary.
 
-**Good:** `rejects empty label` asserts the error and that the stored record is unchanged.
-**Bad:** `validator works` asserts only that a mock was called.
+**Good:** a clear name, real behavior, one thing.
+
+```typescript
+test('retries failed operations 3 times', async () => {
+  let attempts = 0;
+  const operation = () => {
+    attempts++;
+    if (attempts < 3) throw new Error('fail');
+    return 'success';
+  };
+
+  const result = await retryOperation(operation);
+
+  expect(result).toBe('success');
+  expect(attempts).toBe(3);
+});
+```
+
+**Bad:** a vague name, and it checks the mock's call count instead of the result.
+
+```typescript
+test('retry works', async () => {
+  const mock = jest.fn()
+    .mockRejectedValueOnce(new Error())
+    .mockRejectedValueOnce(new Error())
+    .mockResolvedValueOnce('success');
+  await retryOperation(mock);
+  expect(mock).toHaveBeenCalledTimes(3);
+});
+```
 
 Requirements: one behavior, a name that states it, and real code. Use a double only at a slow,
 nondeterministic, or external boundary.
-
-```python
-def test_rejects_empty_label(self):
-    with self.assertRaises(ValueError):
-        clean_label("")
-```
 
 ### Verify RED — Watch It Fail
 
@@ -87,12 +109,34 @@ correct code or manufacture a failure to complete the cycle.
 Write the simplest code that meets the contract, including its known constraints. An obvious
 implementation is fine. When unsure, fake it or add a second distinguishing example.
 
-```python
-def clean_label(label):
-    normalized = label.strip()
-    if not normalized:
-        raise ValueError("Label required")
-    return normalized
+**Good:** just enough to pass.
+
+```typescript
+async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
+  for (let i = 0; i < 3; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (i === 2) throw e;
+    }
+  }
+  throw new Error('unreachable');
+}
+```
+
+**Bad:** options no test asked for.
+
+```typescript
+async function retryOperation<T>(
+  fn: () => Promise<T>,
+  options?: {
+    maxRetries?: number;
+    backoff?: 'linear' | 'exponential';
+    onRetry?: (attempt: number) => void;
+  }
+): Promise<T> {
+  // YAGNI
+}
 ```
 
 Do not add options, features, or unrelated refactoring beyond what the tests require. Do not leave a
@@ -182,6 +226,46 @@ Each of these means the feedback is unreliable. Repair it before you add more co
 | A double cannot represent the contract | Use a focused integration test. |
 
 A complex fixture may reveal coupling, but it does not prove the whole design is wrong.
+
+## Example: Bug Fix
+
+**Bug:** an empty email is accepted.
+
+**RED**
+
+```typescript
+test('rejects empty email', async () => {
+  const result = await submitForm({ email: '' });
+  expect(result.error).toBe('Email required');
+});
+```
+
+**Verify RED**
+
+```text
+$ npm test
+FAIL: expected 'Email required', got undefined
+```
+
+**GREEN**
+
+```typescript
+function submitForm(data: FormData) {
+  if (!data.email?.trim()) {
+    return { error: 'Email required' };
+  }
+  // ...
+}
+```
+
+**Verify GREEN**
+
+```text
+$ npm test
+PASS
+```
+
+**REFACTOR:** extract shared validation if several fields need it, then rerun the tests.
 
 ## Debugging Integration
 

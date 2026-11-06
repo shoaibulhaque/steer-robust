@@ -68,6 +68,9 @@ material question:
   state, retries, persistence, or mixed-version deployments.
 - [Performance Decisions](references/performance-decisions.md): read when workload, time or space growth,
   or an optimization tradeoff is part of the requirement.
+- [Code-Level Decisions](references/code-level-decisions.md): read when names, comments, representations,
+  side effects, error handling, absence, assertions, or resource cleanup inside a function or module
+  affect correctness or clarity.
 
 An abstraction cannot add guarantees its implementation does not provide; respect the actual framework
 and storage semantics. Do not add reliability mechanisms for a failure you cannot name.
@@ -85,10 +88,15 @@ and storage semantics. Do not add reliability mechanisms for a failure you canno
 
 ## Examples
 
-- Two identical tax formulas owned by different legal jurisdictions stay separate. Merging them into a
-  flag-driven pricing framework couples rules that change for different reasons.
-- A retry policy belongs in one place when its callers share eligibility and timing rules. The owner of
-  the durable operation still prevents duplicate effects.
+- **Deep over shallow.** Unix file I/O exposes five calls, and its implementation has changed radically
+  behind them for decades. By contrast, reading serialized objects from a file through three stacked
+  stream objects, where forgetting the buffering one silently makes I/O slow, pushes the common case
+  onto every caller.
+- **One owner for one decision.** When one class reads a file format and another writes it, both change
+  whenever the format changes, even if neither exposes it. Put the format in one module.
+- **Separate models, explicit boundary.** Two teams that casually share objects between a booking model
+  and a scheduling model, without agreeing what is shared, end up with models that diverge silently.
+  Draw the boundary and translate across it.
 
 ## Red Flags — Reconsider the Design
 

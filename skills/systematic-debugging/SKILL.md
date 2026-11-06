@@ -40,7 +40,9 @@ Complete each phase before you start the next.
 
 1. **Read the error carefully.** Read the full message, stack trace, file paths, and codes. Do not skip
    warnings. Separate harness failures and pre-existing defects from the new regression.
-2. **Reproduce it.** Find the exact steps, input, revision, and environment. Reproduce at the smallest
+2. **Reproduce it.** Find the exact steps, input, revision, and environment. Get them from the person
+   who saw the failure: a drawing tool can crash only for strokes drawn in a direction its developer
+   never tried. Reproduce at the smallest
    useful boundary; halve a large failing input until the trigger is isolated. For intermittent
    failures, prefer controlled schedules and the existing harness; a lucky pass proves little. If you
    cannot reproduce it, gather more data; do not guess.
@@ -50,6 +52,20 @@ Complete each phase before you start the next.
    API → service → database), observe what enters and leaves each boundary. Locate the first one where
    data, state, or configuration diverges, then investigate that component. Observe only what answers
    the question. Never print secret values or dump the environment; report presence or absence.
+
+   ```bash
+   # Layer 1: workflow — is the secret available? (prints SET or UNSET, never the value)
+   echo "IDENTITY in workflow: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+   # Layer 2: build script — did it propagate?
+   [ -n "${IDENTITY:-}" ] && echo "IDENTITY in build: SET" || echo "IDENTITY in build: UNSET"
+   # Layer 3: signing — is the keychain state as expected?
+   security list-keychains
+   security find-identity -v
+   # Layer 4: the operation itself, verbosely
+   codesign --sign "$IDENTITY" --verbose=4 "$APP"
+   ```
+
+   Run once; the output shows which boundary breaks (for example, workflow ✓, build ✗).
 5. **Trace the data flow.** Follow the bad value or effect back to its origin and fix it at the source.
    Source code shows a possible path; runtime evidence shows the path that ran. When the error is deep
    in a call stack or one test contaminates another, read [Root-Cause Tracing](references/root-cause-tracing.md).

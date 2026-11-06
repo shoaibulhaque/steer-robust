@@ -112,6 +112,37 @@ Stop when the requested scope and the repository's required evidence are covered
 unchanged broad suites or start other workflows automatically. If authorized fixes follow, review the
 new diff and recheck only the affected evidence instead of restarting the whole review.
 
+## Example: Reviewing a Patch's Tests
+
+A patch changes `buildSearchQuery` and claims the change is covered by this test:
+
+```typescript
+const expected = buildSearchQuery({ tag: 'urgent' });
+expect(buildSearchQuery({ tag: 'urgent' })).toBe(expected);
+```
+
+Ask whether it could pass while the behavior is broken. It could: both sides call the code under test,
+so any output passes. The finding:
+
+> **Should fix: the new query test cannot fail.** `search.test.ts:12`. The expected value is computed by
+> `buildSearchQuery` itself, so a wrong quoting rule still passes. Suggested fix: assert a hand-derived
+> literal, such as `'tag:"urgent"'`.
+
+The same patch tests a retry helper only by counting mock calls:
+
+```typescript
+const mock = jest.fn()
+  .mockRejectedValueOnce(new Error())
+  .mockRejectedValueOnce(new Error())
+  .mockResolvedValueOnce('success');
+await retryOperation(mock);
+expect(mock).toHaveBeenCalledTimes(3);
+```
+
+The call count is a legitimate part of the contract, but the result is never checked, so a helper that
+discards the successful value still passes. Report it as **Should fix**, with the suggestion to also
+assert the returned value. Neither finding is **Blocking** unless the claimed behavior is shown broken.
+
 ## Red Flags — Check the Proof
 
 - Compilation or type checks cited as proof of behavior.

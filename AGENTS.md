@@ -27,10 +27,12 @@ never grants extra authorization.
   migrate callers and remove what the change supersedes.
 - **Make complexity earn its place.** Favor clear control flow, precise names, cohesive modules, and
   interfaces that hide real complexity. Avoid speculative options, shallow wrappers, redundant guards,
-  and abstractions justified only by similar-looking code or size limits.
+  and abstractions justified only by similar-looking code or size limits. Write comments for what the
+  code cannot say: intent, invariants, and non-obvious constraints.
 - **Respect real boundaries.** Preserve public contracts, domain invariants, failure behavior, data
-  compatibility, and trust boundaries. Validate untrusted input where it enters. Keep state and side
-  effects explicit. Consider concurrency, persistence, and operations when the change affects them.
+  compatibility, and trust boundaries. Validate untrusted input where it enters. Never swallow errors
+  or report partial failure as success; handle a failure where the operation's promise can still be
+  kept, and otherwise propagate it with context. Keep state and side effects explicit. Consider concurrency, persistence, and operations when the change affects them.
 - **Weigh consequential tradeoffs.** Balance correctness, actual time and space costs, user experience,
   maintainer experience, and how easily agents can navigate the code. Surface a material conflict
   instead of silently optimizing one at another's expense. Routine work needs no tradeoff report.

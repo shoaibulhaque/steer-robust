@@ -55,6 +55,11 @@ Treat test-only overrides as intermediate steps; replace them with clearer seams
 - **Wrap:** add behavior before or after an existing operation in a wrapper with the same interface.
   Check that the ordering of effects stays correct.
 
+Example of sprouting: a method posts a list of entries and must now skip entries that are already
+recorded. Editing the existing loop would mix duplicate detection with posting and add a temporary
+variable that attracts the next change. Instead, write and test a new `uniqueEntries(entries)` method
+with the testing workflow, then make the one-line change that calls it before posting.
+
 Either way, a unit test of the new code does not prove the old caller invokes it correctly. Verify the
 connection at an appropriate level, through the real caller.
 

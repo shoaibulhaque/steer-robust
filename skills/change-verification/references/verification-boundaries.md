@@ -19,6 +19,14 @@ scope; report that scope rather than substituting a cheaper proxy for the claim.
 | A retry is safe | Response loss/repetition does not duplicate the protected effect | A mock was called once in the happy path |
 | A lifecycle is correct | Required and forbidden transitions hold, including cancellation/failure ownership | Waiting until an eventually successful outcome |
 
+Use the level whose fidelity matches the failure mode, and keep fast feedback where it is enough:
+
+| Level | Establishes | Cannot establish |
+| --- | --- | --- |
+| Isolated unit test | Logic, branches, edge cases | Real dependency formats, wiring, or configuration |
+| Integration check | A dependency contract: wire format, storage semantics, authentication | The full user workflow |
+| Workflow or end-to-end check | Changed wiring and user-visible behavior | Every edge case cheaply |
+
 Choose the narrowest check that can reveal the credible failure. Do not demand a full production
 replica for pure logic, or claim an integration contract from unit isolation alone.
 

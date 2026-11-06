@@ -42,8 +42,8 @@ state/failure, performance and verification fidelity; they do not duplicate the 
   explicit evidence limits. Do not ship project-specific TypeScript helpers or their unrelated imports.
 - Security findings distinguish reachable vulnerabilities, conditional threats and missing hardening.
   Random IDs do not replace authorization; runtime TLS/cookie behavior needs deployment evidence.
-- Replace ten dated, large stack manuals with a compact conditional source table. This is a deliberate
-  reduction in bundled coverage, not a claim that every stack-specific rule was preserved or revalidated.
+- Originally replaced the ten stack manuals with a compact source table. Reversed in the audit below:
+  the manuals are bundled unmodified and read only for the matching stack.
 - Retain per-skill licenses for standalone copying; omit upstream creation logs and pressure-test stories
   from runtime. No support for auto-delegation, forced companion skills, hooks or mandatory analyzers.
 
@@ -130,3 +130,41 @@ a proof could pass while the task is still broken, and migrating all callers in 
 `AGENTS.md`); a test earns its place only if it fails without the change (Langfuse `AGENTS.md`).
 Repository-specific commands, tags, size budgets and tooling were not generalized. No upstream text
 was copied beyond short paraphrase.
+
+## Audit Pass
+
+An audit compared each skill and reference with the supplied originals, mature repository skills and the
+46 consolidated book rules. Findings and changes:
+
+- **Examples:** four skills had no worked example, and several references had lost theirs. Examples now
+  come only from licensed sources (Superpowers, MIT; OpenAI skills, Apache 2.0), used as written, or from
+  the supplied books, paraphrased without code reproduction. Invented scenarios were removed.
+- **Reference depth:** `writing-good-tests`, the three debugging references and `threat-modeling` were
+  restored to the originals' depth (change detectors, framework boundary, mock level, mutation list,
+  worked trace, polling helper, four-layer example, risk tiers and output contract), keeping the
+  recorded corrections.
+- **Security stack manuals:** the ten manuals are bundled unmodified and routed one level deep from the
+  skill; `stack-guidance.md` was folded into the skill body. Progressive disclosure keeps their cost at
+  zero until a matching stack is in scope. Their version pins are dated; the skill requires checking
+  the installed version.
+- **Book coverage:** a new `code-level-decisions` reference covers rules Q18–Q25 (names, comments,
+  representations, state and side effects, contracts and assertions, absence, error boundaries,
+  resources). The design reference gained Q26 and Q28–Q31; the state reference gained Q38 and Q46; the
+  verification reference gained Q33; AGENTS.md gained comment and error-handling defaults.
+- **No citations at runtime:** agents cannot open the books, so skills carry examples without titles or
+  page locators. Sources for human review:
+
+| Example | Source (one-based PDF pages of the supplied copies) |
+| --- | --- |
+| Deep and shallow modules, Unix I/O, Java streams, leakage, flush rules | Ousterhout, *A Philosophy of Software Design*, PDF 32–38, 42 |
+| Defining errors out of existence | Ousterhout, PDF 87–89 |
+| Comments and consistent names (`block` bug) | Ousterhout, PDF 107, 134 |
+| Expensive operations, hash table vs ordered map, inline records | Ousterhout, PDF 166–167 |
+| Hidden session side effect, command–query separation | Martin, *Clean Code*, PDF 75–76 |
+| Special-case object, null-check nesting | Martin, PDF 140–142 |
+| Assertion with an iterator side effect | Hunt and Thomas, *The Pragmatic Programmer*, PDF 208–209 |
+| Reproduce with the reporter (drawing-stroke crash) | Hunt and Thomas, PDF 171 |
+| Bounded contexts, booking and scheduling teams | Evans, *Domain-Driven Design*, PDF 207–209 |
+| Six outcomes of an unanswered request | Kleppmann, *Designing Data-Intensive Applications*, PDF 299–300 |
+| Statement printed in HTML, preparatory refactoring | Fowler, *Refactoring*, PDF 8–9, 62 |
+| Characterization test, sprouting `uniqueEntries` | Feathers, *Working Effectively with Legacy Code*, PDF 83–84, 209–210 |
