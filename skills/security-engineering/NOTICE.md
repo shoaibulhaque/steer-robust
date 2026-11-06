@@ -14,7 +14,8 @@ Changes made by Steer Robust:
   replaces the mandatory pause with targeted questions and writes a file only when asked.
 - `references/security-controls-and-assets.md`: extended with evidence guidance, personal-data lifetime
   and an example.
-- The ten `references/*-security.md` stack manuals are included unmodified.
+- The ten `references/*-security.md` stack manuals retain their security rules. Trailing whitespace
+  was normalized in the Express, general frontend JavaScript, React, and Django manuals.
 
 Changes made 2026-11-06. The supplied archive remains unchanged. This modified version is not an official
 OpenAI product or endorsement.

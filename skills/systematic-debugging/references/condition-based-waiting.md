@@ -74,7 +74,7 @@ async function waitFor<T>(
   const start = performance.now(); // monotonic, unlike Date.now()
   while (true) {
     const result = condition();
-    if (result) return result;
+    if (result !== undefined && result !== null && result !== false) return result;
     if (performance.now() - start > timeoutMs) {
       throw new Error(`Timeout waiting for ${description} after ${timeoutMs}ms`);
     }
@@ -82,6 +82,8 @@ async function waitFor<T>(
   }
 }
 ```
+
+`undefined`, `null`, and `false` mean not ready; `0` and an empty string are valid results.
 
 Choose the deadline and polling interval from the test environment and the operation's budget. Include
 the last observed state in the timeout message, without sensitive data.

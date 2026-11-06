@@ -110,6 +110,10 @@ dev/                                   Package builder and its tests
 
 Requires Python 3.9 or later; no third-party packages.
 
+Example checks also run when Bash and Node.js 24+ are available, and otherwise report skips.
+The optional TypeScript check uses `tsc` on PATH, or an existing compiler selected with
+`STEER_TSC=/path/to/typescript/lib/tsc.js`. No tools are installed by the tests.
+
 ```sh
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s dev -p 'test_*.py'
 PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py

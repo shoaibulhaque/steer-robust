@@ -55,7 +55,7 @@ Complete each phase before you start the next.
 
    ```bash
    # Layer 1: workflow — is the secret available? (prints SET or UNSET, never the value)
-   echo "IDENTITY in workflow: ${IDENTITY:+SET}${IDENTITY:-UNSET}"
+   [ -n "${IDENTITY:-}" ] && echo "IDENTITY in workflow: SET" || echo "IDENTITY in workflow: UNSET"
    # Layer 2: build script — did it propagate?
    [ -n "${IDENTITY:-}" ] && echo "IDENTITY in build: SET" || echo "IDENTITY in build: UNSET"
    # Layer 3: signing — is the keychain state as expected?

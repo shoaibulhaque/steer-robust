@@ -138,8 +138,11 @@ BEFORE adding a mock or test helper:
 
   A method that only tests call lives in test utilities, not production.
 
-  About to assert on the mock itself?
-    Unmock it or delete the assertion.
+  Only checking that a mock or placeholder exists?
+    Assert the real component's behavior, or remove the meaningless assertion.
+
+  Checking arguments, counts, destinations, or ordering required by the contract?
+    Keep the precise interaction assertion. It does not prove real delivery or durability.
 ```
 
 ## Legacy Code: Characterize, Then Specify

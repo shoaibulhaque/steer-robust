@@ -43,7 +43,8 @@ state/failure, performance and verification fidelity; they do not duplicate the 
 - Security findings distinguish reachable vulnerabilities, conditional threats and missing hardening.
   Random IDs do not replace authorization; runtime TLS/cookie behavior needs deployment evidence.
 - Originally replaced the ten stack manuals with a compact source table. Reversed in the audit below:
-  the manuals are bundled unmodified and read only for the matching stack.
+  the manuals retain their security rules and are read only for the matching stack. Trailing whitespace
+  was normalized in four manuals.
 - Retain per-skill licenses for standalone copying; omit upstream creation logs and pressure-test stories
   from runtime. No support for auto-delegation, forced companion skills, hooks or mandatory analyzers.
 
@@ -143,7 +144,7 @@ An audit compared each skill and reference with the supplied originals, mature r
   restored to the originals' depth (change detectors, framework boundary, mock level, mutation list,
   worked trace, polling helper, four-layer example, risk tiers and output contract), keeping the
   recorded corrections.
-- **Security stack manuals:** the ten manuals are bundled unmodified and routed one level deep from the
+- **Security stack manuals:** the ten manuals retain their security rules and are routed one level deep from the
   skill; `stack-guidance.md` was folded into the skill body. Progressive disclosure keeps their cost at
   zero until a matching stack is in scope. Their version pins are dated; the skill requires checking
   the installed version.
