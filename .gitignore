@@ -1,24 +1,42 @@
+# Build output (rebuild with dev/build_package.py)
+dist/
+*.zip
+
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+/coverage/
 .venv/
 venv/
-dist/
+
+# Secrets and local environment
 .env
 .env.*
 *.pem
 *.key
-.DS_Store
 
-# Raw behavioral evaluations may include local paths and runtime context.
+# Raw evaluation output may contain local paths and private context
 eval-results/
 evals/results/
-
-# Project-local agent configuration is not authored package content.
-/.codex/
-/.claude/settings.local.json
-/.agents/settings.local.json
+*.jsonl
 *.log
-/coverage/
-/.cache/
+
+# Local agent and editor configuration
+/.agents/
+/.claude/
+/.codex/
+/.opencode/
 /worktrees/
+/.cache/
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

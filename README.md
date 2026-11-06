@@ -1,89 +1,133 @@
 # Steer Robust
 
-A project-local engineering skill package for Codex and Claude Code.
-Small entrypoints require relevant engineering guidance before decisions; detailed references load on demand.
+Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
+every repository. Six focused skills load only when a task needs them.
 
-## Workflows
+**Status:** v0.5.0 candidate. The package is validated; its effect on agent behavior has not been
+measured yet. See [Evaluate before adoption](#evaluate-before-adoption).
 
-| Skill | Purpose |
-|---|---|
-| engineering-change | Root cause, domain modeling, simplicity and coordinated code changes |
-| project-exploration | Product-first understanding, ownership and teaching |
-| change-verification | Native check selection, regression proof, CI and readiness |
-| runtime-qa | Real product boundaries, preservation cases and reviewable evidence |
-| statechart | Bounded TLA+/TLC safety checks and Mermaid counterexample paths |
-| security-audit | Focused trust-boundary findings, falsification and honest classifications |
+Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
 
-Canonical skill sources are in `src/.agents/skills/`, shared guides in `src/Steer-robust/`.
-`AGENTS.md` is the essential entrypoint; skill bodies select procedures, guides own judgment,
-optional scripts perform deterministic mechanics, and `dev/` plus `evals/` are development infrastructure.
-Installed paths and all three original skill names remain usable. Authored templates moved from
-`package/` to `src/`; developer commands moved from `tools/` to `dev/`.
+## What Is Included
 
-## Adopt
+| Component | Loads when | Does not cover |
+| --- | --- | --- |
+| [AGENTS.md](AGENTS.md) | Every session, as durable defaults | Stack commands or skill activation |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing a testable feature, fix, or behavior change | Pure refactoring, or changes with no behavior a test can observe |
+| [refactoring](skills/refactoring/SKILL.md) | Restructuring code without changing behavior, or changing untested legacy code | Adding behavior or redesigning a contract |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | A failure has an unclear, intermittent, or recurring cause | Defects with an established cause and failing test |
+| [repository-engineering](skills/repository-engineering/SKILL.md) | A substantial change needs a design or ownership decision | Mechanical, diagnosis-only, or review-only tasks |
+| [change-verification](skills/change-verification/SKILL.md) | A patch or PR review, or a merge-readiness judgment, is requested | Routine implementation or simply running tests |
+| [security-engineering](skills/security-engineering/SKILL.md) | A security review, threat model, or hardening is requested | Ordinary feature work or general code review |
 
-```sh
-gh repo clone shoaibulhaque/steer-robust
-cd steer-robust
-python3 dev/adopt.py /path/to/project --client both
+Each responsibility has one owner:
+
+- **TDD** owns the red–green–refactor cycle and test design.
+- **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
+- **Debugging** owns causal investigation.
+- **Repository engineering** owns design and ownership decisions.
+- **Change verification** owns requested review.
+- **Security engineering** owns specialist security analysis.
+
+A task can use more than one skill, but no skill loads another automatically.
+
+## How Loading Works
+
+1. **Metadata.** At startup the agent sees each skill's `name` and `description`. Each description
+   says when to use the skill and when not to.
+2. **Body.** The agent reads a `SKILL.md` only after it selects that skill.
+3. **References.** Each file in `references/` is linked with a "read when" condition and is read only
+   when that condition holds. References never link to further references.
+
+License and notice files are legal notices, not instructions.
+
+## Install
+
+Nothing installs itself. Inspect your existing instructions and skills first, then choose one scope
+per item: personal (all projects) or project (one repository). Do not install the same defaults or the
+same skill in both scopes.
+
+### Defaults
+
+`AGENTS.md` is the universal base. Use it unchanged across projects and append project-specific
+rules after it.
+
+| Client | Personal scope | Project scope |
+| --- | --- | --- |
+| Codex | `~/.codex/AGENTS.md` | `<project>/AGENTS.md` |
+| Claude Code | `~/.claude/CLAUDE.md` | `<project>/CLAUDE.md` |
+| Other agents | The client's documented instruction file | `<project>/AGENTS.md` is widely read |
+
+- Merge with any existing file; keep existing preferences and do not duplicate a rule already present.
+- In Codex, a non-empty `AGENTS.override.md` in the same directory takes precedence over `AGENTS.md`.
+- For repository-specific rules, copy [the project template](templates/project-instructions.md) to the
+  end of the project's file, fill it in, and delete its instructions and unused sections. With personal
+  defaults installed, the project file needs only the project-specific section.
+- More local instruction files refine broader ones for their directory. They never grant additional
+  authorization.
+
+### Skills
+
+Copy each selected skill as a complete folder, including `references/` and any license files.
+
+| Client | Personal scope | Project scope |
+| --- | --- | --- |
+| Codex | `~/.agents/skills/<name>/` | `<project>/.agents/skills/<name>/` |
+| Claude Code | `~/.claude/skills/<name>/` | `<project>/.claude/skills/<name>/` |
+| Other agents | The client's documented skills directory | The client's documented skills directory |
+
+- Stop if a skill with the same name already exists; do not merge directories blindly.
+- Keep only one TDD skill per setup.
+- This checkout's `skills/` directory is not a discovery location; copy from it.
+- Restart the client if new skills do not appear.
+- Do not copy `research/`, `dev/`, `templates/`, or `EVAL_PLAN.md` into a skills directory.
+
+### Update and Uninstall
+
+Compare with the installed files first. Replace only unchanged files that this kit owns, and merge
+local edits by hand. Keep project appendices and unrelated skills. If an earlier version installed
+`evidence-debugging`, replace it with `systematic-debugging`; do not keep both.
+
+To uninstall, remove the kit's skill folders and the instruction text you added. Remove an instruction
+file only if nothing else remains in it. Never remove shared directories, unrelated skills, or other
+configuration.
+
+## Repository Layout
+
+```text
+AGENTS.md                              Universal defaults
+skills/<name>/SKILL.md                 Skill entrypoints
+skills/<name>/references/              Conditional detail, read on demand
+skills/<name>/LICENSE.txt              License for included third-party material
+skills/security-engineering/NOTICE.md  Modification notice
+templates/project-instructions.md      Project appendix template
+EVAL_PLAN.md                           Evaluation protocol
+research/                              Maintainer design notes, not runtime guidance
+dev/                                   Package builder and its tests
 ```
 
-This previews copying. `--apply` copies absent/identical files only; conflicts require manual merging.
-Follow the [adoption guide](src/README.md#adopt-in-one-project) for existing project instructions.
-Codex uses `.agents/skills/`; Claude uses `.claude/skills/` plus an instruction bridge.
-Never overwrite project rules or install individual skill folders without their shared guides.
+## Validate and Build
 
-## Validate without model calls
-
-Python 3.9+ and Git are sufficient. No Python package dependencies are required.
+Requires Python 3.9 or later; no third-party packages.
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools -p 'test_*.py'
-PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s evals -p 'test_*.py'
-PYTHONDONTWRITEBYTECODE=1 python3 dev/validate_package.py
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s dev -p 'test_*.py'
 PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py
 ```
 
-The builder validates/extracts `dist/Steer-robust.zip` and executes extracted helpers.
-CI runs structural/helper tests. Grader controls and real CLI evaluations are opt-in, outside ordinary CI.
+The builder checks skill metadata, local links, code fences, and the exact set of files in each skill.
+It then writes `dist/steer-robust-v0.5.0-candidate.zip` from an explicit allowlist with deterministic
+metadata. The tests extract the archive and validate the extracted copy. Development files, design
+notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 
-## Behavioral evaluation
+## Evaluate Before Adoption
 
-The separate [evaluation suite](evals/README.md) runs real isolated Codex CLI tasks with and without the bundle.
-Native prompt snapshots establish discovery; successful tool outputs establish actual file loading;
-independent outcome and restored-bug tests check actions. Qualitative criteria are explicit; same-agent review is not independent proof.
-No keyword-based success grading or worker self-report substitutes for execution.
-See [research and audit](docs/refactor-research.md) for design choices and upstream implementation findings.
-Measured results and limitations are recorded after actual runs; small fixture samples cannot guarantee adherence.
+Structural checks show the package is well formed. They do not show that an agent selects the right
+skill, follows it, or produces better changes. Before adopting a skill, compare it with your current
+setup using the [evaluation protocol](EVAL_PLAN.md): positive and negative trigger probes,
+outcome-based grading, and cost per accepted result.
 
-## Scope
+## License
 
-Use the project's tools first. Build the Lever only when useful; metrics are evidence, not universal quotas.
-Statechart uses optional supplied Java/TLC and one-worker breadth-first safety checking; model proof is not code proof.
-No custom AST index, repo-map system, cache, memory/compaction machinery, MCP server or orchestration framework.
-Native caching behavior is unchanged. No automatic subagents, dependencies, publishing or global installation.
-Keep essential/skill instructions within 450 words and references within 650; code has no arbitrary line limits.
-Distributed resources are separate from research clones, raw evaluations, private files and development tests.
-
-[MIT license](LICENSE). Selected influences are attributed in the research notes; upstream code is not vendored.
-
-## Repository boundaries
-
-```text
-src/             Canonical runtime instructions, skills, references and necessary helpers
-dev/             Exact manifest, builder, validators, installation helper and regression tests
-evals/           Public benchmark fixtures, deterministic graders and opt-in execution tools
-docs/            Contributor-facing research, audit rationale and attribution
-AGENTS.md        Instructions for maintaining this repository
-CONTRIBUTING.md  Contributor validation commands
-dist/            Generated ZIP only; ignored and never treated as authored source
-```
-
-[The exact manifest](dev/package_contract.py) names every permitted source file. New files do not
-enter the archive by extension or directory membership. The build generates native `.agents/skills/`
-and `.claude/skills/` from the same source, normalizes permissions and verifies extracted references,
-client-copy equality, complete file sets and helper execution. It rejects unexpected files in `src/`.
-No development tools, evaluator answers, raw traces, caches or local configuration belong in the ZIP.
-[Repository audit](dev/audit_repo.py) inventories every tracked file and scans history for defined
-credential/path patterns. This is a bounded hygiene check, not a guarantee that all secrets are detectable.
-Real run data and reports stay outside the repository until an explicit review/publication decision.
+MIT; see [LICENSE](LICENSE). Skill folders that include third-party material carry its original
+license in `LICENSE.txt`, plus `NOTICE.md` where the license requires one.
