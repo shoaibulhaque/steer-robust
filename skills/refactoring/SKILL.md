@@ -53,7 +53,9 @@ For code without adequate tests, work in this order:
 1. **Identify change points:** where the code must change.
 2. **Find test points:** where the effects of that change can be observed. Trace returned values,
    mutated arguments, shared state, and calls to collaborators.
-3. **Break dependencies** that keep the code out of a test harness. Read
+3. **Break dependencies** that keep the code out of a test harness. Before tests exist, make only the
+   minimal, conservative edits needed to get the code under test: preserve signatures, one goal per
+   edit, no cleanup. These seams are part of the safe path; keep them. Read
    [Dependency Breaking](references/dependency-breaking.md) when the code cannot be constructed or
    run in a test, or when you must edit it before any test exists.
 4. **Write characterization tests:** run the code in a harness, assert a value you know is wrong, let
@@ -117,7 +119,8 @@ code easier to understand now.
 - A test needs a different expected result to pass.
 - New behavior or a bug fix is mixed into the restructuring.
 - "While I'm here" edits reach code the task does not touch.
-- Restructuring proceeds with failing tests, or without tests that observe the behavior at risk.
+- Restructuring beyond conservative dependency-breaking edits proceeds with failing tests, or without
+  tests that observe the behavior at risk.
 - A big rewrite replaces an incremental path that was available.
 
 ## Common Rationalizations
@@ -133,7 +136,8 @@ code easier to understand now.
 ## Verification Checklist
 
 - [ ] Relevant tests passed before the first step and after the last.
-- [ ] Behavior at risk was observed by tests, or characterized first.
+- [ ] Behavior at risk was observed by tests, or characterized first; edits made before tests existed
+  were limited to conservative dependency breaking.
 - [ ] Tests changed only to follow an interface change.
 - [ ] The diff contains structure only; recorded bugs are reported, not silently fixed.
 - [ ] Callers are migrated and superseded code is removed or justified.

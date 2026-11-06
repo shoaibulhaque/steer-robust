@@ -35,7 +35,7 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | --- | --- | --- |
 | Repository engineering | Add a substantial feature through an existing extension point; independent domain rules must stay independent | Mechanical local rename |
 | Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause |
-| TDD | Implement testable behavior with a discriminating new example | Prose-only correction; a pure refactor should not trigger it |
+| TDD | Implement testable behavior with a discriminating new example, including an access rule changed only in configuration | Prose-only correction; a pure refactor should not trigger it |
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
 | Change verification | Review a patch for PR readiness against actual contribution/CI rules | Routine implementation or merely running a specified test |
 | Security engineering | Explicit scoped security review, secure-coding request or threat model | Ordinary feature work touching an authenticated route; still preserve security without starting a full audit |

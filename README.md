@@ -13,7 +13,7 @@ Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or 
 | Component | Loads when | Does not cover |
 | --- | --- | --- |
 | [AGENTS.md](AGENTS.md) | Every session, as durable defaults | Stack commands or skill activation |
-| [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing a testable feature, fix, or behavior change | Pure refactoring, prose, configuration-only, or mechanical edits |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing a testable feature, fix, or behavior change | Pure refactoring, or changes with no behavior a test can observe |
 | [refactoring](skills/refactoring/SKILL.md) | Restructuring code without changing behavior, or changing untested legacy code | Adding behavior or redesigning a contract |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | A failure has an unclear, intermittent, or recurring cause | Defects with an established cause and failing test |
 | [repository-engineering](skills/repository-engineering/SKILL.md) | A substantial change needs a design or ownership decision | Mechanical, diagnosis-only, or review-only tasks |

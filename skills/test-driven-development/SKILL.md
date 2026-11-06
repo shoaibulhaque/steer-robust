@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: "Use when implementing a testable feature, bug fix, or behavior change, before writing production code. Covers red-green-refactor, verifying the failure, minimal implementation, and test quality. Not for behavior-preserving refactoring, prose, configuration-only, generated, or mechanical edits."
+description: "Use when implementing a testable feature, bug fix, or behavior change, before writing production code. Covers red-green-refactor, verifying the failure, minimal implementation, and test quality. Includes behavior expressed in configuration, such as access rules or routing. Not for behavior-preserving refactoring or changes with no behavior a test can observe, such as prose or formatting."
 ---
 
 # Test-Driven Development
@@ -19,8 +19,12 @@ Then improve the design while the tests stay green.
 **Not for a behavior-preserving refactor:** that keeps existing tests green rather than starting with
 a failing one. A characterization test records what exists; a regression test specifies what must change.
 
-**Use a different check for:** prose, configuration-only edits, generated artifacts, and disposable
-experiments. Do not invent a meaningless test. Honor explicit project or user exceptions, and state
+**Configuration counts when it changes behavior.** Access rules, routing, validation limits, and
+feature flags are testable behavior even when no code changes: use the cycle.
+
+**Use a different check for:** changes with no behavior a test can observe, such as prose, formatting,
+and disposable experiments, and for generated artifacts whose generator owns the tests. Do not invent
+a meaningless test. Honor explicit project or user exceptions, and state
 material verification gaps.
 
 Use the repository's test runner, fixtures, and conventions.
