@@ -1,6 +1,6 @@
 ---
 name: change-verification
-description: "Use when asked to review a patch, diff, branch, or pull request, or to judge whether a change is ready to merge or ship. Finds correctness defects, checks the change against the repository contract, challenges consequential design choices, and tests whether the evidence proves each claim. Not for routine implementation or simply running the tests."
+description: "Use when reviewing a patch, diff, branch, or PR, judging merge readiness, or planning verification of a specific change. Check correctness, contracts, design, and evidence strength. Not for routine implementation or generic planning."
 ---
 
 # Change Verification
@@ -20,6 +20,10 @@ pass. Ask before doing any of these.
 
 Use for an explicitly requested review of a patch, branch, or PR, or a merge or release readiness
 judgment. Ordinary implementation and routine test runs do not need this workflow.
+
+## Plan-Only Requests
+
+For a verification plan tied to a specific change, map acceptance claims to discriminating checks, affected consumer revisions, failure and compatibility paths, and needed test environments. Do not issue merge-readiness verdicts or fabricate findings before evidence is gathered. Generic feature planning is not patch review.
 
 ## Workflow
 

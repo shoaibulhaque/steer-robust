@@ -83,6 +83,10 @@ Its wording and examples were rewritten for this package; the source's MIT licen
 is retained in the skill folder. This attribution does not imply upstream endorsement or tested
 improvement in agent outcomes.
 
+## Planning Trigger Review (2026-11-09)
+
+All seven descriptions now cover relevant plan-only requests without requiring automatic activation on every planning task. `AGENTS.md` preserves a strict planning/execution boundary; each workflow specifies a minimal plan output and no-write behavior. The preventive skill's change-locality probes are an original adaptation of the earlier untangling concepts. Routing and outcome improvements are unmeasured; evaluation cases appear in `EVAL_PLAN.md`.
+
 ## Supplied Skill Integration
 
 The later integration includes TDD, consolidates debugging and security, and adds focused references

@@ -3,8 +3,7 @@
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
 every repository. Seven focused skills load only when a task needs them.
 
-**Status:** v0.6.0 candidate. The package is validated; its effect on agent behavior has not been
-measured yet. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.6.0 candidate. Structural and behavioral evaluation of the updated package is pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
 
@@ -13,13 +12,13 @@ Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or 
 | Component | Loads when | Does not cover |
 | --- | --- | --- |
 | [AGENTS.md](AGENTS.md) | Every session, as durable defaults | Stack commands or skill activation |
-| [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing a testable feature, fix, or behavior change | Pure refactoring, or changes with no behavior a test can observe |
-| [refactoring](skills/refactoring/SKILL.md) | Restructuring code without changing behavior, or changing untested legacy code | Adding behavior or redesigning a contract |
-| [systematic-debugging](skills/systematic-debugging/SKILL.md) | A failure has an unclear, intermittent, or recurring cause | Defects with an established cause and failing test |
-| [repository-engineering](skills/repository-engineering/SKILL.md) | A substantial change needs a design or ownership decision | Mechanical, diagnosis-only, or review-only tasks |
-| [design-for-change](skills/design-for-change/SKILL.md) | Implementing a feature or fix risks scattered rules, shared state, or unnecessary coupling | Isolated edits, major design decisions, pure refactoring, or review-only work |
-| [change-verification](skills/change-verification/SKILL.md) | A patch or PR review, or a merge-readiness judgment, is requested | Routine implementation or simply running tests |
-| [security-engineering](skills/security-engineering/SKILL.md) | A security review, threat model, or hardening is requested | Ordinary feature work or general code review |
+| [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing testable behavior or explicitly planning test-first cases | Pure refactoring or changes without observable behavior |
+| [refactoring](skills/refactoring/SKILL.md) | Planning or performing behavior-preserving restructuring, including legacy code | Adding behavior or redesigning a contract |
+| [systematic-debugging](skills/systematic-debugging/SKILL.md) | Diagnosing or planning investigation of an unclear failure | Defects with an established cause and failing test |
+| [repository-engineering](skills/repository-engineering/SKILL.md) | Planning or implementing substantial design and ownership decisions | Mechanical, diagnosis-only, or review-only tasks |
+| [design-for-change](skills/design-for-change/SKILL.md) | Planning or implementing changes that risk scattered rules and coupling | Isolated edits, major architecture choices, pure refactoring, or reviews |
+| [change-verification](skills/change-verification/SKILL.md) | Patch or PR review, merge readiness, or specific change-verification plan | Routine implementation or generic planning |
+| [security-engineering](skills/security-engineering/SKILL.md) | Planning or conducting a security review, threat model, or hardening | Ordinary feature work or generic review |
 
 Each responsibility has one owner:
 
@@ -32,6 +31,12 @@ Each responsibility has one owner:
 - **Security engineering** owns specialist security analysis.
 
 A task can use more than one skill, but no skill loads another automatically.
+
+## Planning vs. Execution
+
+Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans can use `repository-engineering`, change-locality plans `design-for-change`, refactor plans `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
+
+Do not load every skill just because the user asks for a plan. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
 
 ## How Loading Works
 

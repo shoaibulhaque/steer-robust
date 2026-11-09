@@ -1,6 +1,6 @@
 ---
 name: security-engineering
-description: "Use when explicitly asked for a security review or audit, a threat model or abuse-path analysis, secure-coding guidance, or hardening of authentication, authorization, tenant isolation, secrets, input handling, SSRF, file handling, or agent tool permissions. Grounds findings in reachable code paths. Not for ordinary feature work, general code review, or non-security design."
+description: "Use when planning or conducting a security review, threat model, secure-coding change, or hardening of authentication, authorization, tenant isolation, secrets, input handling, SSRF, file handling, or agent tool permissions. Not for ordinary features or general code review."
 ---
 
 # Security Engineering
@@ -12,6 +12,10 @@ guidance or hardening, a security review, or a threat model.
 
 **Core principle:** a finding connects an attacker capability, a reachable path, and a concrete impact,
 each backed by source evidence. A plausible threat is not a verified vulnerability.
+
+## Plan-Only Requests
+
+A security plan distinguishes hypotheses from confirmed vulnerabilities. Identify relevant assets, trust boundaries, attacker capabilities, controls and their owners, and rejecting tests. Label deployment assumptions. Do not edit code, infrastructure, or credentials or claim the proposed controls are implemented or tested.
 
 ## Choose the Mode
 

@@ -1,100 +1,91 @@
 ---
 name: design-for-change
-description: "Use when implementing a feature or fix in an existing codebase that spans consumers, repeats a rule, adds shared state, or tempts caller-specific flags or extra layers. Prevent hidden co-change, needless coupling, and surplus in the changed path. Not for isolated edits, consequential design decisions, behavior-preserving refactoring, or review-only tasks."
+description: "Use when planning or implementing a feature or fix that spans consumers, introduces shared state, or tempts duplicated rules, caller-specific flags, or extra layers. Prevent hidden coordination and coupling in the requested change. Not for isolated edits, pure refactoring, reviews, or major architecture decisions."
 ---
 
 # Design for Change
 
 ## Overview
 
-Prevent the new change from making future changes harder. This is a focused implementation workflow,
-not a whole-codebase audit or cleanup.
+Keep a new change from making the next change harder. This skill evaluates the *change being planned or made*, not the codebase's overall architectural quality.
 
-**Core principle:** put each decision with the reason it changes, and make its connections to
-consumers explicit. Code that changes together should be easy to find and update together; unrelated
-decisions should not be forced to change together.
+**Core principle:** decisions with the same reason to change should have one clear owner. Decisions that evolve independently should not be coupled just because their implementations look similar.
 
 ## When to Use
 
-Use during an implementation when a feature or fix introduces a rule used by multiple consumers,
-threads data across modules, adds shared state, or pressures you to add variant flags, copied logic, or
-new forwarding layers. Keep the check proportional to the change.
+Use when a feature or fix crosses consumers or modules, introduces shared decisions or state, or invites copied rules, variant flags, or forwarding layers. Keep analysis proportional: an obvious local change needs no ceremony.
 
-Skip an isolated edit with a clear owner. Consequential choices about contracts, domain ownership,
-persistence, or architecture belong to the repository's design workflow. Pure restructuring belongs
-to the refactoring workflow; an explicitly requested review belongs to change verification. This
-skill does not replace test-driven development or automatically invoke other skills.
+Consequential domain, interface, persistence, and architecture choices belong to `repository-engineering`; behavior-preserving restructuring belongs to `refactoring`, and an explicit patch review belongs to `change-verification`. This skill does not replace testing or invoke other skills automatically.
+
+## Plan or Implement
+
+- **Plan-only:** inspect the relevant path and propose the owner, consumer changes, boundaries, test-first steps where behavior changes, and completion evidence. Label assumptions. Do not edit files, implement, or claim tests passed.
+- **Implementation:** apply the workflow to the actual change and review the resulting diff. Keep preparations and behavior changes separately checkable.
+
+Do not generate a separate architectural report for routine work. State only decisions that help the user act on the plan or understand the patch.
 
 ## Workflow
 
-### 1. Trace the Change, Not the Entire Repository
+### 1. Locate the Change's Reason and Owner
 
-1. Read the applicable instructions, the affected code path, its immediate consumers, and nearby tests.
-2. Find the existing owner of the behavior and the closest working example.
-3. Name the decision being introduced or modified, who relies on it, and what must remain stable.
-4. Distinguish multiple *representations* of one rule from independent rules that merely look alike.
+1. Trace a concrete scenario through its entry point, rule owner, consumers, effects, and nearby tests. Inspect close analogues, not the entire repository.
+2. State the decision in domain terms and identify which component is authoritative.
+3. Identify affected contracts and guarantees. Distinguish one rule represented across layers from independent rules that merely look alike.
+4. Prefer an existing appropriate extension point over a parallel implementation.
 
-Do not inventory unrelated modules. If there is already an appropriate extension point, use it.
+If ownership is ambiguous or a new public contract is needed, address that consequential design choice rather than improvising.
 
-### 2. Check the Three Tangles
+### 2. Apply the Three Tangle Tests
 
-| Signal in the proposed change | What to do |
-| --- | --- |
-| **Hidden links:** the same decision is copied into several places; callers must know an undocumented order; separate state must be manually synchronized | Give the decision a discoverable owner; express dependencies through a clear contract or explicit coordination |
-| **Needless links:** a stable component knows a caller's special vocabulary; a consumer reaches through an interface into internals; an option couples otherwise independent workflows | Keep caller-specific policy at its owner and depend on the smallest stable contract that carries the required behavior |
-| **Surplus:** a new pass-through wrapper, unused extension hook, speculative configuration, or redundant stored state adds concepts without a real requirement | Omit it; prefer the existing path unless the new boundary hides meaningful volatility or enforces an invariant |
+| Pattern | Evidence | Better direction |
+| --- | --- | --- |
+| **Hidden links** | Copies of one rule, implicit call order, module globals set elsewhere, manually synchronized state | Make one owner authoritative; expose necessary coordination through a clear contract |
+| **Needless links** | Stable code knows caller-specific policy, consumers reach into internals, generic interfaces accumulate context flags | Keep volatile decisions at their owner; expose only what callers genuinely need |
+| **Surplus** | Pass-through layers, speculative extension points, unused configuration, or state that can be derived | Avoid new concepts unless they hide real volatility or enforce an invariant |
 
-Do not deduplicate on syntax alone. Two rules with different owners or reasons to evolve can correctly
-remain separate. A single consumer can justify an interface at an external or failure-prone boundary.
-Judge coupling by the knowledge and coordination it imposes, not by file count or caller count.
+Check *reasons to change*, not syntactic similarity. Independent tax jurisdictions or providers may need distinct rules even when their code looks identical. Multiple consumers of the same eligibility rule must not independently invent its meaning.
 
-### 3. Treat Special Cases as Questions
+### 3. Probe Change Locality
 
-A new value-specific branch, caller flag, retry, sleep, swallowed exception, or disabled test may signal
-a missing design concept. Ask what concrete requirement or failure mode it handles, and whether that
-behavior belongs at the current boundary.
+Use the present requirement as evidence; do not invent hypothetical product roadmaps.
 
-- Preserve legitimate exceptions, compatibility paths, and defensive behavior; make their purpose
-  observable and testable where appropriate.
-- Do not hide a repeated structural problem behind another condition or a generic framework.
-- If a real ownership or contract redesign is needed, handle it as a consequential design decision
-  rather than quietly broadening the task.
+- **Same rule evolves:** where does a maintainer change it? Could they miss another copy or required manual step?
+- **One consumer evolves independently:** does an unrelated owner or consumer need changes?
+- **A rule crosses layers:** do schema, API, editor, and renderer each perform their own legitimate job, or independently redefine the same meaning?
 
-### 4. Implement and Inspect the Diff
+A legitimate change may touch many files. Optimize independent decisions and implicit coordination, **not** file counts, line counts, or number of interfaces.
 
-Implement within the requested scope. Keep behavior changes and preparatory restructuring separately
-checkable. Use the repository's applicable test-first and verification practices; do not introduce a
-second testing process here.
+For complex recurring coupling, Git co-change history and dependency paths may add evidence. Co-change alone does not justify combining modules: formatting, batch migrations, and releases also correlate edits.
 
-When done, ask:
+### 4. Question New Special Cases
 
-1. If this decision changes again, can someone identify its owner without searching for copies?
-2. Did this patch require consumers to learn more internals, hidden state, or call ordering?
-3. Are multiple changed files justified by distinct layers or contracts, rather than duplicated
-   decisions?
-4. Did we add an abstraction, special case, or configuration without a present need?
+A value-specific branch, caller flag, retry, sleep, swallowed exception, or disabled test warrants investigating *why it exists*—not automatically deleting it.
 
-Correct tangles introduced by this patch. Record relevant pre-existing problems as follow-ups; do not
-expand into a repository-wide refactor. Finish when the requested behavior and checks are complete,
-not when the architecture is theoretically perfect.
+- Preserve genuine business distinctions, compatibility paths, and defensive behavior.
+- Put guards and retries with the boundary owning the invariant or failure policy. Respect ambiguous remote outcomes and non-idempotent effects.
+- Avoid general infrastructure for hypothetical consumers.
+- When a legitimate case does not fit the model, reconsider its owner or contract instead of hiding the conflict behind more flags.
 
-## Example
+### 5. Finish at the Requested Boundary
 
-A new content property may legitimately require edits to its schema, editor, API, and renderer. The
-four-file change is not itself a tangle. Independently inventing four meanings or fallback rules for
-that property is. Keep the authoritative contract explicit while respecting each layer's role.
+**For a plan:** give a concise change map: authoritative rule, affected consumers/contracts, work sequence, relevant risks, and evidence that would reject an incorrect implementation. Do not claim execution.
 
-Conversely, two integrations with similar-looking transformations may need separate implementations
-when their contracts evolve independently. A shared helper with provider flags can make both harder
-to change.
+**For implementation:** inspect the diff for duplicated decisions, hidden ordering/state, unnecessary caller knowledge, and surplus concepts. Fix tangles this change introduces; report relevant pre-existing issues without expanding scope. Follow the existing test-first and verification workflows.
+
+## Examples
+
+**Legitimate fan-out:** a new content field affects schema, editor, preview, and renderer. Four files can be correct; independently defined defaulting rules that conflict are not.
+
+**Wrong abstraction:** two payment providers expose similarly named statuses but follow different failure and business contracts. A generic mapper with provider flags can couple unrelated policies.
+
+**Useful boundary:** even one consumer may justify an interface around volatile external I/O or an invariant. Do not delete it simply to reduce wrapper count.
 
 ## Red Flags
 
-- "One file per change" becomes the goal instead of clear ownership.
-- A reusable helper requires a new flag for each consumer.
-- A duplicated decision is defended as "simpler" without accounting for synchronization.
-- A workaround is deleted solely because it looks like a special case.
-- A requested feature becomes an unsolicited architectural rewrite.
+- Extracting every repeated line but leaving duplicated decisions.
+- Adding caller flags rather than finding the owner of a distinction.
+- Merging unrelated concepts to force a one-file change.
+- Deleting a required workaround merely because it looks special.
+- Turning a requested feature into an unsolicited codebase redesign.
 
-**Stop condition:** the new change has an understandable owner, justified dependencies, no avoidable
-coordination introduced by this patch, and the required behavior is verified.
+**Stop when:** ownership is clear, necessary coordination is explicit, independent rules stay independent, and the plan or implementation has proportional verification.

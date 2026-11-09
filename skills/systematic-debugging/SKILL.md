@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "Use when a bug, test failure, build failure, or unexpected behavior has an unclear cause: flaky or intermittent failures, works-locally-fails-in-CI, timing or environment dependence, regressions, or a fix that did not hold. Finds the root cause before any fix is proposed. Not for a defect whose cause and failing test are already established."
+description: "Use when diagnosing or planning investigation of a failure with unclear cause: flaky tests, environment-specific regressions, recurring failures, or fixes that did not hold. Find causal evidence before proposing fixes. Not when cause and failing test are established."
 ---
 
 # Systematic Debugging
@@ -31,6 +31,10 @@ Use when the cause is unclear, especially when:
 - Time pressure makes guessing tempting. Pressure calls for a smaller decisive probe, not a guess.
 
 If the cause and a failing test are already established, proceed with the correction.
+
+## Plan-Only Requests
+
+Plan the smallest observations, reproduction, boundary probes, and competing hypotheses capable of distinguishing causes. Identify missing evidence without presenting any hypothesis or fix as established. Do not modify code or implement a speculative correction. The phases below govern a later execution request.
 
 ## The Four Phases
 

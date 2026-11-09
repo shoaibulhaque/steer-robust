@@ -1,6 +1,6 @@
 ---
 name: repository-engineering
-description: "Use when a substantial change in an existing codebase needs a design decision: where new behavior belongs, whether to add or remove an abstraction, how to change an interface or domain rule, or how a change affects state, failure handling, compatibility, or performance. Not for mechanical edits, pure refactoring, diagnosis-only, or review-only tasks."
+description: "Use when planning or implementing a substantial codebase change that needs decisions about ownership, interfaces, domain rules, state, failure handling, compatibility, or performance. Not for mechanical edits, pure refactoring, diagnosis-only, or review-only tasks."
 ---
 
 # Repository Engineering
@@ -19,6 +19,10 @@ Use for consequential design and ownership decisions in an established codebase:
 crosses modules, a changed interface or domain rule, new state or persistence, or a performance
 requirement. Skip mechanical edits, pure refactoring, diagnosis-only requests, and review-only work.
 When an established pattern already meets the contract, follow it without a design exercise.
+
+## Plan-Only Requests
+
+A plan authorizes scoped investigation and design, not edits. Apply the design steps, then provide the current owner and contract, chosen boundary, material alternative (if any), affected consumers, ordered implementation steps, and evidence needed for acceptance. Label unknowns that could change the choice. Do not implement or claim the proposal was tested.
 
 ## Workflow
 
