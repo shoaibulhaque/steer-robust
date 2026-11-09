@@ -7,9 +7,9 @@ import re
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.5.0-candidate"
+VERSION = "0.6.0-candidate"
 NAME = f"steer-robust-v{VERSION}"
-SKILLS = ("repository-engineering", "refactoring", "systematic-debugging",
+SKILLS = ("repository-engineering", "design-for-change", "refactoring", "systematic-debugging",
           "test-driven-development", "change-verification", "security-engineering")
 FILES = (
     "AGENTS.md", "README.md", "LICENSE", "EVAL_PLAN.md", "research/README.md",
@@ -21,6 +21,7 @@ FILES = (
     "skills/repository-engineering/references/performance-decisions.md",
     "skills/refactoring/references/dependency-breaking.md",
     "skills/change-verification/references/verification-boundaries.md",
+    "skills/design-for-change/LICENSE.txt",
     "skills/test-driven-development/LICENSE.txt",
     "skills/systematic-debugging/references/root-cause-tracing.md",
     "skills/systematic-debugging/references/condition-based-waiting.md",

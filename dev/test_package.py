@@ -96,6 +96,14 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             kit.archive()
 
+    def test_design_for_change_and_upstream_license_are_distributed(self):
+        self.assertIn("design-for-change", kit.SKILLS)
+        with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
+            prefix = f"{kit.NAME}/skills/design-for-change/"
+            self.assertIn(prefix + "SKILL.md", archive.namelist())
+            self.assertIn(prefix + "LICENSE.txt", archive.namelist())
+            self.assertIn(b"Copyright (c) 2026 Maze", archive.read(prefix + "LICENSE.txt"))
+
     def test_missing_imported_license_is_rejected(self):
         (self.root / "skills/security-engineering/LICENSE.txt").unlink()
         with self.assertRaises(ValueError):

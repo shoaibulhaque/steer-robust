@@ -16,6 +16,7 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
+| I: preventive design | B plus design-for-change | Less duplicate knowledge and implicit coordination during everyday multi-consumer implementations, without false activation or extra ceremony? |
 
 Test the combined configuration only after useful individual results. If an existing setup already has
 an overlapping debugging/security skill, document it and compare replacements explicitly. Do not let
@@ -34,6 +35,7 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | Skill | Positive scenario | Adjacent negative control |
 | --- | --- | --- |
 | Repository engineering | Add a substantial feature through an existing extension point; independent domain rules must stay independent | Mechanical local rename |
+| Design for change | Extend a setting through schema, API and UI where rules could be duplicated and a caller-specific option is tempting | Isolated local edit; a pure cleanup should use refactoring, a major contract decision repository engineering |
 | Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause |
 | TDD | Implement testable behavior with a discriminating new example, including an access rule changed only in configuration | Prose-only correction; a pure refactor should not trigger it |
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
@@ -47,6 +49,7 @@ when needed and unrelated guides remain unloaded.
 ## Representative Decision Cases
 
 - Existing extension point versus parallel implementation; duplicated syntax versus shared knowledge.
+- Routine multi-consumer change: stable ownership of one decision versus duplicated defaults, context flags, or needless coordination; legitimate edits across layers are not penalized.
 - A consequential interface/performance decision with a simpler alternative and representative workload.
 - Legacy characterization followed by a desired behavior change; observable effects/error order matter.
 - Public API or rolling data migration; old/new readers and writers have actual compatibility obligations.

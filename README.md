@@ -1,9 +1,9 @@
 # Steer Robust
 
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
-every repository. Six focused skills load only when a task needs them.
+every repository. Seven focused skills load only when a task needs them.
 
-**Status:** v0.5.0 candidate. The package is validated; its effect on agent behavior has not been
+**Status:** v0.6.0 candidate. The package is validated; its effect on agent behavior has not been
 measured yet. See [Evaluate before adoption](#evaluate-before-adoption).
 
 Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
@@ -17,6 +17,7 @@ Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or 
 | [refactoring](skills/refactoring/SKILL.md) | Restructuring code without changing behavior, or changing untested legacy code | Adding behavior or redesigning a contract |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | A failure has an unclear, intermittent, or recurring cause | Defects with an established cause and failing test |
 | [repository-engineering](skills/repository-engineering/SKILL.md) | A substantial change needs a design or ownership decision | Mechanical, diagnosis-only, or review-only tasks |
+| [design-for-change](skills/design-for-change/SKILL.md) | Implementing a feature or fix risks scattered rules, shared state, or unnecessary coupling | Isolated edits, major design decisions, pure refactoring, or review-only work |
 | [change-verification](skills/change-verification/SKILL.md) | A patch or PR review, or a merge-readiness judgment, is requested | Routine implementation or simply running tests |
 | [security-engineering](skills/security-engineering/SKILL.md) | A security review, threat model, or hardening is requested | Ordinary feature work or general code review |
 
@@ -25,7 +26,8 @@ Each responsibility has one owner:
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
 - **Debugging** owns causal investigation.
-- **Repository engineering** owns design and ownership decisions.
+- **Repository engineering** owns consequential design and ownership decisions.
+- **Design for change** owns preventing new coordination and coupling during implementation.
 - **Change verification** owns requested review.
 - **Security engineering** owns specialist security analysis.
 
@@ -116,7 +118,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py
 ```
 
 The builder checks skill metadata, local links, code fences, and the exact set of files in each skill.
-It then writes `dist/steer-robust-v0.5.0-candidate.zip` from an explicit allowlist with deterministic
+It then writes `dist/steer-robust-v0.6.0-candidate.zip` from an explicit allowlist with deterministic
 metadata. The tests extract the archive and validate the extracted copy. Development files, design
 notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 
