@@ -1,6 +1,6 @@
 ---
 name: refactoring
-description: "Use when restructuring code without changing its behavior (refactor, clean up, rename, extract, inline, move, split a large function or class, remove duplication) or when legacy code that lacks tests must be changed and first brought under test. Covers small behavior-preserving steps, characterization tests, and safe dependency breaking. Not for adding behavior alone or for redesigning a contract."
+description: "Use when planning or performing behavior-preserving restructuring (rename, extract, inline, move, split, deduplicate), or preparing untested legacy code for safe changes. Not for adding behavior or redesigning a contract."
 ---
 
 # Refactoring
@@ -25,6 +25,10 @@ and take a smaller one.
 
 Refactor only the code the task touches. Note unrelated problems as follow-ups. If code is broken or
 its behavior must change, that is a behavior change: use the testing workflow, not this one.
+
+## Plan-Only Requests
+
+Map observable behavior and dependencies at risk. Propose a baseline or characterization test, small reversible restructuring steps, caller cutover, and focused verification after each step. Do not edit, claim tests passed, or silently combine bug fixes with behavior-preserving restructuring.
 
 ## The Two Hats
 

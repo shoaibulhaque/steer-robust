@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: "Use when implementing a testable feature, bug fix, or behavior change, before writing production code. Covers red-green-refactor, verifying the failure, minimal implementation, and test quality. Includes behavior expressed in configuration, such as access rules or routing. Not for behavior-preserving refactoring or changes with no behavior a test can observe, such as prose or formatting."
+description: "Use when implementing testable behavior or explicitly planning a test-first sequence for a feature or fix. Covers red-green-refactor and meaningful expectations. Not for pure refactoring or changes without observable behavior."
 ---
 
 # Test-Driven Development
@@ -28,6 +28,10 @@ a meaningless test. Honor explicit project or user exceptions, and state
 material verification gaps.
 
 Use the repository's test runner, fixtures, and conventions.
+
+## Plan-Only Requests
+
+For an explicitly requested test-first plan, identify observable acceptance cases, independent expected results, the smallest useful test boundary, and an ordered red–green–refactor sequence. Include material failure paths. These are proposed tests: do not edit files or claim RED/GREEN occurred. Do not load this workflow for every general architecture plan just because tests will eventually be needed.
 
 ## The Iron Law
 

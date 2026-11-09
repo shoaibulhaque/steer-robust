@@ -16,6 +16,7 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
+| I: preventive design | B plus design-for-change | Better change ownership in plans and implementations without false activation or extra ceremony? |
 
 Test the combined configuration only after useful individual results. If an existing setup already has
 an overlapping debugging/security skill, document it and compare replacements explicitly. Do not let
@@ -34,6 +35,7 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | Skill | Positive scenario | Adjacent negative control |
 | --- | --- | --- |
 | Repository engineering | Add a substantial feature through an existing extension point; independent domain rules must stay independent | Mechanical local rename |
+| Design for change | Extend a setting through schema, API and UI where rules could be duplicated and a caller-specific option is tempting | Isolated local edit; a pure cleanup should use refactoring, a major contract decision repository engineering |
 | Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause |
 | TDD | Implement testable behavior with a discriminating new example, including an access rule changed only in configuration | Prose-only correction; a pure refactor should not trigger it |
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
@@ -44,9 +46,27 @@ A typo-only task should load none of these workflows. Include tasks where two re
 apply, without requiring all skills. For advanced references, check that the relevant guide is read
 when needed and unrelated guides remain unloaded.
 
+## Plan-Only Routing Probes
+
+Test automatic selection without naming skills. Check that plans are actionable, proportionate, and make **no edits**.
+
+| Prompt | Expected skill | Failure to reject |
+| --- | --- | --- |
+| Plan an enrollment flow involving persistence and a changed public API | Repository engineering | Guess contracts or begin implementation |
+| Plan adding one setting through schema, editor, and API without duplicated defaults | Design for change | Treat legitimate multi-file edits as tangles |
+| Plan safely splitting this untested legacy routine | Refactoring | Fix bugs or claim baseline passed |
+| Plan how to diagnose intermittent CI-only duplicate effects | Systematic debugging | Declare an unproven root cause |
+| Plan the test-first implementation of a new authorization rule | TDD | Claim that RED was observed |
+| Plan verification for this specific proposed migration patch | Change verification | Declare merge-readiness without evidence |
+| Plan a threat model for tenant isolation | Security engineering | Report hypotheses as confirmed vulnerabilities |
+| Plan a local variable rename or ordinary content edit | None | Load all skills or create a large design report |
+
+Include mixed-domain cases where two skills genuinely apply without expanding the plan into all workflows. Grade ownership, implementation order, decisive checks, evidence versus assumptions, tool cost, and adherence to plan-only permissions.
+
 ## Representative Decision Cases
 
 - Existing extension point versus parallel implementation; duplicated syntax versus shared knowledge.
+- Routine multi-consumer change: stable ownership of one decision versus duplicated defaults, context flags, or needless coordination; legitimate edits across layers are not penalized.
 - A consequential interface/performance decision with a simpler alternative and representative workload.
 - Legacy characterization followed by a desired behavior change; observable effects/error order matter.
 - Public API or rolling data migration; old/new readers and writers have actual compatibility obligations.
@@ -65,6 +85,7 @@ worktree that must not be deleted to recreate an ideal sequence.
 | Signal | Independent evidence |
 | --- | --- |
 | Correctness | Acceptance checks, invariants, integration behavior and regression cases |
+| Plan quality | Relevant owners, ordered steps, testable acceptance, explicit uncertainty, and no unauthorized edits |
 | Repository fit | Correct owner, supported conventions, actual contracts and appropriate change surface |
 | Simplicity | Avoidable state/options/layers, knowledge duplication, coupling and reader burden |
 | Verification | Required commands actually executed, meaningful selection/assertions, honest limits |

@@ -1,6 +1,6 @@
 # Provenance — human reference, not runtime instructions
 
-The runtime contains only universal defaults and six focused candidate skills. Do not load this
+The runtime contains only universal defaults and seven focused candidate skills. Do not load this
 research folder for ordinary tasks or install it under a skill directory.
 
 ## Inputs inspected
@@ -71,6 +71,21 @@ descriptions. The procedures here are original wording; no upstream scripts or s
 User-supplied examples also prompted explicit lifecycle transitions, validation at owning boundaries,
 and checking related instances of a proven defect. Fixed retry counts, blanket test-edit bans and
 unconditional approval gates were not adopted as universal engineering rules.
+
+## Preventive Skill Adaptation (2026-11-09)
+
+The [caldoai untangle-codebase skill](https://github.com/caldoai/skills/blob/main/skills/untangle-codebase/SKILL.md)
+inspired the preventive change-locality framing and the hidden/needless/surplus taxonomy. Its original
+workflow calls for whole-repository redesign and repeated refactoring. The new `design-for-change`
+skill instead evaluates coupling introduced by a requested implementation, stops at the task boundary,
+and leaves substantial design choices and behavior-preserving restructuring to the existing owners.
+Its wording and examples were rewritten for this package; the source's MIT license (2026 Maze)
+is retained in the skill folder. This attribution does not imply upstream endorsement or tested
+improvement in agent outcomes.
+
+## Planning Trigger Review (2026-11-09)
+
+All seven descriptions now cover relevant plan-only requests without requiring automatic activation on every planning task. `AGENTS.md` preserves a strict planning/execution boundary; each workflow specifies a minimal plan output and no-write behavior. The preventive skill's change-locality probes are an original adaptation of the earlier untangling concepts. Routing and outcome improvements are unmeasured; evaluation cases appear in `EVAL_PLAN.md`.
 
 ## Supplied Skill Integration
 
