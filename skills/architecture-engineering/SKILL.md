@@ -1,6 +1,6 @@
 ---
 name: architecture-engineering
-description: "Use when planning or designing a greenfield system, evolving an existing codebase, integrating or migrating components, evaluating architecture tradeoffs, or implementing a multi-module change with consequential ownership or coupling risks. Not for routine local edits, pure behavior-preserving refactoring, root-cause debugging, or patch-readiness reviews."
+description: "Use for greenfield system design, substantial brownfield features, integrations or migrations, consequential architecture decisions, or implementation at risk of cross-module coupling. Produce justified plans or guide boundaries during coding. Not for small local edits, pure refactoring, root-cause investigation, or patch review."
 ---
 
 # Architecture Engineering
@@ -33,6 +33,11 @@ Do not load another skill simply because it is named here.
 files, run a migration, or claim unperformed tests. For an implementation request, do not substitute a
 plan for working code.
 
+Choose **depth** independently of the project's age: a small addition to a mature application may
+need only a change map, while a new system that handles money or sensitive data can require careful
+failure and trust modeling. Spend the most analysis on decisions that are uncertain, consequential,
+and expensive to reverse; use an established, reversible choice without prolonged comparison.
+
 ## Method
 
 ### 1. Establish the Architectural Drivers
@@ -45,6 +50,12 @@ assumption.
 Translate important quality attributes into scenarios: workload and latency, failure and recovery,
 data consistency, privacy and authorization, deployability, operating cost, and ease of change. Select
 those that could alter this design; do not invent targets or demand enterprise controls by default.
+
+Define an important scenario as **condition → action or failure → required observable outcome**.
+For example, "if the worker dies after committing an external effect but before acknowledgment,
+recovery must not create a second billable effect." Identify who owns the guarantee and what evidence
+could falsify it. For material uncertainty, distinguish a known fact from a hypothesis and state which
+decision would change when the hypothesis is tested.
 
 ### 2. Work from the Actual Context
 
@@ -63,10 +74,20 @@ contract, prefer extending it over building a parallel solution.
 Start with the least complex design that satisfies the drivers. Make explicit which component owns
 each invariant, how consumers interact with it, where state lives, and where failures are observed.
 
-Challenge consequential decisions with one credible simpler alternative and scenarios that could
-disprove the choice. Consider feasibility, resource growth, compatibility, operational burden,
-reversibility, and failure windows in proportion to the risk. Use measurements, a narrow prototype,
-or documentation checks when those would change the decision; don't present estimates as results.
+Challenge consequential decisions with a credible simpler alternative and a small set of scenarios
+that could disprove the choice. Consider feasibility, resource growth, compatibility, operational
+burden, reversibility, and failure windows in proportion to the risk. Prefer removing unnecessary work,
+knowledge, or coordination before adding another stateful component.
+
+Inspect the **boundary where the design might fail**, not merely its happy-path diagram: an
+acknowledgment may be lost after a remote effect; concurrent actors may both believe they own work;
+a rolling deployment may mix old and new readers; a cache may serve stale authorization. Do not
+apply these examples universally—select only the realistic failure windows for the task.
+
+Use measurements, a narrow prototype, a contract check, or documentation when evidence could change
+the choice. A proposed experiment should name representative inputs, a success criterion, and the
+decision that follows each outcome. Do not present estimates, mock behavior, or an unrun test as
+measured feasibility.
 
 Check change locality: can the same rule change in one authoritative place? Can an unrelated consumer
 evolve without forcing other consumers to change? Many changed files are acceptable when each layer
@@ -80,11 +101,19 @@ Investigate its purpose rather than deleting it for aesthetic simplicity.
 ### 4. Deliver or Implement at the Requested Depth
 
 For a **plan**, provide the smallest useful combination of:
-- The objective, relevant evidence, assumptions, and chosen design or boundary.
-- Material alternatives and tradeoffs, when the choice is consequential.
-- Ordered work that names affected owners/contracts, prerequisites, risky transitions, and checks
-  that would reject an incorrect implementation.
-- Deployment, data migration, recovery, and rollback conditions only where they matter.
+- **Architectural brief:** objective, relevant evidence, assumptions, chosen design and named owners
+  for important data, contracts and invariants.
+- **Decision rationale:** material alternatives and tradeoffs when a choice is consequential; clearly
+  separate decisions from unresolved hypotheses and describe reconsideration conditions if useful.
+- **Execution map:** ordered, dependency-aware work packages. Each meaningful package states its
+  expected outcome, affected contracts or owners, prerequisites and acceptance evidence; test-first
+  steps belong with behavior changes.
+- **Transition and operations:** supported client versions, migration, release ordering, recovery,
+  monitoring and rollback versus forward-fix limits **only** where the system needs them.
+
+Before delivery, challenge the plan: could implementation follow these steps while violating an
+important requirement? Would a different engineer have to invent the data owner, failure behavior, or
+cutover rule? Resolve material gaps; do not fill minor uncertainties with speculative infrastructure.
 
 For **implementation**, separate preparatory restructuring from new behavior, use the applicable
 test-first workflow, migrate affected callers, and inspect the diff for accidental coupling. Keep
@@ -115,6 +144,9 @@ Read only the reference that addresses a material question; do not load all of t
   retries, persistence, or partial failures affect correctness.
 - [Performance Decisions](references/performance-decisions.md): read when workload, capacity, latency,
   or resource cost materially affects the choice.
+- [Worked Architecture Plans](references/architecture-plan-casebook.md): read when preparing a
+  substantial multi-step architecture plan and examples would clarify ownership, failure scenarios,
+  transition sequencing, or falsifiable acceptance criteria.
 
 ## Illustrative Decisions
 

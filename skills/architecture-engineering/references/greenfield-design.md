@@ -18,6 +18,14 @@ Convert consequential quality attributes into scenarios. For example, "fast" nee
 
 A new abstraction earns its existence by hiding meaningful volatility, protecting an invariant, or clarifying domain intent. Do not add a service, broker, cache, or plugin system solely because it may be needed later.
 
+## Capacity and Operations as Design Inputs
+
+Estimate only quantities that could change the architecture: peak arrival rate rather than only daily averages, concurrent in-flight work, per-request CPU and memory, payload size, storage growth, and remote provider limits. Use explicit units and ranges; distinguish assumed inputs from measured values.
+
+Consider the smallest sustainable operational model: how configuration and secrets enter, how migrations run, how failures surface, how an operator can restart or recover work, and who owns backups if stored data is critical. An unneeded cluster adds operational risk; a "single server" still requires a recovery decision when losing that server would violate a stated guarantee.
+
+Do not make "cloud-native" synonymous with distributed. Prefer known, well-supported dependencies and contracts over novelty. If an unusual technology is proposed, name the requirement that needs it and the cost of replacing it.
+
 ## Challenge the Initial Architecture
 
 Compare the candidate with a credible simpler option when the consequences justify it. Evaluate likely bottlenecks, uncertain integration behavior, data loss or duplication, security boundaries, and cost of operating the design.
@@ -32,5 +40,14 @@ Examples:
 ## Plan the First Delivery
 
 Order work by dependencies and risk: representative contract and data model, one end-to-end path, relevant failure cases, supporting features, then operational hardening and deployment. State acceptance evidence for each important outcome. Record reversible technology choices as such, and name observable conditions that would trigger reconsideration.
+
+For a substantial greenfield system, the first end-to-end slice should prove the boundaries most likely to invalidate the design—such as persistent job acceptance, tenant-scoped reads, or a vendor API—rather than a collection of isolated interfaces that cannot yet communicate.
+
+**Avoid these failures:**
+- Choosing microservices because the domain has several modules.
+- Treating expected business growth as measured production load.
+- Proposing a cache without explaining freshness, invalidation, and a baseline bottleneck.
+- Modeling success paths while leaving ownership of failed or cancelled operations undefined.
+- Creating every abstraction before any user-visible workflow is demonstrable.
 
 A plan is adequate when another engineer can implement the first valuable slice without guessing which component owns the essential rules. Do not imply that pre-launch capacity estimates were production measurements.

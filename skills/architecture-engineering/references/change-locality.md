@@ -14,12 +14,27 @@
 
 These are **diagnostic categories**, not instructions to deduplicate or eliminate every wrapper. The same domain decision may be represented through a schema, API, editor, and renderer without being duplicated. Each layer can have a legitimate responsibility.
 
+## Distinguish Knowledge from Repetition
+
+A useful extraction centralizes **one decision**, not necessarily identical syntax. Two implementations may look alike but represent policies owned by different departments, vendors, or regulations; a shared helper with new flags for each variation would increase coupling.
+
+Conversely, repeated authorization or eligibility rules are one piece of knowledge even when expressed with different syntax. Changing them separately creates hidden links and inconsistent behavior.
+
+The cost of an interface is not its file count. Ask what a caller needs to know to use it correctly, what it hides, and which independent changes it forces the caller to absorb. A single caller can warrant an adapter when it isolates volatile I/O, enforces a contract, or creates a necessary test seam.
+
 ## Apply Two Change Probes
 
 1. **Same rule changes:** can the maintainer find one authoritative decision and its consumers, or must they guess which copies, flags, and manual steps to update?
 2. **One consumer changes independently:** does that force changes to stable, unrelated consumers or to a shared abstraction that knows too much?
 
 Use a concrete change the system actually needs. Git co-change history can reveal hidden coordination, but correlation alone does not prove the modules belong together: formatting, release, or bulk migration commits also co-change.
+
+When the change is consequential, trace a hypothetical next edit **within the known domain**:
+- The eligibility policy changes: how many independently defined decisions must the maintainer locate?
+- The mobile client changes presentation: must the billing rule or another consumer change without a behavior reason?
+- A failed operation is retried: does the caller need to know an internal ordering or global state to avoid damage?
+
+This is a design probe, not a forecast of requirements. If it does not identify a credible synchronization cost, stop instead of manufacturing a new abstraction.
 
 ## Special Cases Are Architectural Evidence
 
@@ -30,6 +45,8 @@ An `if` for one value, a caller-specific option, a swallowed exception, a hardco
 - Would changing the underlying policy require finding more exceptions elsewhere?
 
 Preserve legitimate distinctions, compatibility requirements, and safeguards. A remote timeout does not mean the effect failed; removing retries or deduplication solely to make code appear simpler can break correctness.
+
+A special case merits a brief explanation when its reason is otherwise invisible. Do not document every conditional; capture the non-obvious contractual constraint, preferably near the owning code or a focused test. An exception handler that silently swallows a failure may be a real defect; an exception handler that reconciles an ambiguous remote outcome may be essential.
 
 ## Examples
 
@@ -42,6 +59,8 @@ Preserve legitimate distinctions, compatibility requirements, and safeguards. A 
 **Legitimate fan-out:** introducing a CMS field requires a schema, editor, preview, and renderer change. The file count is not the problem; inconsistent fallback semantics would be.
 
 ## Scope and Stop
+
+Do not convert this diagnostic reference into the upstream skill's whole-codebase "untangle in one pass" workflow. The goal here is to **prevent new tangles in the requested change** and identify a better boundary when the change demands one. For a dedicated restructuring request, use the behavior-preserving refactoring workflow.
 
 During planning, identify likely coordination traps and ownership decisions; do not edit. During implementation, inspect the diff for tangles **introduced by this change**, remove unjustified additions, and preserve behavioral and compatibility requirements.
 

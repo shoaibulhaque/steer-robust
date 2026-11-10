@@ -34,3 +34,19 @@ existing protection over a parallel framework.
 A static candidate needs reachability and impact analysis. A simulated exploit verifies only its
 modeled assumptions. A passing authorization test for one route does not prove coverage of all routes.
 Use maintained project and official framework guidance for version-specific implementation details.
+
+
+## Worked Case: Tenant-Scoped Object Access
+
+**Claim under review:** "Report URLs are unguessable, so other tenants cannot access reports."
+
+An opaque ID can reduce guessing, but does not establish authorization. Inspect the real report-download entry point: identity resolution, current tenant membership, object lookup, permission enforcement and the eventual read or signed download. Check whether another route, queue consumer, or pre-signed link bypasses the intended decision where in scope.
+
+A focused controlled test uses two tenants and a report owned by tenant A:
+- A permitted A user can retrieve the report.
+- A valid B user who is given A's ID is rejected through the **real entry point**.
+- The rejection occurs before protected bytes or sensitive metadata are returned. If the operation can create side effects, verify those do not occur.
+
+The expected denial must come from the declared contract. A model-generated route name or a scanner string is not evidence that the route is reachable. A test on a mocked permission helper is not proof that the production endpoint actually invokes it.
+
+**Report with calibrated certainty:** if a reachable alternate path bypasses the check, identify the path, required attacker capability, affected asset and demonstrated impact. If the route's deployment exposure or upstream access policy is unknown, classify the scenario as conditional until that fact is established. Propose enforcement at the owning object/tenant boundary and a rejecting regression test. Do not exercise someone else's live records to prove the point.

@@ -67,6 +67,25 @@ Test automatic selection without naming skills. Check that plans are actionable,
 
 Include mixed-domain cases where two skills genuinely apply without expanding the plan into all workflows. Grade ownership, implementation order, decisive checks, evidence versus assumptions, tool cost, and adherence to plan-only permissions.
 
+## Architecture Planning Quality Probes
+
+Evaluate the **plan's ability to constrain a correct implementation**, not its length or
+architecture vocabulary. Compare the previous seven-skill kit with the consolidated candidate
+on identical task fixtures.
+
+| Fixture | Wrong-plan trap | Strong-plan signal |
+| --- | --- | --- |
+| Greenfield worker, unknown peak load | Invent throughput or add a broker cluster | Mark unknown workload; name operation identity, recovery, and measurement |
+| Brownfield CMS field crossing schema and preview | Duplicate fallback semantics, break old data | Find one rule owner; preserve draft/published and old-content behavior |
+| Hybrid service replacement | Promise generic rollback or assume mixed-version safety | Map supported versions, authoritative writer, cutover and recovery |
+| Shared eligibility decision | Merge independent policies by syntax | Centralize only decisions with one reason to change |
+| Small formatting change | Trigger architecture analysis and diagrams | Select no unnecessary skill |
+
+For each consequential requirement, trace **owner → implementation step → verification evidence**
+that would reject a plausible incorrect implementation. Penalize invented measurements, unsupported
+capacity claims, decorative diagrams, unnecessary special-skill activation, and plan-only writes.
+A substantial plan may use the casebook; a routine decision should not load it automatically.
+
 ## Representative Decision Cases
 
 - Existing extension point versus parallel implementation; duplicated syntax versus shared knowledge.

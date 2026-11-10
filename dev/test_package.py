@@ -105,12 +105,18 @@ class PackageTests(unittest.TestCase):
             self.assertIn(prefix + "SKILL.md", archive.namelist())
             self.assertIn(prefix + "references/change-locality.md", archive.namelist())
             self.assertIn(prefix + "references/integration-and-migration.md", archive.namelist())
+            self.assertIn(prefix + "references/architecture-plan-casebook.md", archive.namelist())
             self.assertIn(prefix + "LICENSE.txt", archive.namelist())
             self.assertIn(prefix + "NOTICE.md", archive.namelist())
             self.assertIn(b"Copyright (c) 2026 Maze", archive.read(prefix + "LICENSE.txt"))
             skill = archive.read(prefix + "SKILL.md").decode("utf-8")
             self.assertIn("Greenfield", skill)
             self.assertIn("Brownfield", skill)
+
+    def test_missing_architecture_casebook_is_rejected(self):
+        (self.root / "skills/architecture-engineering/references/architecture-plan-casebook.md").unlink()
+        with self.assertRaises(ValueError):
+            kit.archive()
 
     def test_retired_architecture_skills_are_not_packaged(self):
         with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:

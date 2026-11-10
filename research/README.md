@@ -115,3 +115,15 @@ for custom engineering/review workflows. See the [adaptation review](skill-adapt
 structure preservation, concrete corrections, selected direct book reading, licensing and limits.
 The larger source book collection was located after the initial rebuild; earlier research claims
 should not be read as evidence that the entire collection was reviewed.
+
+## Evidence-Led Quality Pass (2026-11-10)
+
+The architecture workflow was strengthened with risk-proportional depth, observable quality scenarios,
+explicit uncertainty, design-challenge probes, and actionable implementation work packages. The five
+new architecture references now address more concrete operational and integration risks; an optional
+worked-plan casebook provides greenfield, brownfield and migration examples.
+
+Existing TDD, refactoring, debugging, verification and security references gained worked cases.
+Their principal skill workflows, activation descriptions and responsibilities remain unchanged.
+These enhancements have not been shown to improve agent outcomes; comparative skill-selection,
+plan-quality and execution evaluations are still required.

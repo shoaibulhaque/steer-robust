@@ -21,6 +21,7 @@ FILES = (
     "skills/architecture-engineering/references/integration-and-migration.md",
     "skills/architecture-engineering/references/change-locality.md",
     "skills/architecture-engineering/references/architecture-evaluation.md",
+    "skills/architecture-engineering/references/architecture-plan-casebook.md",
     "skills/architecture-engineering/references/design-decisions.md",
     "skills/architecture-engineering/references/state-and-failure.md",
     "skills/architecture-engineering/references/performance-decisions.md",

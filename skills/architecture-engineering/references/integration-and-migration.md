@@ -8,6 +8,19 @@ List producers and consumers, current and proposed data contracts, supported ver
 
 Distinguish a replacement from an additive integration. Do not introduce dual writes, synchronization, or a compatibility shim without a concrete purpose and an end condition.
 
+## Prove the Coexistence Contract
+
+For a rolling change, enumerate the old and new readers and writers that may actually run together. Do not assume deployment is atomic across mobile clients, browser caches, workers, databases, and separate repositories.
+
+| Combination | Question |
+| --- | --- |
+| Old reader + old writer | What currently works and what evidence proves it? |
+| Old reader + new writer | Can the old reader consume newly written state without misinterpretation? |
+| New reader + old writer | Can new code handle old fields and missing data during rollout? |
+| New reader + new writer | Does the intended final contract satisfy all affected behavior? |
+
+Unsupported mixes must be prohibited by the deployment plan, not silently ignored. Where zero downtime is required, verify that every combination that can actually occur is supported.
+
 ## Prefer an Explicit Transition
 
 A common safe sequence is **expand → migrate → contract**, adapted to the supported deployment model.
@@ -27,6 +40,11 @@ flowchart LR
 
 ## Address Irreversible Effects
 
+Plan the **source of truth during transition** explicitly. If a backfill races with live writes,
+identify the ordering, checkpoint, replay/delta or conflict policy, and the validation query that
+would reveal divergence. If the old path still writes, decide how writes are fenced or reconciled
+before the new path becomes authoritative.
+
 Database rollback does not undo externally committed payments, emails, or side effects. For non-atomic distributed operations, identify stable operation identity, deduplication, reconciliation, or compensation at the owner of the effect.
 
 If the old system and new system can both write, specify conflict resolution and when ownership transfers. Avoid unbounded bidirectional synchronization. A cutover without a trustworthy source of truth can corrupt data even when every service remains available.
@@ -36,6 +54,13 @@ If the old system and new system can both write, specify conflict resolution and
 State: preconditions; checkpoints; migration script properties such as idempotency and restartability where relevant; validation queries; release order; rollback versus forward-fix feasibility; observation windows; and the removal condition for temporary bridges.
 
 Do not promise zero downtime without a verifiable deployment and state-transition design. Where rollback is impossible after a data-format or business-effect change, say so and choose a safe forward-recovery strategy.
+
+**Common migration failure:** adding the new read path, copying historical records, and switching
+traffic while new writes still land in the old store. A correct migration must explain how live
+writes are captured or stopped and how the final reconciliation proves no committed write was missed.
+
+The plan is complete only when temporary bridges have an owner and a retirement condition. Merely
+deploying the new system is not proof that the old system can be removed.
 
 ## Example: API Replacement
 

@@ -26,7 +26,7 @@ Each responsibility has one owner:
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
 - **Debugging** owns causal investigation.
-- **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, and quality tradeoffs.
+- **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, quality tradeoffs, and substantial worked plans.
 - **Change verification** owns requested review.
 - **Security engineering** owns specialist security analysis.
 
@@ -132,6 +132,11 @@ metadata. The tests extract the archive and validate the extracted copy. Develop
 notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 
 ## Evaluate Before Adoption
+
+The architecture skill includes a conditional [worked-plan casebook](skills/architecture-engineering/references/architecture-plan-casebook.md)
+covering greenfield job processing, an existing CMS feature and hybrid migration. Existing TDD,
+refactoring, debugging, verification and security references now include focused worked cases.
+These are examples, not universal implementation templates.
 
 Structural checks show the package is well formed. They do not show that an agent selects the right
 skill, follows it, or produces better changes. Before adopting a skill, compare it with your current
