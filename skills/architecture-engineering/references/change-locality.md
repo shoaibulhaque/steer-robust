@@ -2,7 +2,10 @@
 
 **Read when:** a planned or implemented multi-consumer change risks hidden coordination, unnecessary coupling, copied domain decisions, or surplus abstraction.
 
-**Core test:** should these pieces change for the same reason? If yes, make the relationship and authority clear. If not, do not force them to move together.
+**Core test:** should these pieces change for the same reason? If yes, make the necessary relationship
+and authority discoverable; that does not require physically combining them. If not, avoid needless
+coordination. Replicated projections or independent failure domains can justify multiple representations
+when their consistency and ownership are explicit.
 
 ## Three Architectural Tangles
 
@@ -62,6 +65,9 @@ A special case merits a brief explanation when its reason is otherwise invisible
 
 Do not convert this diagnostic reference into the upstream skill's whole-codebase "untangle in one pass" workflow. The goal here is to **prevent new tangles in the requested change** and identify a better boundary when the change demands one. For a dedicated restructuring request, use the behavior-preserving refactoring workflow.
 
-During planning, identify likely coordination traps and ownership decisions; do not edit. During implementation, inspect the diff for tangles **introduced by this change**, remove unjustified additions, and preserve behavioral and compatibility requirements.
+During planning, identify likely coordination traps and ownership decisions; do not edit. During
+implementation, inspect the diff for tangles **introduced by this change** and correct avoidable ones.
+Deliberate redundancy may improve availability, decoupling or performance; account for its consistency
+cost instead of deleting it solely for architectural neatness.
 
 A typical change need not fit in one file. Stop when owners and necessary dependencies are explicit and no avoidable new coordination remains. Do not repeatedly refactor the whole repository until every special case disappears.

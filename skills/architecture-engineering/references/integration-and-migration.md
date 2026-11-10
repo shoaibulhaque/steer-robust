@@ -23,7 +23,10 @@ Unsupported mixes must be prohibited by the deployment plan, not silently ignore
 
 ## Prefer an Explicit Transition
 
-A common safe sequence is **expand → migrate → contract**, adapted to the supported deployment model.
+For changes requiring mixed-version coexistence, **expand → migrate → contract** is useful, not
+universal. If every affected client and writer can be stopped or upgraded atomically within an approved
+downtime window, a controlled cutover may be safer and simpler. Choose by actual compatibility,
+integrity, recovery and operational constraints.
 
 ```mermaid
 flowchart LR
@@ -59,8 +62,9 @@ Do not promise zero downtime without a verifiable deployment and state-transitio
 traffic while new writes still land in the old store. A correct migration must explain how live
 writes are captured or stopped and how the final reconciliation proves no committed write was missed.
 
-The plan is complete only when temporary bridges have an owner and a retirement condition. Merely
-deploying the new system is not proof that the old system can be removed.
+If the chosen strategy introduces temporary bridges, give each an owner and retirement condition.
+Do not invent bridges only to match a staged-migration example. Deploying the new system alone does not
+prove that an old system can be removed.
 
 ## Example: API Replacement
 

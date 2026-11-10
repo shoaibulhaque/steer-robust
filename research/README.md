@@ -127,3 +127,19 @@ Existing TDD, refactoring, debugging, verification and security references gaine
 Their principal skill workflows, activation descriptions and responsibilities remain unchanged.
 These enhancements have not been shown to improve agent outcomes; comparative skill-selection,
 plan-quality and execution evaluations are still required.
+
+## Judgment and Example Anchoring Audit (2026-11-10)
+
+Reviewed the consolidated architecture skill, its casebook and migration/evaluation references, plus
+universal guidance and existing specialist workflows. Replaced categorical preferences for a simple
+single-worker topology, a database-backed queue, and staged migration with conditional decisions.
+Examples remain candidate solutions with explicit counterfactuals, not recommended default stacks.
+The architecture workflow compares alternatives only when a real choice remains and accepts additional
+complexity when evidence justifies its guarantees. Diagnostic coupling categories do not prohibit
+legitimate replication or distributed coordination.
+
+Existing TDD maintains its test-first discipline for observable behavior while clarifying that example
+language and test granularity are not prescribed. Debugging phases are iterative rather than compulsory
+one-way gates; refactoring accommodates pre-existing unrelated failures through attributable baselines.
+EVAL_PLAN.md adds paired anti-anchoring cases that vary one material constraint at a time.
+No agent-model behavioral improvement is claimed until controlled evaluations are performed.

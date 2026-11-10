@@ -27,7 +27,11 @@ and disposable experiments, and for generated artifacts whose generator owns the
 a meaningless test. Honor explicit project or user exceptions, and state
 material verification gaps.
 
-Use the repository's test runner, fixtures, and conventions.
+Use the repository's test runner, fixtures and conventions. Examples illustrate test detection, not
+a mandated language, framework, test granularity or number of assertions. Select the smallest
+boundary that credibly observes the behavior; integration or end-to-end checks may be essential when
+a unit test cannot prove the promise. Keep the test-first discipline for testable behavior without
+inventing a test for each implementation helper.
 
 ## Plan-Only Requests
 

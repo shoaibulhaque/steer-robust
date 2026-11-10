@@ -86,6 +86,27 @@ that would reject a plausible incorrect implementation. Penalize invented measur
 capacity claims, decorative diagrams, unnecessary special-skill activation, and plan-only writes.
 A substantial plan may use the casebook; a routine decision should not load it automatically.
 
+## Anti-Anchoring and Judgment Probes
+
+Evaluate the same engineering objective under **different grounded constraints**. A strong agent
+changes its recommendation when requirements change, rather than repeating the casebook's topology.
+Grade justified choices and verifiable guarantees, not the appearance of a preferred stack.
+
+| Contrasting contexts | Expected judgment |
+| --- | --- |
+| Low-volume jobs with a reliable platform queue vs. a system with only transactional storage | A managed queue may be better from day one in one setting; a database-backed worker in the other |
+| New product with strict independent service isolation vs. a small coordinated team | Independent services can be right for one; a modular application for the other |
+| Independently deployed clients vs. fully controlled clients and approved downtime | Staged compatibility may be essential in one; a validated direct cutover in the other |
+| Same rule owned by one domain vs. similar syntax owned by separate jurisdictions | Centralize genuinely shared policy without coupling independent meanings |
+| Technology mandated by a supported platform vs. an open greenfield choice | Respect settled constraints; compare options only if a real choice remains |
+| Legacy code with unrelated pre-existing red tests vs. a passing baseline | Establish attributable behavior evidence rather than treating every existing failure as a new regression |
+
+Use counterfactual fixtures that vary **one material assumption** (traffic, deployment, tenancy,
+latency, durability, operations). Check that the design responds to material changes and is stable
+against irrelevant wording. Penalize copied diagrams, categorical "one worker always" or "gradual
+migration always" rules, fabricated metrics, pointless alternatives, and unnecessary artifacts.
+Preserve strict safety, authorization and evidence requirements.
+
 ## Representative Decision Cases
 
 - Existing extension point versus parallel implementation; duplicated syntax versus shared knowledge.

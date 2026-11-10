@@ -13,7 +13,9 @@ Convert consequential quality attributes into scenarios. For example, "fast" nee
 1. Identify the authoritative source for each important decision and data item: identities, authorization, content, payments, or other domain-specific concepts.
 2. Group rules by reason to change. Keep distinct meanings separate even when their names or data shapes match.
 3. Define public contracts at boundaries that actually matter: input, output, errors, side effects, ownership and version expectations.
-4. Choose the simplest deployment structure that meets today's constraints. A modular application can have strong internal boundaries without separately deployed services.
+4. Choose deployment boundaries from actual consistency, ownership, isolation, scaling, ecosystem and
+   operating constraints. A modular application need not be separately deployed; independent services
+   can be justified before high traffic when independent ownership or operational guarantees require them.
 5. Trace a thin vertical slice through UI or API, domain behavior, persistence, and one external effect where relevant. Prefer a working path over building every layer as an independent framework.
 
 A new abstraction earns its existence by hiding meaningful volatility, protecting an invariant, or clarifying domain intent. Do not add a service, broker, cache, or plugin system solely because it may be needed later.
@@ -24,7 +26,10 @@ Estimate only quantities that could change the architecture: peak arrival rate r
 
 Consider the smallest sustainable operational model: how configuration and secrets enter, how migrations run, how failures surface, how an operator can restart or recover work, and who owns backups if stored data is critical. An unneeded cluster adds operational risk; a "single server" still requires a recovery decision when losing that server would violate a stated guarantee.
 
-Do not make "cloud-native" synonymous with distributed. Prefer known, well-supported dependencies and contracts over novelty. If an unusual technology is proposed, name the requirement that needs it and the cost of replacing it.
+Do not equate "cloud-native" with distributed or "simple" with monolithic. Familiar, supported tools
+reduce risk when they fit, but an unfamiliar technology may serve a consequential requirement better.
+Evaluate its advantages, integration costs and operational ownership rather than rewarding familiarity
+or novelty as ends in themselves.
 
 ## Challenge the Initial Architecture
 
@@ -35,7 +40,8 @@ An uncertainty can justify a narrow spike or benchmark with a predefined success
 Examples:
 
 - A static site with a CMS may need content validation, draft access control, and reliable builds; it does not thereby need a general event-driven backend.
-- A scheduled report may need one durable worker. Add a distributed work system only if actual workload, recovery, or isolation needs warrant it.
+- A scheduled report may need one durable worker, or an existing managed queue may already be the
+  simpler operational choice. Neither low volume nor high volume alone establishes the best topology.
 
 ## Plan the First Delivery
 

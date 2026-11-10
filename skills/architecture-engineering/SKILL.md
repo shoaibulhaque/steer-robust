@@ -11,8 +11,14 @@ Choose the simplest defensible design for the actual requirements, then make it 
 verify, operate, and change. Architecture includes the cost of understanding a system, not just its
 runtime topology.
 
-**Core principle:** give each rule and invariant a clear owner. Introduce coordination, abstraction,
-and infrastructure only when they protect a real requirement or materially reduce the cost of change.
+**Core principle:** make responsibilities and invariants understandable and enforceable. Choose boundaries,
+coordination, abstractions and infrastructure for the real guarantees they provide and costs they impose.
+Neither fewer components nor more components is inherently better.
+
+**Decision authority:** requirements and observed system behavior govern the design. Patterns, diagrams
+and examples here are hypotheses and probes, not prescribed architectures. Distributed services,
+replicated state, specialized infrastructure or a direct cutover can be right when the constraints
+justify them. Explain the evidence, rather than forcing an example's outcome.
 
 ## Choose the Work
 
@@ -71,13 +77,15 @@ contract, prefer extending it over building a parallel solution.
 
 ### 3. Construct and Challenge a Candidate
 
-Start with the least complex design that satisfies the drivers. Make explicit which component owns
-each invariant, how consumers interact with it, where state lives, and where failures are observed.
+Construct a viable design from the drivers, not a preferred topology. Avoid complexity without material
+benefit, but do not reject necessary complexity for aesthetic simplicity. Make explicit which component
+enforces each invariant, how consumers interact, where authoritative state lives, and how important
+failures are observed or recovered.
 
-Challenge consequential decisions with a credible simpler alternative and a small set of scenarios
-that could disprove the choice. Consider feasibility, resource growth, compatibility, operational
-burden, reversibility, and failure windows in proportion to the risk. Prefer removing unnecessary work,
-knowledge, or coordination before adding another stateful component.
+Compare credible alternatives **when a real choice remains**. A simpler alternative is useful only if
+it can plausibly satisfy the guarantees. Where a fixed contract or observed constraint settles the
+choice, verify it instead of inventing an alternative. Evaluate feasibility, growth, compatibility,
+operations, reversibility and failure windows proportionately. Accept necessary stateful components.
 
 Inspect the **boundary where the design might fail**, not merely its happy-path diagram: an
 acknowledgment may be lost after a remote effect; concurrent actors may both believe they own work;
@@ -119,10 +127,10 @@ For **implementation**, separate preparatory restructuring from new behavior, us
 test-first workflow, migrate affected callers, and inspect the diff for accidental coupling. Keep
 the requested scope; note pre-existing problems rather than starting a general architectural cleanup.
 
-A diagram, ADR, capacity estimate, or detailed RFC is useful only when it resolves a real ambiguity.
-A plan is complete when the important decisions are justified, the remaining uncertainty is explicit,
-and another engineer can execute and verify the intended outcome. Do not continue refining an already
-sufficient plan for architectural perfection.
+A diagram, ADR, estimate or RFC earns its place by resolving ambiguity, meeting a project requirement
+or supporting a consequential handoff. No artifact is mandatory because an example contains it. A
+plan is complete when important decisions are justified, uncertainty is explicit, and another engineer
+can execute and verify the intended outcome; avoid polishing an adequate plan indefinitely.
 
 ## Conditional References
 
@@ -144,9 +152,9 @@ Read only the reference that addresses a material question; do not load all of t
   retries, persistence, or partial failures affect correctness.
 - [Performance Decisions](references/performance-decisions.md): read when workload, capacity, latency,
   or resource cost materially affects the choice.
-- [Worked Architecture Plans](references/architecture-plan-casebook.md): read when preparing a
-  substantial multi-step architecture plan and examples would clarify ownership, failure scenarios,
-  transition sequencing, or falsifiable acceptance criteria.
+- [Worked Architecture Plans](references/architecture-plan-casebook.md): read when a substantial plan
+  benefits from an illustrative counterexample. Do not copy component choices, rollout strategies or
+  sequence without validating their assumptions.
 
 ## Illustrative Decisions
 

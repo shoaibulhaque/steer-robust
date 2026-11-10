@@ -30,7 +30,10 @@ Each responsibility has one owner:
 - **Change verification** owns requested review.
 - **Security engineering** owns specialist security analysis.
 
-A task can use more than one skill, but no skill loads another automatically.
+A task can use more than one skill, but no skill loads another automatically. **Examples are
+illustrative, not prescriptive:** select technologies and workflows from the real requirements and
+project constraints, rather than copying the sample architecture or completing an irrelevant
+comparison checklist.
 
 ## Planning vs. Execution
 

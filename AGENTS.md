@@ -23,6 +23,12 @@ never grants extra authorization.
 - For consequential plans, identify owners, contracts, affected consumers, dependencies, ordered steps, and acceptance evidence. Match detail to the decision rather than producing a design document for every task.
 - Apply applicable specialized skills during planning, but do not load them all, assume an unverified fix is proven, or claim checks were executed.
 
+## Engineering Judgment
+
+- Treat skill procedures, heuristics, diagrams and examples as decision aids, not additional system requirements. Derive choices from the user's goal, verified context, constraints and guarantees.
+- A suggested pattern or technology is not the default. Choose an alternative when evidence or explicit requirements justify it; explain consequential tradeoffs rather than completing a checklist.
+- Scale investigation and verification to uncertainty and impact. Keep authorization, safety and correctness obligations intact.
+
 ## Engineering
 
 - **Solve the right problem.** Establish the expected behavior and material constraints. For a defect,

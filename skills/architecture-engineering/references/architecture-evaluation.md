@@ -29,7 +29,10 @@ These are example prompts, **not default acceptance thresholds**. Identify known
 
 ## Challenge Consequential Decisions
 
-Compare the candidate with a credible simpler alternative, or two genuinely different options if no simple baseline exists. Evaluate:
+When consequential alternatives remain unresolved, compare credible candidates that can realistically
+satisfy the required guarantees. Do not invent a weaker "simple alternative" only to complete a
+comparison. Where a fixed contract or verified constraint settles the choice, verify feasibility and
+residual risk instead. Evaluate relevant factors such as:
 
 - Functional coverage and correctness invariants.
 - Change surface and knowledge required of callers.
@@ -54,10 +57,10 @@ Identify claims that would change the design if disproven: storage performance, 
 
 An experiment can establish feasibility only under its tested conditions. A local benchmark does not prove internet-scale traffic; mocks do not prove end-to-end durability; a load test without failure injection cannot establish recovery.
 
-**Decision experiment:** "At the expected peak input size and concurrency, measure job completion
-time and memory for one worker. If the result meets the agreed objective with acceptable headroom,
-keep one worker; otherwise compare bounded parallel workers before introducing a broker cluster."
-The plan describes how to gather evidence, not an invented performance outcome.
+**Illustrative decision experiment:** measure job latency and resource use under a representative
+peak workload, then compare viable execution options against reliability, isolation and cost objectives.
+One worker, several workers, a managed queue or existing broker may win. The example describes how
+evidence changes a choice, not a preselected winner or an invented performance result.
 
 ## Preserve the Decision
 

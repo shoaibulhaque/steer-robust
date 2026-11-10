@@ -1,6 +1,11 @@
 # Architecture Plan Casebook
 
-**Read when:** a substantial plan needs a concrete example of how architectural drivers become decisions, ordered work, and falsifiable acceptance evidence. These scenarios are illustrative, not templates to copy into unrelated systems.
+**Read when:** a substantial plan benefits from examples of turning requirements into architecture,
+ordered work and falsifiable evidence. These are illustrative **candidate solutions**, not default
+stacks, prescribed boundaries, mandatory sequences or acceptance thresholds.
+
+**Reuse the reasoning, not the topology.** Identify the assumptions behind an example and a condition
+under which a different solution would be better. If its assumptions do not apply, do not copy it.
 
 ## Example A: Greenfield Durable Report Jobs
 
@@ -17,7 +22,12 @@
 
 Do not invent a concurrency target from the daily average. Determine service time and peak arrivals before claiming a single worker is sufficient or proposing a cluster.
 
-### Candidate architecture
+### One possible architecture
+
+This diagram assumes job state in a database and a worker. Managed queues, workflow platforms,
+serverless processing or a broker may better satisfy actual delivery semantics, workload patterns,
+operational capabilities, team constraints or platform guarantees. The diagram does not settle that choice.
+
 
 ```mermaid
 flowchart LR
@@ -35,7 +45,10 @@ flowchart LR
 - Artifact storage holds bytes; the read path still enforces current object/tenant access.
 - The user sees truthful state, including a recoverable failure. A status page cannot substitute for actual recovery logic.
 
-**Alternative:** introduce a distributed message broker. Reject it initially unless the observed arrival pattern, delivery requirements, or isolation constraints justify another operational component. A database-backed queue may be enough, but only if its concurrency and claiming semantics are proven in the chosen storage engine.
+**Compare actual options:** a database-backed queue may reduce infrastructure and reuse transaction
+guarantees; a managed queue or broker may offer better isolation, independent scaling or delivery
+capabilities even at low volume. Evaluate failure semantics, operations, cost and platform constraints.
+Neither the daily request count nor this example determines a winner.
 
 ### Challenge with feasible failure schedules
 
@@ -54,7 +67,7 @@ Do not claim exactly-once processing because a framework or broker offers an exa
 2. Implement durable acceptance with authorization. Acceptance: accepted response points to committed work, and rejected callers leave no work.
 3. Implement worker claiming, execution and recovery. Acceptance: interruption and duplicate-claim schedules preserve state.
 4. Implement status and artifact access. Acceptance: correct user retrieves; other tenant cannot.
-5. Run representative performance and recovery checks. Record actual measurements, environment and uncertainty. Add another worker or broker only if evidence calls for it.
+5. Run representative performance and recovery checks. Record actual measurements, environment and uncertainty. Select or revise the execution architecture when requirements or evidence justify it.
 
 This is more executable than "Use Redis/Celery for scalable background jobs" because it names contracts and the specific ways the proposed architecture could be wrong.
 
@@ -66,7 +79,10 @@ First inspect the existing schema, draft retrieval path, component props, any fa
 
 The *same value* may pass through schema, CMS editor, preview response, static build and presentation. That fan-out is not a design defect; separately defined subtitle defaults in each layer are.
 
-**Candidate decision:** the content schema owns whether subtitle is optional; the content transformation defines one fallback if a fallback is required. Editors and renderers display the resolved content without reinventing the policy.
+**One candidate ownership decision:** the content schema defines optionality and a transformation
+resolves a shared fallback if all consumers need the same meaning. Another project may place that rule
+in domain logic or intentionally use different preview, excerpt and published-page fallbacks. Check
+actual consumers before consolidating what may be independent policy.
 
 **Relevant changes and checks:**
 
@@ -82,6 +98,10 @@ If current published documents lack the field, choose the fallback or migration 
 ## Example C: Hybrid Storage or API Replacement
 
 **Request:** "Replace an existing writer with a new service while old clients and deployed instances may remain active."
+
+This scenario assumes independently deployed clients and mixed versions. A coordinated maintenance
+window or one-step cutover may be preferable when all consumers are controlled, downtime is acceptable,
+and recovery is verified.
 
 Define the compatibility contract *before* designing deployment steps:
 
@@ -103,6 +123,13 @@ flowchart LR
 **Hard question:** after writing in the new representation, can the previous version still read the state? If not, rolling back code may be unsafe even if the deployment tool offers a rollback button.
 
 Define checkpoints: snapshot/backup and restoration evidence where justified, backfill repeatability, mismatch measurement, remaining old traffic, deployment order, and removal of temporary compatibility code. Distinguish rollback from forward recovery when irreversible business effects are involved.
+
+## Counterfactual Outcomes
+
+The same planning method can yield different correct architectures: a managed queue can win on
+operational guarantees, a direct cutover can beat staged migration when coexistence is unnecessary,
+and two similarly named content rules can remain separate when their owners evolve independently.
+The goal is to justify the choice from its constraints, not reproduce the casebook's components.
 
 ## What a Finished Plan Proves—and Does Not
 

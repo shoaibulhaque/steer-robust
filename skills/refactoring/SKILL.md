@@ -46,9 +46,11 @@ afterwards as a behavior change with its own test.
 
 ### 1. Establish the Safety Net
 
-Run the relevant tests before you start; they must pass. Note any pre-existing failures. Confirm the
-tests observe the behavior you will preserve, including returned values, state changes, errors, effects,
-and ordering. If they do not, characterize it first.
+Establish a relevant baseline before editing. Ideally the affected tests pass; if unrelated or
+pre-existing failures exist, separate them from regressions with available evidence and characterize
+the behavior at risk where feasible. Do not declare preservation proven when observations cannot
+distinguish before from after. Check returned values, state changes, errors, effects and ordering to
+the extent they are contractual.
 
 ### 2. Characterize Legacy Code
 
@@ -76,8 +78,9 @@ or change; one broad passing test may not exercise the risky transformation.
 Apply one named refactoring per step: rename, extract, inline, move, change a signature, split a phase,
 or similar. Run the focused tests after each step.
 
-- **A step fails?** Revert it rather than debugging a large diff. Retry with smaller steps. The trickier
-  the code, the smaller the steps.
+- **A step fails?** Identify whether the current step caused the difference. Undo only task-owned
+  edits when necessary; never overwrite pre-existing work. Use smaller checkpoints as uncertainty
+  and consequence grow.
 - **Prefer tools:** use automated refactorings from the language server or IDE where reliable. Use the
   compiler or type checker to find affected callers; check dynamic and reflective uses separately.
 - **Edit with one goal:** when you notice another needed change, write it down and finish the current
@@ -104,13 +107,13 @@ part of the contract. Report the bugs you recorded.
 | --- | --- |
 | A name hides what something means | Rename it |
 | A fragment needs a comment to explain what it does | Extract a function whose name states the intent |
-| A layer only forwards calls | Inline it |
+| A layer forwards calls without hiding behavior or variation | Consider inlining after checking ownership and contract |
 | The same knowledge, with the same reason to change, lives in several places | Unify it at one owner |
 | Similar-looking code with different owners or reasons to change | Leave it separate |
 | A function uses another module's data more than its own | Move it toward that data |
 | One function performs several sequential phases | Split the phases |
 | A flag argument selects between behaviors | Separate the functions |
-| A type switch repeats across the code | Use polymorphism, only for real behavioral variation |
+| A type switch repeats across the code | Compare polymorphism, dispatch tables or explicit branches; choose what fits the actual variation |
 | Mutable data is shared widely | Encapsulate it behind its owner |
 | A stored value can be derived | Replace it with a query |
 
@@ -139,7 +142,7 @@ code easier to understand now.
 
 ## Verification Checklist
 
-- [ ] Relevant tests passed before the first step and after the last.
+- [ ] Relevant baseline and final behavior are compared, with pre-existing failures distinguished from regressions.
 - [ ] Behavior at risk was observed by tests, or characterized first; edits made before tests existed
   were limited to conservative dependency breaking.
 - [ ] Tests changed only to follow an interface change.
