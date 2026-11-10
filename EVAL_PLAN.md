@@ -10,15 +10,18 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | --- | --- | --- |
 | A: baseline | None | What does the actual working Codex + TDD setup achieve? |
 | B: defaults | Candidate AGENTS.md only | Do durable defaults add benefit without unnecessary work? |
-| C: design | B plus repository-engineering | Better ownership/abstraction choices on consequential tasks? |
+| C: architecture | B plus architecture-engineering | Sound greenfield/brownfield/hybrid plans and better design choices without extra ceremony? |
 | D: debugging | B plus systematic-debugging | Better diagnosis of uncertain failures without slowing clear ones? |
 | E: review | B plus change-verification | Better explicit review/readiness without activation during ordinary coding? |
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
-| I: preventive design | B plus design-for-change | Better change ownership in plans and implementations without false activation or extra ceremony? |
+| I: consolidation | Current seven-skill kit versus proposed six-skill kit | Does consolidation improve routing, plans and cost without losing preventive change-locality discipline? |
 
-Test the combined configuration only after useful individual results. If an existing setup already has
+Compare architecture cases with the existing seven-skill installation as a separate baseline. Record
+whether both former architecture skills were selected and whether they contributed unique value. Run
+conditions on identical fixtures without mixed installations. Test the combined configuration only
+after useful individual results. If an existing setup already has
 an overlapping debugging/security skill, document it and compare replacements explicitly. Do not let
 competing same-name skills silently contaminate conditions or attribute a bundled gain to every component.
 
@@ -34,8 +37,7 @@ testing automatic selection; test explicit invocation separately to distinguish 
 
 | Skill | Positive scenario | Adjacent negative control |
 | --- | --- | --- |
-| Repository engineering | Add a substantial feature through an existing extension point; independent domain rules must stay independent | Mechanical local rename |
-| Design for change | Extend a setting through schema, API and UI where rules could be duplicated and a caller-specific option is tempting | Isolated local edit; a pure cleanup should use refactoring, a major contract decision repository engineering |
+| Architecture engineering | Plan a greenfield service with measurable constraints, or implement a multi-consumer rule without duplicating decisions | Mechanical local rename, pure refactoring, causal debugging, or PR readiness review |
 | Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause |
 | TDD | Implement testable behavior with a discriminating new example, including an access rule changed only in configuration | Prose-only correction; a pure refactor should not trigger it |
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
@@ -52,8 +54,10 @@ Test automatic selection without naming skills. Check that plans are actionable,
 
 | Prompt | Expected skill | Failure to reject |
 | --- | --- | --- |
-| Plan an enrollment flow involving persistence and a changed public API | Repository engineering | Guess contracts or begin implementation |
-| Plan adding one setting through schema, editor, and API without duplicated defaults | Design for change | Treat legitimate multi-file edits as tangles |
+| Plan a new enrollment service with storage and realistic traffic constraints | Architecture engineering: greenfield | Choose infrastructure without workload evidence or begin implementation |
+| Plan an enrollment change involving a persisted schema and deployed API | Architecture engineering: brownfield | Guess existing contracts or start implementation |
+| Plan an old/new data pipeline cutover without data loss | Architecture engineering: integration/migration | Promise rollback without assessing irreversible writes |
+| Plan adding a setting through schema, editor, and API without duplicated defaults | Architecture engineering: change locality | Treat legitimate multi-file edits as tangles |
 | Plan safely splitting this untested legacy routine | Refactoring | Fix bugs or claim baseline passed |
 | Plan how to diagnose intermittent CI-only duplicate effects | Systematic debugging | Declare an unproven root cause |
 | Plan the test-first implementation of a new authorization rule | TDD | Claim that RED was observed |
@@ -67,6 +71,10 @@ Include mixed-domain cases where two skills genuinely apply without expanding th
 
 - Existing extension point versus parallel implementation; duplicated syntax versus shared knowledge.
 - Routine multi-consumer change: stable ownership of one decision versus duplicated defaults, context flags, or needless coordination; legitimate edits across layers are not penalized.
+- Greenfield design meeting realistic workloads without speculative distributed infrastructure.
+- Brownfield plan separating supported contracts from incidental implementation and suspected defects.
+- Hybrid cutover with mixed-version readers, authoritative writes, validation, and old-path removal.
+- Hidden links, needless links, surplus and special cases used as diagnostic evidence, not as a mandate to refactor unrelated code.
 - A consequential interface/performance decision with a simpler alternative and representative workload.
 - Legacy characterization followed by a desired behavior change; observable effects/error order matter.
 - Public API or rolling data migration; old/new readers and writers have actual compatibility obligations.

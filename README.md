@@ -1,9 +1,9 @@
 # Steer Robust
 
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
-every repository. Seven focused skills load only when a task needs them.
+every repository. Six focused skills load only when a task needs them.
 
-**Status:** v0.6.0 candidate. Structural and behavioral evaluation of the updated package is pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.7.0 candidate. Structural validation and comparative agent-behavior evaluation are pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
 
@@ -15,8 +15,7 @@ Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or 
 | [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing testable behavior or explicitly planning test-first cases | Pure refactoring or changes without observable behavior |
 | [refactoring](skills/refactoring/SKILL.md) | Planning or performing behavior-preserving restructuring, including legacy code | Adding behavior or redesigning a contract |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | Diagnosing or planning investigation of an unclear failure | Defects with an established cause and failing test |
-| [repository-engineering](skills/repository-engineering/SKILL.md) | Planning or implementing substantial design and ownership decisions | Mechanical, diagnosis-only, or review-only tasks |
-| [design-for-change](skills/design-for-change/SKILL.md) | Planning or implementing changes that risk scattered rules and coupling | Isolated edits, major architecture choices, pure refactoring, or reviews |
+| [architecture-engineering](skills/architecture-engineering/SKILL.md) | Greenfield/brownfield system planning, design choices, migrations, or preventing coupling in multi-module work | Routine local edits, pure refactoring, root-cause diagnosis, or patch-readiness review |
 | [change-verification](skills/change-verification/SKILL.md) | Patch or PR review, merge readiness, or specific change-verification plan | Routine implementation or generic planning |
 | [security-engineering](skills/security-engineering/SKILL.md) | Planning or conducting a security review, threat model, or hardening | Ordinary feature work or generic review |
 
@@ -25,8 +24,7 @@ Each responsibility has one owner:
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
 - **Debugging** owns causal investigation.
-- **Repository engineering** owns consequential design and ownership decisions.
-- **Design for change** owns preventing new coordination and coupling during implementation.
+- **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, and quality tradeoffs.
 - **Change verification** owns requested review.
 - **Security engineering** owns specialist security analysis.
 
@@ -34,9 +32,9 @@ A task can use more than one skill, but no skill loads another automatically.
 
 ## Planning vs. Execution
 
-Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans can use `repository-engineering`, change-locality plans `design-for-change`, refactor plans `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
+Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
 
-Do not load every skill just because the user asks for a plan. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
+Do not load every skill just because the user asks for a plan. Choose greenfield, brownfield, or hybrid guidance based on actual system context. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
 
 ## How Loading Works
 
@@ -94,6 +92,10 @@ Copy each selected skill as a complete folder, including `references/` and any l
 Compare with the installed files first. Replace only unchanged files that this kit owns, and merge
 local edits by hand. Keep project appendices and unrelated skills. If an earlier version installed
 `evidence-debugging`, replace it with `systematic-debugging`; do not keep both.
+For v0.7, replace the kit-owned `repository-engineering` and `design-for-change` folders with
+`architecture-engineering` after checking for local modifications. Preserve local customizations by
+merging them deliberately. Do not keep the retired skills alongside the replacement: their overlapping
+metadata can compete for the same request.
 
 To uninstall, remove the kit's skill folders and the instruction text you added. Remove an instruction
 file only if nothing else remains in it. Never remove shared directories, unrelated skills, or other
@@ -123,7 +125,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py
 ```
 
 The builder checks skill metadata, local links, code fences, and the exact set of files in each skill.
-It then writes `dist/steer-robust-v0.6.0-candidate.zip` from an explicit allowlist with deterministic
+It then writes `dist/steer-robust-v0.7.0-candidate.zip` from an explicit allowlist with deterministic
 metadata. The tests extract the archive and validate the extracted copy. Development files, design
 notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 

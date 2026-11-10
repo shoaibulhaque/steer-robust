@@ -1,6 +1,6 @@
 # Provenance — human reference, not runtime instructions
 
-The runtime contains only universal defaults and seven focused candidate skills. Do not load this
+The runtime contains only universal defaults and six focused candidate skills. Do not load this
 research folder for ordinary tasks or install it under a skill directory.
 
 ## Inputs inspected
@@ -86,6 +86,27 @@ improvement in agent outcomes.
 ## Planning Trigger Review (2026-11-09)
 
 All seven descriptions now cover relevant plan-only requests without requiring automatic activation on every planning task. `AGENTS.md` preserves a strict planning/execution boundary; each workflow specifies a minimal plan output and no-write behavior. The preventive skill's change-locality probes are an original adaptation of the earlier untangling concepts. Routing and outcome improvements are unmeasured; evaluation cases appear in `EVAL_PLAN.md`.
+
+## Architecture Skill Consolidation (2026-11-10)
+
+The previous `repository-engineering` and `design-for-change` skills overlapped on rule ownership,
+abstraction depth, dependency direction and change locality. The replacement
+`architecture-engineering` provides a single activation owner for consequential system/feature
+design and architecture-sensitive implementation. Its core separates requested outcome and context,
+design choice, challenge, delivery and permissions. Conditional references cover greenfield,
+brownfield, integration/migration, change locality, architecture evaluation, and the existing
+design/state/performance decision guides.
+
+The `design-for-change` taxonomy remains explicit: hidden links, needless links, surplus and
+special cases are now explained in `change-locality.md` with practical examples and stop conditions.
+The taxonomy was inspired by caldoai's `untangle-codebase` skill; the MIT author license and a new
+attribution notice move with the new folder. Existing references were preserved by content. The
+original TDD, debugging, refactoring, security and verification skill bodies are unchanged.
+
+Both predecessor skills must be uninstalled from the same scope when the replacement is installed;
+otherwise overlapping metadata will continue to compete. Package tests and comparative positive and
+negative trigger probes were updated. Structural checks do not establish improved model routing or
+engineering outcomes.
 
 ## Supplied Skill Integration
 

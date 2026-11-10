@@ -96,13 +96,31 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             kit.archive()
 
-    def test_design_for_change_and_upstream_license_are_distributed(self):
-        self.assertIn("design-for-change", kit.SKILLS)
+    def test_consolidated_architecture_skill_and_attribution_are_distributed(self):
+        self.assertIn("architecture-engineering", kit.SKILLS)
+        self.assertNotIn("repository-engineering", kit.SKILLS)
+        self.assertNotIn("design-for-change", kit.SKILLS)
         with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
-            prefix = f"{kit.NAME}/skills/design-for-change/"
+            prefix = f"{kit.NAME}/skills/architecture-engineering/"
             self.assertIn(prefix + "SKILL.md", archive.namelist())
+            self.assertIn(prefix + "references/change-locality.md", archive.namelist())
+            self.assertIn(prefix + "references/integration-and-migration.md", archive.namelist())
             self.assertIn(prefix + "LICENSE.txt", archive.namelist())
+            self.assertIn(prefix + "NOTICE.md", archive.namelist())
             self.assertIn(b"Copyright (c) 2026 Maze", archive.read(prefix + "LICENSE.txt"))
+            skill = archive.read(prefix + "SKILL.md").decode("utf-8")
+            self.assertIn("Greenfield", skill)
+            self.assertIn("Brownfield", skill)
+
+    def test_retired_architecture_skills_are_not_packaged(self):
+        with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
+            self.assertFalse(any("/skills/repository-engineering/" in n or
+                                 "/skills/design-for-change/" in n for n in archive.namelist()))
+
+    def test_missing_consolidated_attribution_is_rejected(self):
+        (self.root / "skills/architecture-engineering/NOTICE.md").unlink()
+        with self.assertRaises(ValueError):
+            kit.archive()
 
     def test_missing_imported_license_is_rejected(self):
         (self.root / "skills/security-engineering/LICENSE.txt").unlink()
