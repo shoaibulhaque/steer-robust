@@ -42,3 +42,23 @@ The causal chain explains the observation and the correction rejects the failure
 legitimate behavior. If a link remains unobserved, state that limit; tracing source alone is not proof
 of the runtime path. Add independent defenses only where another trust, ownership or effect boundary
 needs protection.
+
+
+## Worked Case: "The Job Ran Twice"
+
+An API reports a timeout, and the user sees two completed operations. It is tempting to add a delay or lower the worker concurrency. Neither explains the symptom.
+
+**Observations to collect, without repeating live side effects:** operation identity, request timestamp, job claim identity, durable effect ID, retry or redelivery reason, and relevant worker state. Inspect existing traces and controlled test fixtures first.
+
+Separate competing explanations:
+
+| Hypothesis | Distinguishing observation |
+| --- | --- |
+| Client submitted twice | Two independently accepted requests with different operation identities |
+| Broker redelivered one request | Same operation identity delivered or claimed more than once |
+| External call succeeded but response was lost | One durable external effect followed by a timeout/retry |
+| Two workers shared ownership | Overlapping claims with insufficient atomicity or lease fencing |
+
+A useful probe deliberately schedules the relevant interleaving in an isolated environment, then observes the durable business effect. An ordinary successful run cannot falsify a concurrency hypothesis.
+
+Once evidence identifies the cause, correct the component that owns request identity, claiming, or effect deduplication. Do not globally disable retries: some failures require retry for liveness. Report what the observations establish and any untested schedule or external visibility limit.

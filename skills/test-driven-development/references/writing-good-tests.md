@@ -90,3 +90,25 @@ new analyzer is required. A test failing only from broken setup does not prove i
 
 Mirrored oracles, never-selected tests, swallowed failures, fixture state shared across tests, assertions
 on a mock placeholder, or a test that survives the defect it supposedly catches require reassessment.
+
+
+## Worked Case: Authorization with an Observable Denied Effect
+
+**Requirement:** a user can request a report for their own tenant but not another tenant. Do not begin by testing that a permission helper returns a boolean; the meaningful contract is what the real request path permits and prevents.
+
+Choose independent examples: tenant A's authorized user can create a job for tenant A; tenant B's user cannot create a job owned by A. The denied case should assert **both** the rejection and absence of any persisted job or external effect.
+
+```python
+# Illustrative integration-test shape; adapt to the real framework and contract.
+response = client_as(tenant_b_user).post(
+    "/reports", json={"tenant_id": tenant_a_id}
+)
+assert response.status_code == expected_denial_status
+assert not report_jobs.exists_for(tenant_a_id, requested_operation_id)
+```
+
+The expected status comes from the API contract, not from the handler's current implementation. A unit test that mocks the job creator can verify a local interaction; it cannot prove that an alternate route or database write is blocked.
+
+A useful red test should fail because unauthorized work is accepted **or** because the expected denial is missing. After implementation, verify the allowed path still works. No extra per-helper tests are required merely because a permission function was extracted.
+
+**Counterexample:** asserting only "the endpoint returned 403" could pass even if the endpoint already queued the job before rejecting the request. The effect assertion is what distinguishes the actual invariant.

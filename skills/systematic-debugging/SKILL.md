@@ -36,9 +36,22 @@ If the cause and a failing test are already established, proceed with the correc
 
 Plan the smallest observations, reproduction, boundary probes, and competing hypotheses capable of distinguishing causes. Identify missing evidence without presenting any hypothesis or fix as established. Do not modify code or implement a speculative correction. The phases below govern a later execution request.
 
+## Security-Sensitive Investigation
+
+For failures involving identity, tenant context, permission, credentials, untrusted input or sensitive
+data, use targeted redacted evidence rather than raw bodies, database records or environment dumps.
+Do not disable authentication, authorization, certificate verification or other protections to make
+a reproduction pass.
+
+A credible active exposure may require explicitly authorized containment before root cause is fully
+understood; label it as mitigation, not proof of a fix. Reproduce with owned fixtures and controlled
+access. Do not extend diagnostics into unrelated users' data or infrastructure.
+
 ## The Four Phases
 
-Complete each phase before you start the next.
+Use the phases as an iterative investigation, not fixed gates. Comparing a working example can
+reveal the next observation; a hypothesis may expose a missing boundary trace. Revisit earlier
+phases when evidence changes. Do not implement a speculative fix to advance through a checklist.
 
 ### Phase 1: Root-Cause Investigation
 
@@ -63,8 +76,9 @@ Complete each phase before you start the next.
 1. **Find a working example.** Locate similar code, configuration, or a run that works.
 2. **Compare against the reference.** Read enough of it to understand its full contract, including
    required call order and setup. Do not skim the part you depend on.
-3. **List the differences.** Compare data, configuration, versions, load, timing, and state ownership.
-   List every difference, however small, before you choose one as the cause.
+3. **Find discriminating differences.** Compare data, configuration, versions, load, timing and
+   ownership. Prioritize differences capable of explaining the failure rather than exhaustively
+   cataloguing unrelated variation.
 4. **Understand the dependencies.** Identify the components, settings, and assumptions it requires.
 
 For correlated flags or order-dependent behavior, name the states, events, legal transitions, and
@@ -94,11 +108,10 @@ invalid combinations. A state-machine library is not required to do this.
 4. **Clean up.** Remove task-created workarounds and temporary diagnostics. Preserve pre-existing edits.
 5. **If the fix does not work,** stop and return to Phase 1 with the new information.
 
-**Repeated failed fixes are a signal to question the design.** When each fix reveals new shared state,
-coupling, or symptoms elsewhere, stop patching. Ask whether the pattern is sound, and discuss the
-design with the user before you attempt another fix. The signal is the revealed coupling, not a fixed
-attempt count. Stop the investigation when the evidence is sufficient, or when the next observation
-needs access you do not have.
+**Repeated failed fixes are a signal to revise the causal model.** If attempts reveal shared state or
+coupling, reconsider the design; if they reveal missing evidence, improve the probe. Raise a
+consequential redesign before expanding scope. The trigger is new evidence, not an arbitrary number
+of attempts. Stop when the evidence supports a correction or the needed observation is inaccessible.
 
 ## Red Flags — Stop and Return to Phase 1
 

@@ -18,6 +18,14 @@ AGENTS.md (or CLAUDE.md) in a repository, then fill it from repository evidence.
 - Module ownership and extension points: <paths and what each owns>.
 - External contracts and supported clients: <APIs, data formats, and their source of truth>.
 
+### Security Invariants (only where relevant)
+
+- Protected assets and trust boundaries: <actors, data or effects requiring protection>.
+- Enforcement owners: <actual modules, middleware, policies, IAM or runtime controls>.
+- Required rejected behavior: <what an unauthorized or malformed operation must not do>.
+- Existing security model and authoritative policy: <paths; read when the touched boundary matters>.
+- Deployment-specific safeguards: <what is enforced outside the repository and how to verify it>.
+
 ### Commands
 
 - Setup: `<command>`.

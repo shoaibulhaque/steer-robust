@@ -68,3 +68,18 @@ let every test become a slow system test once finer seams exist.
 
 To understand a tangle, refactor freely in a disposable scratch copy. Discard it, then redo only the
 validated steps through the safe workflow.
+
+
+## Worked Case: Extracting Logic from a Legacy Effectful Method
+
+A legacy invoice routine calculates totals, updates database state, and invokes a remote payment service in one long method. The requested change is to separate calculations without changing externally observable behavior.
+
+1. **Identify what must not change:** rounding, validation order, emitted errors, writes, remote-call arguments, and ordering of effects. A successful return value alone does not characterize the contract.
+2. **Find the observation point:** existing integration tests may exercise the method; add focused characterization of the calculation and representative error branches where the current behavior is otherwise unprotected.
+3. **Create only the needed seam:** if constructing the payment client blocks testing, inject a narrow collaborator while retaining the old production default and invocation behavior. Do not redesign the payment API yet.
+4. **Extract one coherent calculation:** copy it without changing rounding or validation; run relevant checks immediately. Refactoring improves structure; changing rounding would require a separate behavior-change step.
+5. **Verify production wiring:** a unit test of the new calculator does not show that the original invoice entry point calls it with the correct fields or preserves the effect order.
+
+For a failure after an extraction, return to the last known-good state using only changes belonging to the current task. A broad rewrite that changes calculation, payment semantics, and error handling together loses the ability to attribute regressions.
+
+**When to stop:** the requested responsibilities have clearer owners and the externally observable method contract is protected. Do not continue extracting every helper or invent an interface without a genuine dependency boundary.

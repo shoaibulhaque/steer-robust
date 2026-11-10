@@ -7,21 +7,28 @@ import re
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.6.0-candidate"
+VERSION = "0.7.0-candidate"
 NAME = f"steer-robust-v{VERSION}"
-SKILLS = ("repository-engineering", "design-for-change", "refactoring", "systematic-debugging",
+SKILLS = ("architecture-engineering", "refactoring", "systematic-debugging",
           "test-driven-development", "change-verification", "security-engineering")
 FILES = (
     "AGENTS.md", "README.md", "LICENSE", "EVAL_PLAN.md", "research/README.md",
     "templates/project-instructions.md",
     *(f"skills/{name}/SKILL.md" for name in SKILLS),
     "skills/test-driven-development/references/writing-good-tests.md",
-    "skills/repository-engineering/references/design-decisions.md",
-    "skills/repository-engineering/references/state-and-failure.md",
-    "skills/repository-engineering/references/performance-decisions.md",
+    "skills/architecture-engineering/references/greenfield-design.md",
+    "skills/architecture-engineering/references/brownfield-evolution.md",
+    "skills/architecture-engineering/references/integration-and-migration.md",
+    "skills/architecture-engineering/references/change-locality.md",
+    "skills/architecture-engineering/references/architecture-evaluation.md",
+    "skills/architecture-engineering/references/architecture-plan-casebook.md",
+    "skills/architecture-engineering/references/design-decisions.md",
+    "skills/architecture-engineering/references/state-and-failure.md",
+    "skills/architecture-engineering/references/performance-decisions.md",
     "skills/refactoring/references/dependency-breaking.md",
     "skills/change-verification/references/verification-boundaries.md",
-    "skills/design-for-change/LICENSE.txt",
+    "skills/architecture-engineering/LICENSE.txt",
+    "skills/architecture-engineering/NOTICE.md",
     "skills/test-driven-development/LICENSE.txt",
     "skills/systematic-debugging/references/root-cause-tracing.md",
     "skills/systematic-debugging/references/condition-based-waiting.md",
@@ -30,6 +37,13 @@ FILES = (
     "skills/security-engineering/references/threat-modeling.md",
     "skills/security-engineering/references/security-controls-and-assets.md",
     "skills/security-engineering/references/stack-guidance.md",
+    "skills/security-engineering/references/api-and-parser-boundaries.md",
+    "skills/security-engineering/references/ai-application-boundaries.md",
+    "skills/security-engineering/references/build-and-secrets-integrity.md",
+    "skills/security-engineering/references/runtime-and-observability.md",
+    "skills/security-engineering/references/audit-evidence-and-coverage.md",
+    "skills/security-engineering/references/threat-informed-defense.md",
+    "skills/security-engineering/references/security-intelligence-and-untrusted-sources.md",
     "skills/security-engineering/LICENSE.txt", "skills/security-engineering/NOTICE.md",
     "research/skill-adaptation-review.md",
 )

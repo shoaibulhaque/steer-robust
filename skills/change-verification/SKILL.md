@@ -58,6 +58,17 @@ Trace each changed path with concrete inputs. Prioritize:
 Confirm each candidate defect by tracing a feasible trigger. Drop it if counterevidence shows the path
 is unreachable or already protected.
 
+### Security Impact of the Diff
+
+For touched trust boundaries, trace **actor → actual entry point → enforcement → protected effect**.
+Inspect relevant allowed and rejected paths, including tenant scope, validation, serialization, and
+partial failures. The evidence should fail on a plausible unsafe outcome; mocked permissions and
+scanner scores cannot prove enforcement across real callers.
+
+An ordinary review does not become a full penetration test. Report a security defect only when
+there is a credible triggering path and consequence, while distinguishing unknown exposure from
+verified bypass. A dedicated deep review remains the security skill's responsibility.
+
 ### 3. Challenge Consequential Design Choices
 
 - Does an existing owner or extension point already solve this? Look for parallel paths and rules

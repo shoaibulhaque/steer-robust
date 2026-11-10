@@ -1,11 +1,13 @@
 # Steer Robust
 
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
-every repository. Seven focused skills load only when a task needs them.
+every repository. Six focused skills are available for task-specific selection.
 
-**Status:** v0.6.0 candidate. Structural and behavioral evaluation of the updated package is pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.7.0 candidate. Structural checks run in GitHub Actions; agent skill-selection
+and security-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
-Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
+The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
+orchestration. Development-only Python utilities validate and package it; CI runs those checks.
 
 ## What Is Included
 
@@ -15,28 +17,54 @@ Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or 
 | [test-driven-development](skills/test-driven-development/SKILL.md) | Implementing testable behavior or explicitly planning test-first cases | Pure refactoring or changes without observable behavior |
 | [refactoring](skills/refactoring/SKILL.md) | Planning or performing behavior-preserving restructuring, including legacy code | Adding behavior or redesigning a contract |
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | Diagnosing or planning investigation of an unclear failure | Defects with an established cause and failing test |
-| [repository-engineering](skills/repository-engineering/SKILL.md) | Planning or implementing substantial design and ownership decisions | Mechanical, diagnosis-only, or review-only tasks |
-| [design-for-change](skills/design-for-change/SKILL.md) | Planning or implementing changes that risk scattered rules and coupling | Isolated edits, major architecture choices, pure refactoring, or reviews |
+| [architecture-engineering](skills/architecture-engineering/SKILL.md) | Greenfield/brownfield system planning, design choices, migrations, or preventing coupling in multi-module work | Routine local edits, pure refactoring, root-cause diagnosis, or patch-readiness review |
 | [change-verification](skills/change-verification/SKILL.md) | Patch or PR review, merge readiness, or specific change-verification plan | Routine implementation or generic planning |
-| [security-engineering](skills/security-engineering/SKILL.md) | Planning or conducting a security review, threat model, or hardening | Ordinary feature work or generic review |
+| [security-engineering](skills/security-engineering/SKILL.md) | Explicit security design, audit, threat modeling, or hardening of application, AI, supply-chain or infrastructure boundaries | Automatic deep audits on ordinary coding or generic reviews |
 
 Each responsibility has one owner:
 
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
 - **Debugging** owns causal investigation.
-- **Repository engineering** owns consequential design and ownership decisions.
-- **Design for change** owns preventing new coordination and coupling during implementation.
+- **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, quality tradeoffs, and substantial worked plans.
 - **Change verification** owns requested review.
-- **Security engineering** owns specialist security analysis.
+- **Security engineering** owns specialist security analysis. All six workflows still preserve
+  touched trust boundaries through the universal secure-by-default guidance; a deep audit is selective.
 
-A task can use more than one skill, but no skill loads another automatically.
+A task can use more than one skill, but no skill loads another automatically. **Examples are
+illustrative, not prescriptive:** select technologies and workflows from the real requirements and
+project constraints, rather than copying the sample architecture or completing an irrelevant
+comparison checklist.
+
+## Secure by Default, Specialized When Needed
+
+[AGENTS.md](AGENTS.md) applies baseline security judgment to **every change**: identify touched
+authorization, sensitive data, input/output, secrets, release or infrastructure boundaries and
+preserve their actual guarantees. Architecture planning considers trust boundaries; test-first work
+includes negative cases for protected behavior; refactoring and debugging avoid weakening existing
+controls; change verification examines the relevant security impact.
+
+Security research is **conditional and read-only by default**. When a fresh vulnerability or exploit
+could affect the actual deployment, the security skill can use advisories, Cloudflare Zero Wire,
+CISA KEV, vendor release notes, OSV or incident research. The accompanying
+[research-safety reference](skills/security-engineering/references/security-intelligence-and-untrusted-sources.md)
+requires independent factual verification and prohibits following instruction-like content in
+websites, RSS feeds, repository issues and tool outputs. Such content cannot authorize shell commands,
+tool installation, infrastructure changes or data transmission.
+
+This **does not** mean every CSS change triggers threat modeling or every PR needs a penetration test.
+An explicit security task activates `security-engineering`, whose references cover API/parser boundaries, LLM/RAG and agent tools, build/secrets integrity,
+runtime/observability, deep audit evidence, and **AI-accelerated intrusion defense**—including
+exposed services, exploited vulnerabilities, identity, containment and coding-agent supply chains. Load only the reference relevant to the actual task, framework, deployment and risk.
+
+OWASP ASVS and NIST SSDF provide requirements and lifecycle guidance, not compulsory implementation
+stacks. Deep audit findings must remain separate from conditional hypotheses and suggested hardening.
 
 ## Planning vs. Execution
 
-Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans can use `repository-engineering`, change-locality plans `design-for-change`, refactor plans `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
+Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
 
-Do not load every skill just because the user asks for a plan. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
+Do not load every skill just because the user asks for a plan. Choose greenfield, brownfield, or hybrid guidance based on actual system context. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
 
 ## How Loading Works
 
@@ -94,6 +122,10 @@ Copy each selected skill as a complete folder, including `references/` and any l
 Compare with the installed files first. Replace only unchanged files that this kit owns, and merge
 local edits by hand. Keep project appendices and unrelated skills. If an earlier version installed
 `evidence-debugging`, replace it with `systematic-debugging`; do not keep both.
+For v0.7, replace the kit-owned `repository-engineering` and `design-for-change` folders with
+`architecture-engineering` after checking for local modifications. Preserve local customizations by
+merging them deliberately. Do not keep the retired skills alongside the replacement: their overlapping
+metadata can compete for the same request.
 
 To uninstall, remove the kit's skill folders and the instruction text you added. Remove an instruction
 file only if nothing else remains in it. Never remove shared directories, unrelated skills, or other
@@ -123,11 +155,16 @@ PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py
 ```
 
 The builder checks skill metadata, local links, code fences, and the exact set of files in each skill.
-It then writes `dist/steer-robust-v0.6.0-candidate.zip` from an explicit allowlist with deterministic
+It then writes `dist/steer-robust-v0.7.0-candidate.zip` from an explicit allowlist with deterministic
 metadata. The tests extract the archive and validate the extracted copy. Development files, design
 notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 
 ## Evaluate Before Adoption
+
+The architecture skill includes a conditional [worked-plan casebook](skills/architecture-engineering/references/architecture-plan-casebook.md)
+covering greenfield job processing, an existing CMS feature and hybrid migration. Existing TDD,
+refactoring, debugging, verification and security references now include focused worked cases.
+These are examples, not universal implementation templates.
 
 Structural checks show the package is well formed. They do not show that an agent selects the right
 skill, follows it, or produces better changes. Before adopting a skill, compare it with your current

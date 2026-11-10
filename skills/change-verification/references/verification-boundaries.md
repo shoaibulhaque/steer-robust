@@ -55,3 +55,16 @@ without turning every possible failure into a mandatory new project.
 
 If authorized fixes follow review, inspect the new diff and recheck invalidated evidence. Preserve
 still-valid observations and stop once the requested review scope is covered.
+
+
+## Worked Case: A Green CI Run Does Not Establish a Safe API Migration
+
+A PR adds an optional field to an API response and updates a frontend. Both repositories pass their unit tests. The change is still not necessarily safe if older deployed frontend bundles or mobile clients parse the response differently.
+
+Trace the **contract combinations** that can coexist: old client with old API, old client with new API, new client with old API (during rolling deployment), and the final new/new pair. Only require combinations permitted by the actual rollout; document prohibited combinations and the mechanism that prevents them.
+
+Evidence should include the real serializer or wire shape, nullable/missing-field behavior, the actual consumer parser, and representative mixed-version checks. A mock fixture with the new field hardcoded proves only that the mocked consumer understands the fixture.
+
+**Review outcome:** If supported old clients demonstrably crash on the new shape, report a concrete compatibility defect with the triggering client version and consequence. If old clients were not examined and production coexistence is unknown, report a bounded evidence gap or question—not an invented proven outage.
+
+A passing check is useful when it would fail on an implementation that violates its claimed contract. It is not a substitute for identifying which clients and deployed revisions the contract covers.
