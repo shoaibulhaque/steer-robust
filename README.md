@@ -3,7 +3,8 @@
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
 every repository. Six focused skills load only when a task needs them.
 
-**Status:** v0.7.0 candidate. Structural validation and comparative agent-behavior evaluation are pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.7.0 candidate. The package tests and deterministic build passed in CI;
+comparative agent-behavior evaluation is still pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
 

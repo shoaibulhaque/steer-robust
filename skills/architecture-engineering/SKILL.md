@@ -72,6 +72,11 @@ Check change locality: can the same rule change in one authoritative place? Can 
 evolve without forcing other consumers to change? Many changed files are acceptable when each layer
 has a distinct job; duplicated decisions and hidden coordination are not.
 
+Recognize **hidden links** (things that must co-change but conceal their relationship), **needless
+links** (independent things forced to co-change), and **surplus** (constructs without their own reason
+to exist). A special case may reveal a missing design concept, but may also protect a real requirement.
+Investigate its purpose rather than deleting it for aesthetic simplicity.
+
 ### 4. Deliver or Implement at the Requested Depth
 
 For a **plan**, provide the smallest useful combination of:
