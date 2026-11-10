@@ -1,12 +1,13 @@
 # Steer Robust
 
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
-every repository. Six focused skills load only when a task needs them.
+every repository. Six focused skills are available for task-specific selection.
 
 **Status:** v0.7.0 candidate. The package tests and deterministic build passed in CI;
 comparative agent-behavior evaluation is still pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
-Everything is Markdown: no runtime dependencies, hooks, scripts, installers, or orchestration.
+The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
+orchestration. Development-only Python utilities validate and package it; CI runs those checks.
 
 ## What Is Included
 
