@@ -36,6 +36,17 @@ If the cause and a failing test are already established, proceed with the correc
 
 Plan the smallest observations, reproduction, boundary probes, and competing hypotheses capable of distinguishing causes. Identify missing evidence without presenting any hypothesis or fix as established. Do not modify code or implement a speculative correction. The phases below govern a later execution request.
 
+## Security-Sensitive Investigation
+
+For failures involving identity, tenant context, permission, credentials, untrusted input or sensitive
+data, use targeted redacted evidence rather than raw bodies, database records or environment dumps.
+Do not disable authentication, authorization, certificate verification or other protections to make
+a reproduction pass.
+
+A credible active exposure may require explicitly authorized containment before root cause is fully
+understood; label it as mitigation, not proof of a fix. Reproduce with owned fixtures and controlled
+access. Do not extend diagnostics into unrelated users' data or infrastructure.
+
 ## The Four Phases
 
 Use the phases as an iterative investigation, not fixed gates. Comparing a working example can

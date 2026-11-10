@@ -33,6 +33,17 @@ boundary that credibly observes the behavior; integration or end-to-end checks m
 a unit test cannot prove the promise. Keep the test-first discipline for testable behavior without
 inventing a test for each implementation helper.
 
+## Security-Relevant Behavior
+
+When behavior changes authorization, tenant separation, secrets, parsing, untrusted output or
+sensitive effects, derive **negative examples** from the protected contract as well as allowed ones.
+A denied operation should, where relevant, prove both rejection and the absence of unauthorized
+writes, disclosure or remote effects. Test the real enforcement boundary when a mocked helper
+would miss a bypass.
+
+Do not manufacture security tests for unrelated edits or assume one authorization test protects
+every route. Test granularity follows the requirement; test-first discipline remains unchanged.
+
 ## Plan-Only Requests
 
 For an explicitly requested test-first plan, identify observable acceptance cases, independent expected results, the smallest useful test boundary, and an ordered red–green–refactor sequence. Include material failure paths. These are proposed tests: do not edit files or claim RED/GREEN occurred. Do not load this workflow for every general architecture plan just because tests will eventually be needed.

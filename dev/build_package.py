@@ -37,6 +37,12 @@ FILES = (
     "skills/security-engineering/references/threat-modeling.md",
     "skills/security-engineering/references/security-controls-and-assets.md",
     "skills/security-engineering/references/stack-guidance.md",
+    "skills/security-engineering/references/api-and-parser-boundaries.md",
+    "skills/security-engineering/references/ai-application-boundaries.md",
+    "skills/security-engineering/references/build-and-secrets-integrity.md",
+    "skills/security-engineering/references/runtime-and-observability.md",
+    "skills/security-engineering/references/audit-evidence-and-coverage.md",
+    "skills/security-engineering/references/threat-informed-defense.md",
     "skills/security-engineering/LICENSE.txt", "skills/security-engineering/NOTICE.md",
     "research/skill-adaptation-review.md",
 )

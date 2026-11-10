@@ -128,6 +128,32 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             kit.archive()
 
+    def test_security_by_default_and_conditional_resources_are_distributed(self):
+        with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
+            default_text = archive.read(f"{kit.NAME}/AGENTS.md").decode("utf-8")
+            self.assertIn("## Security by Default", default_text)
+            self.assertIn("trust boundary or protected invariant", default_text)
+            prefix = f"{kit.NAME}/skills/security-engineering/references/"
+            references = (
+                "api-and-parser-boundaries.md",
+                "ai-application-boundaries.md",
+                "build-and-secrets-integrity.md",
+                "runtime-and-observability.md",
+                "audit-evidence-and-coverage.md",
+                "threat-informed-defense.md",
+            )
+            for name in references:
+                self.assertIn(prefix + name, archive.namelist())
+            for skill in ("architecture-engineering", "test-driven-development",
+                          "refactoring", "systematic-debugging", "change-verification"):
+                content = archive.read(f"{kit.NAME}/skills/{skill}/SKILL.md").decode("utf-8")
+                self.assertIn("security", content.lower())
+
+    def test_missing_security_reference_is_rejected(self):
+        (self.root / "skills/security-engineering/references/ai-application-boundaries.md").unlink()
+        with self.assertRaises(ValueError):
+            kit.archive()
+
     def test_missing_imported_license_is_rejected(self):
         (self.root / "skills/security-engineering/LICENSE.txt").unlink()
         with self.assertRaises(ValueError):

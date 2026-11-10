@@ -30,6 +30,17 @@ its behavior must change, that is a behavior change: use the testing workflow, n
 
 Map observable behavior and dependencies at risk. Propose a baseline or characterization test, small reversible restructuring steps, caller cutover, and focused verification after each step. Do not edit, claim tests passed, or silently combine bug fixes with behavior-preserving restructuring.
 
+## Preserve Security-Relevant Behavior
+
+Behavior to preserve includes effective authorization, object/tenant scope, input rejection, redaction,
+error responses and protection against unintended external effects. If a refactor moves validation
+or a permission check, verify that the real entry point still enforces it—even under rejected,
+concurrent and failure paths as appropriate. A helper-level test alone may miss a bypass.
+
+Characterize important allowed and denied paths where existing evidence is weak. Removing a real
+vulnerability is a **behavior change**, not merely a structure improvement; distinguish that work
+and its tests. Do not weaken security for cosmetic simplicity.
+
 ## The Two Hats
 
 At any moment, you either add behavior or refactor. Never both at once.

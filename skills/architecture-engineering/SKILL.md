@@ -57,6 +57,11 @@ Translate important quality attributes into scenarios: workload and latency, fai
 data consistency, privacy and authorization, deployability, operating cost, and ease of change. Select
 those that could alter this design; do not invent targets or demand enterprise controls by default.
 
+**Security is part of the design:** for consequential trust boundaries, identify who can act, the
+protected asset, where authority is enforced and the rejection or containment behavior. Consider
+release/build identity when it controls sensitive effects. A public static website and a multi-tenant
+payment system require different depth; neither needs a generic threat table solely for ceremony.
+
 Define an important scenario as **condition → action or failure → required observable outcome**.
 For example, "if the worker dies after committing an external effect but before acknowledgment,
 recovery must not create a second billable effect." Identify who owns the guarantee and what evidence
@@ -115,7 +120,8 @@ For a **plan**, provide the smallest useful combination of:
   separate decisions from unresolved hypotheses and describe reconsideration conditions if useful.
 - **Execution map:** ordered, dependency-aware work packages. Each meaningful package states its
   expected outcome, affected contracts or owners, prerequisites and acceptance evidence; test-first
-  steps belong with behavior changes.
+  steps belong with behavior changes. For changed trust boundaries, specify permitted and rejected
+  outcomes and the actual enforcement point, rather than delegating all security to a later audit.
 - **Transition and operations:** supported client versions, migration, release ordering, recovery,
   monitoring and rollback versus forward-fix limits **only** where the system needs them.
 

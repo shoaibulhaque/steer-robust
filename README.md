@@ -3,8 +3,8 @@
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
 every repository. Six focused skills are available for task-specific selection.
 
-**Status:** v0.7.0 candidate. The package tests and deterministic build passed in CI;
-comparative agent-behavior evaluation is still pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.7.0 candidate. Structural checks run in GitHub Actions; agent skill-selection
+and security-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
 orchestration. Development-only Python utilities validate and package it; CI runs those checks.
@@ -19,7 +19,7 @@ orchestration. Development-only Python utilities validate and package it; CI run
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | Diagnosing or planning investigation of an unclear failure | Defects with an established cause and failing test |
 | [architecture-engineering](skills/architecture-engineering/SKILL.md) | Greenfield/brownfield system planning, design choices, migrations, or preventing coupling in multi-module work | Routine local edits, pure refactoring, root-cause diagnosis, or patch-readiness review |
 | [change-verification](skills/change-verification/SKILL.md) | Patch or PR review, merge readiness, or specific change-verification plan | Routine implementation or generic planning |
-| [security-engineering](skills/security-engineering/SKILL.md) | Planning or conducting a security review, threat model, or hardening | Ordinary feature work or generic review |
+| [security-engineering](skills/security-engineering/SKILL.md) | Explicit security design, audit, threat modeling, or hardening of application, AI, supply-chain or infrastructure boundaries | Automatic deep audits on ordinary coding or generic reviews |
 
 Each responsibility has one owner:
 
@@ -28,12 +28,29 @@ Each responsibility has one owner:
 - **Debugging** owns causal investigation.
 - **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, quality tradeoffs, and substantial worked plans.
 - **Change verification** owns requested review.
-- **Security engineering** owns specialist security analysis.
+- **Security engineering** owns specialist security analysis. All six workflows still preserve
+  touched trust boundaries through the universal secure-by-default guidance; a deep audit is selective.
 
 A task can use more than one skill, but no skill loads another automatically. **Examples are
 illustrative, not prescriptive:** select technologies and workflows from the real requirements and
 project constraints, rather than copying the sample architecture or completing an irrelevant
 comparison checklist.
+
+## Secure by Default, Specialized When Needed
+
+[AGENTS.md](AGENTS.md) applies baseline security judgment to **every change**: identify touched
+authorization, sensitive data, input/output, secrets, release or infrastructure boundaries and
+preserve their actual guarantees. Architecture planning considers trust boundaries; test-first work
+includes negative cases for protected behavior; refactoring and debugging avoid weakening existing
+controls; change verification examines the relevant security impact.
+
+This **does not** mean every CSS change triggers threat modeling or every PR needs a penetration test.
+An explicit security task activates `security-engineering`, whose references cover API/parser boundaries, LLM/RAG and agent tools, build/secrets integrity,
+runtime/observability, deep audit evidence, and **AI-accelerated intrusion defense**—including
+exposed services, exploited vulnerabilities, identity, containment and coding-agent supply chains. Load only the reference relevant to the actual task, framework, deployment and risk.
+
+OWASP ASVS and NIST SSDF provide requirements and lifecycle guidance, not compulsory implementation
+stacks. Deep audit findings must remain separate from conditional hypotheses and suggested hardening.
 
 ## Planning vs. Execution
 
