@@ -211,3 +211,23 @@ scanner installation, release signing, JSON ledger or paid service is introduced
 false-positive rate, exploitation resistance and operational cost. Distribution tests validate file
 integrity and references, not these outcomes. `EVAL_PLAN.md` includes targeted positive, negative
 and counterfactual scenarios.
+
+## External Intelligence and Prompt Injection (2026-11-10)
+
+Follow-up to the security-by-default pass: fresh public intelligence is useful for vulnerability
+triage but introduces an indirect prompt-injection surface. Added the conditional
+`security-intelligence-and-untrusted-sources.md` reference, with practical RSS/advisory workflows,
+source verification, susceptibility tests and an explicit boundary between evidence and tool
+authority. It covers Cloudflare Zero Wire, CISA KEV, OSV, GitHub advisories, NVD, EPSS and vendor
+sources without treating any feed as an exhaustive or privileged authority.
+
+Source guidance: OWASP LLM01/Prompt Injection Prevention, OpenAI's *Designing AI Agents to Resist
+Prompt Injection* and Codex agent-approval guidance, and Google's April 2026 analysis of real
+prompt-injection attempts on web pages. All stress minimizing consequences of malicious instructions,
+not trusting source content as operational permission. These examples cannot guarantee immunity;
+testing must include benign web research as a negative control.
+
+Expanded the API/parser, AI tool, build/secrets, runtime/observability and audit-evidence references
+with concrete boundary traces, safe test shapes and counterexamples. Extended the architecture
+performance, state/failure and design-decision references with worked scenarios. Conditional
+reference loading and the six-skill activation boundary are unchanged.

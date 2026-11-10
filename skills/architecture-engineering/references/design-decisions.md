@@ -55,3 +55,31 @@ still needs proof that production wiring invokes the right implementation.
 Do not generalize another project's architecture, deployment topology or language conventions into
 this repository. Finish when the contract has an understandable owner and adequate feedback, not when
 every possible abstraction or pattern has been considered.
+
+## Worked Boundary Decision: One Eligibility Rule, Several Consumers
+
+A product's eligibility is displayed in a web UI, enforced through an API and checked by a background job. A proposed implementation repeats the full decision in each component.
+
+Investigate whether the UI is merely presenting an authoritative result or making an independent business decision. If **the same policy** governs all three consumers, make the policy discoverable and enforceable at its owning domain boundary; the client may display eligibility but must not become a substitute for server authorization.
+
+However, the UI may legitimately have a presentation-only rule, such as disabling a button while the server remains authoritative. Do not merge two policies solely because both use the word "eligible."
+
+**Change-locality probe:** if the eligibility rule changes, where must maintainers edit? If one consumer changes presentation, must the domain policy or unrelated clients be revised? Prefer a design that answers those questions without hidden synchronization.
+
+## Counterexample: Useful Separate Adapters
+
+Two external providers return similarly named statuses, but one status reflects final settlement and another reflects pending authorization. A common enum with provider flags can hide a significant difference in business effects.
+
+Consider keeping provider-specific translation at the provider boundary, mapping into an internally meaningful domain result only when semantics are truly equivalent. Adding an interface is worthwhile when it hides differing failure or authentication behavior; it is surplus when every method blindly forwards arguments.
+
+## Interface Contract Notes
+
+For consequential boundaries, a short contract may be more valuable than an elaborate diagram. Specify:
+- Supported inputs and who validates them.
+- Returned states, including absent, rejected and ambiguous results.
+- Observable side effects and which owner can perform them.
+- Authorization identity and any tenant or role conditions.
+- Compatibility and version expectations if independently deployed consumers exist.
+- Whether repeated or concurrent calls are safe, and which party owns recovery.
+
+These are prompts for relevant decisions, not a demand that every helper receive six sections of documentation. Preserve important rationale near the owning code or as a concise ADR when future engineers would otherwise rediscover the same tradeoff.

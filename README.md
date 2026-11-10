@@ -44,6 +44,14 @@ preserve their actual guarantees. Architecture planning considers trust boundari
 includes negative cases for protected behavior; refactoring and debugging avoid weakening existing
 controls; change verification examines the relevant security impact.
 
+Security research is **conditional and read-only by default**. When a fresh vulnerability or exploit
+could affect the actual deployment, the security skill can use advisories, Cloudflare Zero Wire,
+CISA KEV, vendor release notes, OSV or incident research. The accompanying
+[research-safety reference](skills/security-engineering/references/security-intelligence-and-untrusted-sources.md)
+requires independent factual verification and prohibits following instruction-like content in
+websites, RSS feeds, repository issues and tool outputs. Such content cannot authorize shell commands,
+tool installation, infrastructure changes or data transmission.
+
 This **does not** mean every CSS change triggers threat modeling or every PR needs a penetration test.
 An explicit security task activates `security-engineering`, whose references cover API/parser boundaries, LLM/RAG and agent tools, build/secrets integrity,
 runtime/observability, deep audit evidence, and **AI-accelerated intrusion defense**—including

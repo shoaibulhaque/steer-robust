@@ -43,6 +43,7 @@ FILES = (
     "skills/security-engineering/references/runtime-and-observability.md",
     "skills/security-engineering/references/audit-evidence-and-coverage.md",
     "skills/security-engineering/references/threat-informed-defense.md",
+    "skills/security-engineering/references/security-intelligence-and-untrusted-sources.md",
     "skills/security-engineering/LICENSE.txt", "skills/security-engineering/NOTICE.md",
     "research/skill-adaptation-review.md",
 )

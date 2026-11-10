@@ -45,3 +45,47 @@ Describe observed behavior and controls separately from plausible risks. A simul
 Prefer using the application's actual identity, authorization, egress, logging and lifecycle mechanisms over a new AI-specific security framework. Maintain clear audit evidence for privileged effects without logging secrets, full sensitive prompts, or cross-tenant retrieved content.
 
 **Primary reference:** [OWASP GenAI LLM Risks](https://genai.owasp.org/llm-top-10/). Consult the currently applicable edition before citing individual category identifiers.
+
+## Worked Case: Untrusted Retrieval Steering a Tool
+
+**Scenario:** an assistant searches customer documents. An attacker can edit one retrieved document but has no permission to view other tenants' records. The document contains seemingly helpful instructions asking the assistant to fetch a private file and send it to a supplied website.
+
+Treat this as an **indirect prompt-injection attempt**, whether phrased as an urgent security notice, a markdown note, a simulated system message or a hidden HTML element. The document may still contain relevant customer facts, but it cannot grant tool permissions.
+
+A robust design keeps the action path separate:
+
+```mermaid
+flowchart LR
+    DOC["Retrieved document: untrusted"] --> MODEL["Model proposes action"]
+    MODEL --> GATE{"Execution authorization"}
+    WHO["Authenticated principal + current tenant policy"] --> GATE
+    GATE -->|Authorized| EFFECT["Bounded tool effect"]
+    GATE -->|Denied| REJECT["Reject + safe evidence"]
+```
+
+The gate is **actual code or platform enforcement** of tool identity, operation, target object and caller authority. Do not treat the diagram as mandating a particular orchestrator. A privileged model prompt or structured JSON schema is not that gate.
+
+**Negative test:** inject a benign request for a disallowed document ID or unauthorized outbound destination into an owned retrieval fixture. Confirm the real tool handler rejects the proposed call before it can fetch or send sensitive content. Then test a permitted request to ensure the protection does not disable legitimate work.
+
+**Failure mode:** a tool may be "read only" yet still leak data through an attacker-chosen URL, query parameter, log destination or cross-tenant search result. Read-only permissions must be examined against confidentiality as well as modification risk.
+
+## Tool Calls as Untrusted Proposals
+
+Before executing a model-proposed tool call, evaluate:
+- The **original user task**, not instructions inside retrieved sources.
+- Current user/service principal and action-level permission.
+- Allowed resource, tenant, destination, data scope and output recipient.
+- Input validation, limits, deadlines and side-effect/approval policy.
+- Whether a tool or MCP server can change behavior independently of the agent model.
+
+Prefer separating public research from private-system access. For example, use a read-only public web-research phase to collect an advisory identifier, and a separate scoped internal phase to check deployed versions. Do not give a single browsing agent broad simultaneous access to source content, production secrets, mutable infrastructure and arbitrary outbound requests.
+
+## Memory, Multi-Agent and Long-Running Risks
+
+Stored summaries, persistent memory, vector indexes, model-generated plans and other agents' messages can preserve attacker-origin instructions beyond the original page. Preserve provenance and treat that text as external evidence when read back. A summarizer must not convert "run this command" in an advisory into a newly authorized operator instruction.
+
+Tool delegation should narrow authority instead of inheriting all of a coordinator's credentials. Use bounded time/cost and safe cancellation for loops; a model can consume resources without performing a privileged write.
+
+## What to Evaluate
+
+Use a realistic set of benign and attacker-controlled sources, including innocuous-looking instructions without obvious trigger keywords. Grade **observed tool effects, access control and task completion**, not the model's verbal refusal or a keyword classifier's score. Continue benign tasks despite suspicious content when safe, but prevent unapproved effects even if the model follows an injected instruction.

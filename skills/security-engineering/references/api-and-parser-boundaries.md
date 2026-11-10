@@ -41,3 +41,47 @@ DNS checks disconnected from the eventual socket are not enough. Conversely, all
 For each supported finding, identify attacker control, reachable source, enforcement gap, sensitive effect, consequence and the exact verification limit. If a proposed chain depends on an unobserved step, mark that dependency as conditional. Do not force small observations into a high-severity chain or assign impact from a scanner label.
 
 **Primary references:** [OWASP ASVS](https://asvs.owasp.org/), [OWASP SSRF Prevention](https://cheatsheetseries.owasp.org/cheatsheets/Server_Side_Request_Forgery_Prevention_Cheat_Sheet.html).
+
+## Worked Review: Endpoint Authorization Through the Real Data Path
+
+An endpoint accepts a report identifier. Authentication runs in middleware, but the handler retrieves the report by identifier and then returns its bytes. The reviewer should trace the actual principal-to-object binding, not infer that middleware authentication implies authorization.
+
+```python
+# Illustrative domain boundary, NOT a framework-agnostic prescription.
+def get_report(principal, report_id):
+    report = reports.find_visible_to(principal, report_id)
+    if report is None:
+        raise NotFound()  # Or a contractually appropriate denial.
+    return report
+```
+
+`find_visible_to` must itself enforce current object and tenant permissions; a function name does not establish that. Where resource ownership or permissions can change, check whether an earlier authorization decision can become stale before the effect. Multi-step writes may need an atomic policy+mutation operation, database row lock or another suitable concurrency control.
+
+**Rejecting evidence:** user A's authorized request succeeds; user B's request for A's report fails through the real route, and the body/metadata and side effects remain inaccessible. Test a role downgrade or tenant reassignment only if that is a supported real-world transition.
+
+**Counterexample:** the same record may be intentionally shared across organizations under explicit access grants. A strict `tenant_id == current_tenant` predicate could wrongly reject valid access; enforce actual policy rather than a simplistic ownership equality.
+
+## Worked Review: Webhook Authenticity and Replay
+
+For a payment/status webhook, distinguish:
+- **Origin authentication:** signed payload or provider-specific verification based on the *raw representation* required by the provider.
+- **Freshness and replay:** timestamp windows or stable event identifiers, as supported.
+- **Idempotent business effect:** duplicates, reordering and retries must not create new payments, certificates or access grants.
+- **Resource limits:** parsed body size, processing time and external calls.
+
+A verified signature does **not** mean that the event refers to a legitimate order in the local domain, nor that a duplicate event should be processed twice. Test invalid signature rejection, a valid duplicate, a late/out-of-order event, and an event for a missing object through the actual intake path.
+
+## Case Selection by Boundary
+
+Choose an appropriate subset rather than checking every parser for every route:
+
+| Real capability | Additional questions |
+| --- | --- |
+| File upload or archive extraction | Byte size and decompression amplification, object ownership, symlink/path containment, media serving policy, cleanup on partial failure |
+| XML ingestion | Actual parser defaults, entity/DTD policy, supported features and safe handling of entity expansion |
+| URL import or webhooks with outbound calls | DNS and redirect handling, connected destination, credential propagation, deadlines and response-size limits |
+| GraphQL or flexible filtering | Object authorization beneath resolvers, query complexity, resource budgets and field exposure |
+| Bulk operation | Per-object authorization, partial-success contract, bounded resource consumption and concurrency semantics |
+| Query/form/body parsing | Which representations are actually supported and whether alternate parsing paths bypass protections |
+
+A broad scanner pass can propose candidates, but the finding requires the real route, supported representation, reachable sensitive operation and effective controls. Do not exploit external parties or use uncontrolled callbacks to prove reachability.

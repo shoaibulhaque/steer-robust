@@ -34,3 +34,50 @@ A log proves only that an event was recorded; it is not itself a preventive auth
 Choose non-disruptive checks and stage or validate configuration before any authorized deployment. Record remaining assumptions about actual network, identity or platform configuration. Do not claim a service is hardened because it conforms to a template or passes one scanner.
 
 **References:** [OWASP Logging Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html), [NIST SSDF](https://csrc.nist.gov/pubs/sp/800/218/final).
+
+## Worked Case: Small Public API on a Linux Server
+
+For a server running a reverse proxy, API process, background worker and database, a **read-only** hardening review should first determine which components are actually exposed and where their authority comes from.
+
+| Boundary | Investigation | High-value evidence |
+| --- | --- | --- |
+| Public ingress | DNS, external proxy, firewall/cloud ingress, exposed listen addresses | Public routes and effective origin policy |
+| Administrative access | SSH/bastion/VPN, users, session handling, deployment identity | Who can log in, from where and with which capabilities |
+| Application process | Service user, container privilege, writable mounts and secrets | Runtime uid, mounts, process command and effective grants |
+| Database | Network exposure, service credentials, role grants, backup/restore | Accepted connections, grants, restoration evidence |
+| Background jobs | Broker access, task identity, duplicate effects, worker leases | Ownership, retry and reconciliation behavior |
+| Delivery chain | CI permissions, deploy token and artifact | Which actor can replace running code |
+
+Do not assume a database in Docker is private merely because it has an internal-looking hostname. Verify published ports, host firewall and cloud ingress. Conversely, a process listening on all interfaces may still be protected by actual upstream network policy. Distinguish what is observed from what is inferred.
+
+### Avoid a Self-Inflicted Outage
+
+Hardening commands can disconnect the operator or silently break application traffic. A safe authorized plan stages one reversible change at a time, retains an administrative recovery path, validates health and logs, and distinguishes config validation from actually reachable service behavior.
+
+Examples requiring deliberate analysis:
+- HSTS affects browsers and subdomains; deploying it without validating certificate coverage can disrupt users.
+- Strict CSP can break legitimate scripts; tailor it to the actual content model and test browser behavior.
+- Non-root/read-only filesystem settings need explicit writable state and bind-port requirements.
+- Default-deny firewall or egress policies must preserve DNS, updates, health checks and authorized external integrations.
+
+The point is not to avoid hardening; it is to ensure the proposed control satisfies a specified guarantee without destroying the service it protects.
+
+## Detection Design: From Failure to Operator Action
+
+Start with an actual question, such as: "How will we know a privileged credential is being abused?" Then define the minimal event, threshold or anomaly, responder and recovery path.
+
+| Event | Useful non-secret context | Operator action |
+| --- | --- | --- |
+| Privilege grant or role change | Actor identity reference, target role, time, request/trace ID | Verify authorization and revert unauthorized grant |
+| Large sensitive export | Principal/tenant identifier under privacy policy, count/band, endpoint, outcome | Review legitimacy, revoke inappropriate token and assess access |
+| Unusual admin authentication | Account, coarse source context, outcome and baseline | Check account integrity, enable containment if needed |
+| Repeated failed background effect | Stable operation ID, state, failure category, retries | Recover or reconcile without duplicate effect |
+| Unreviewed deployment | Artifact digest/commit, deploying actor, environment | Pause or revert deployment under change policy |
+
+Not every error should page someone, and a log volume spike is not proof of an attack. Prefer actionable, bounded, privacy-conscious telemetry over copying full requests and responses. If the only response channel is an Admin dashboard, design useful dashboard states instead of adding an external messaging dependency by default.
+
+## Recovery Is Part of Security
+
+For systems that cannot tolerate significant data loss, a backup is not enough: define restore authority, isolation from compromised credentials and periodic proof that representative data can be restored. Security events may involve a malicious actor who has access to the application's normal deletion path; a backup under the same compromised privilege may be insufficient.
+
+These considerations are risk-driven, not an unconditional requirement for every static or disposable development environment.

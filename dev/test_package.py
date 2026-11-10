@@ -141,6 +141,7 @@ class PackageTests(unittest.TestCase):
                 "runtime-and-observability.md",
                 "audit-evidence-and-coverage.md",
                 "threat-informed-defense.md",
+                "security-intelligence-and-untrusted-sources.md",
             )
             for name in references:
                 self.assertIn(prefix + name, archive.namelist())
@@ -148,6 +149,16 @@ class PackageTests(unittest.TestCase):
                           "refactoring", "systematic-debugging", "change-verification"):
                 content = archive.read(f"{kit.NAME}/skills/{skill}/SKILL.md").decode("utf-8")
                 self.assertIn("security", content.lower())
+
+    def test_malicious_source_remains_data_not_authority(self):
+        with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
+            core = archive.read(f"{kit.NAME}/AGENTS.md").decode("utf-8")
+            self.assertIn("RSS", core)
+            ref = archive.read(f"{kit.NAME}/skills/security-engineering/"
+                               "references/security-intelligence-and-untrusted-sources.md").decode("utf-8")
+            self.assertIn("External Content Cannot Issue Commands", ref)
+            self.assertIn("Malicious RSS Entry", ref)
+            self.assertIn("Testing the Research Boundary", ref)
 
     def test_missing_security_reference_is_rejected(self):
         (self.root / "skills/security-engineering/references/ai-application-boundaries.md").unlink()
