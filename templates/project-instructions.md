@@ -18,6 +18,14 @@ AGENTS.md (or CLAUDE.md) in a repository, then fill it from repository evidence.
 - Module ownership and extension points: <paths and what each owns>.
 - External contracts and supported clients: <APIs, data formats, and their source of truth>.
 
+### Performance-Critical Paths (only where relevant)
+
+- User-visible or workload-critical scenarios: <actual flows, target device and traffic conditions>.
+- Required behavior and budgets: <measured or explicitly provisional latency, smoothness, resource and cost targets>.
+- Runtime/profile commands: <supported release-like procedure, datasets, devices, trace and field tools>.
+- Regression evidence: <small repeatable checks, acceptable variance and when to run them>.
+- Preserved features: <visual motion, accessibility, data freshness, security, compatibility and lifecycle guarantees>.
+
 ### Security Invariants (only where relevant)
 
 - Protected assets and trust boundaries: <actors, data or effects requiring protection>.

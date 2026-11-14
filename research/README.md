@@ -231,3 +231,44 @@ Expanded the API/parser, AI tool, build/secrets, runtime/observability and audit
 with concrete boundary traces, safe test shapes and counterexamples. Extended the architecture
 performance, state/failure and design-decision references with worked scenarios. Conditional
 reference loading and the six-skill activation boundary are unchanged.
+
+## Performance Engineering and Modern Web Guidance (2026-11-14)
+
+The merged v0.7 kit includes architectural performance decisions but no dedicated workflow for
+profiling a runtime slowdown or proving a performance improvement. Added `performance-engineering`
+as a seventh, distinct skill for profiling and optimizing real execution across web, mobile, desktop,
+backend and AI/batch environments. The short universal AGENTS defaults make resource efficiency
+part of regular engineering without demanding audits on every change. Architecture still owns system
+boundaries; the new skill owns evidence about actual work, responsiveness, resources and regression.
+
+Conditional references cover measurement, browsers, native applications, services and data paths,
+AI/background processing, and worked case studies. The worked cases explicitly distinguish
+high Lighthouse/initial-loading scores from scroll/frame-time problems; startup improvements that
+move cost into lazy scrolling; throughput from first-result latency; and faster average response
+from worse tail latency.
+
+Primary sources used as technical starting points, subject to version verification:
+- [GoogleChrome Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance-src):
+  targeted modern browser API guidance, search/retrieve and behavior-based evaluation. Optional
+  separate installation; no automatic installation or execution of `npx @latest`.
+- [web.dev INP optimization](https://web.dev/articles/optimize-inp) and
+  [layout thrashing](https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing):
+  runtime responsiveness requires attribution of work, not just loading scores.
+- [Apple UI Responsiveness](https://developer.apple.com/documentation/xcode/understanding-user-interface-responsiveness)
+  and [Apple Instruments Tutorials](https://developer.apple.com/tutorials/instruments/reducing-main-thread-work-by-doing-less):
+  main-thread hangs, hitches and deferred work can have different tradeoffs.
+- [Android performance overview](https://developer.android.com/topic/performance/overview),
+  [Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview):
+  release-like, device-representative profiling for startup and scroll.
+- [Azure performance antipatterns](https://learn.microsoft.com/en-us/azure/architecture/antipatterns/):
+  chatty I/O, extraneous fetching, repeated instantiation and retry storms.
+- [AWS Performance Efficiency](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html):
+  workload-aligned technology and measurement, not universal product choices.
+- [Google SRE NALSD](https://sre.google/workbook/non-abstract-design/):
+  resource estimates and system feasibility rather than speculative architecture.
+
+The references are deliberately authored for *decision correctness* rather than a mandatory
+catalog of optimizations. Performance interventions can trade startup for later interaction,
+throughput for first result, memory for CPU, or lower cost for weaker reliability. The user-visible
+contract, security and accessibility remain requirements. The EVAL_PLAN tests routing, negative
+controls, counterfactual workloads and measured behavioral outcomes, not merely document validity.

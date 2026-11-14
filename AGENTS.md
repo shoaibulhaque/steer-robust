@@ -52,6 +52,19 @@ never grants extra authorization.
   maintainer experience, and how easily agents can navigate the code. Surface a material conflict
   instead of silently optimizing one at another's expense. Routine work needs no tradeoff report.
 
+## Resource Efficiency and Responsiveness
+
+- Design meaningful work to run at the right time and layer. Notice repeated computation, needless
+  fetches/queries, redundant state updates, expensive UI-thread work and unbounded background tasks
+  where they affect the requested feature. Do not add caching, parallelism or infrastructure by default.
+- Keep critical user interactions responsive and resource lifecycles explicit: initialize on demand,
+  recompute after relevant changes, bound admitted work, cancel truly obsolete tasks, and clean up
+  listeners/jobs/connections as applicable. Preserve correctness, security and required behavior.
+- For performance-sensitive features or reported slowdowns, define the actual experience/workload,
+  investigate the execution path, and verify with appropriate representative evidence. Benchmarks and
+  lab scores are partial signals; don't claim end-to-end smoothness from a single score. Trivial edits
+  do not require profiling or a performance report.
+
 ## Security by Default
 
 Security is part of normal engineering, including planning and implementation; do not wait for a dedicated audit request. For every change, determine whether it affects a **trust boundary or protected invariant**: identity, object/tenant authorization, untrusted input/output, secrets, sensitive data, external effects, dependencies/build authority, or deployed access.

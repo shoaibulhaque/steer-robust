@@ -7,10 +7,11 @@ import re
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.7.0-candidate"
+VERSION = "0.8.0-candidate"
 NAME = f"steer-robust-v{VERSION}"
 SKILLS = ("architecture-engineering", "refactoring", "systematic-debugging",
-          "test-driven-development", "change-verification", "security-engineering")
+          "test-driven-development", "change-verification", "security-engineering",
+          "performance-engineering")
 FILES = (
     "AGENTS.md", "README.md", "LICENSE", "EVAL_PLAN.md", "research/README.md",
     "templates/project-instructions.md",
@@ -25,6 +26,12 @@ FILES = (
     "skills/architecture-engineering/references/design-decisions.md",
     "skills/architecture-engineering/references/state-and-failure.md",
     "skills/architecture-engineering/references/performance-decisions.md",
+    "skills/performance-engineering/references/measurement-and-regressions.md",
+    "skills/performance-engineering/references/browser-rendering-and-interaction.md",
+    "skills/performance-engineering/references/native-app-responsiveness.md",
+    "skills/performance-engineering/references/services-and-data-paths.md",
+    "skills/performance-engineering/references/ai-batch-and-background-work.md",
+    "skills/performance-engineering/references/performance-casebook.md",
     "skills/refactoring/references/dependency-breaking.md",
     "skills/change-verification/references/verification-boundaries.md",
     "skills/architecture-engineering/LICENSE.txt",
