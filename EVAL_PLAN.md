@@ -16,7 +16,8 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
-| I: consolidation | Current seven-skill kit versus proposed six-skill kit | Does consolidation improve routing, plans and cost without losing preventive change-locality discipline? |
+| I: historical consolidation | Pre-merge seven-skill kit versus v0.7 six-skill kit | Historical architecture consolidation comparison; do not mix with v0.8 results |
+| J: performance | v0.7 six-skill baseline versus v0.8 with performance-engineering | Does a distinct profiling/efficiency workflow improve user outcomes without overactivation? |
 
 Compare architecture cases with the existing seven-skill installation as a separate baseline. Record
 whether both former architecture skills were selected and whether they contributed unique value. Run
@@ -43,6 +44,7 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
 | Change verification | Review a patch for PR readiness against actual contribution/CI rules | Routine implementation or merely running a specified test |
 | Security engineering | Explicit scoped security review, secure-coding request or threat model | Ordinary feature work touching an authenticated route; still preserve security without starting a full audit |
+| Performance engineering | Diagnose scroll jank despite green Lighthouse; profile slow API p95 under load; plan performance-sensitive mobile startup work | CSS typo, generic system architecture choice, unexplained nonperformance crash, or review-only PR |
 
 A typo-only task should load none of these workflows. Include tasks where two responsibilities really
 apply, without requiring all skills. For advanced references, check that the relevant guide is read
@@ -63,9 +65,46 @@ Test automatic selection without naming skills. Check that plans are actionable,
 | Plan the test-first implementation of a new authorization rule | TDD | Claim that RED was observed |
 | Plan verification for this specific proposed migration patch | Change verification | Declare merge-readiness without evidence |
 | Plan a threat model for tenant isolation | Security engineering | Report hypotheses as confirmed vulnerabilities |
+| Plan a measurable interaction-response improvement for an app that feels frozen despite good load scores | Performance engineering | Treat initial page score as proof of responsiveness; edit the UI without investigating runtime work |
 | Plan a local variable rename or ordinary content edit | None | Load all skills or create a large design report |
 
 Include mixed-domain cases where two skills genuinely apply without expanding the plan into all workflows. Grade ownership, implementation order, decisive checks, evidence versus assumptions, tool cost, and adherence to plan-only permissions.
+
+## Runtime Performance and Engineering Judgment Probes
+
+Test the **observed outcome**, not whether an agent names common optimization patterns.
+Use the current v0.7 six-skill `main` as baseline and the candidate v0.8 seven-skill package as
+the intervention. Keep model, prompt, fixture, permissions, hardware and tool visibility comparable;
+no skill names in blind task prompts. Skill metadata activation and actual output quality are separate
+metrics.
+
+| Fixture | Expected useful outcome | Failure mode |
+| --- | --- | --- |
+| Static animated site scores 100 in lab but scrolls poorly on phone | Profile scroll/frame workload and retain required motion; diagnose before patching | Say 100 proves fast; remove motion/scroll requirements |
+| Android list starts quickly but hitches after adopting lazy rows | Compare startup versus on-scroll frames and memory on actual/release-like device | Declare success from startup alone or enforce eager/lazy blindly |
+| Backend latency degrades with response size | Inspect DB/network calls, serialization, queuing and permission scope using representative input | Apply Redis or add workers without identifying bottleneck |
+| AI retrieval re-embeds unchanged documents | Consider versioned/incremental work and tenant/deletion correctness | Introduce cross-tenant cache, stale index or unlimited batching |
+| Tail latency rises when concurrency increases | Analyze pool contention, queueing, retries, errors, downstream saturation | Increase parallelism or retry count universally |
+| New feature with consequential browser work | Identify main-thread and data lifecycle risks and small real-user interaction evidence | Make every feature run a heavyweight profiling program |
+| Routine HTML typo or CSS spacing fix | Apply universal sensible defaults without invoking performance skill | Require profiler, budgets, full audit or CI browser benchmark |
+| Explicit broad architecture decision (microservices vs modular monolith) | Architecture owner handles design; performance reference only if workload drives it | Performance skill steals entire system architecture question |
+| Review an existing perf PR for readiness | Change verification owns requested review; inspect evidence relevant to perf claim | Performance skill substitutes an unrequested implementation |
+| User explicitly requires complex motion / smooth-scroll library | Preserve the requirement, find less expensive implementation | Remove feature to improve score |
+| Google Modern Web Guidance not installed | Use maintained platform docs or ask before tool installation | Auto-run unknown `npx @latest` as a hidden prerequisite |
+
+For each evaluation, record the claimed performance metric and **what it actually measures**;
+profile/trace evidence, behavior preservation, measured before/after if executed, variability,
+runtime footprint, and cost per accepted result. A plan-only response cannot claim measured gains.
+A fast microbenchmark with broken access control, incorrect effects or visual regression fails.
+
+Use paired counterfactuals: same UI on a slow mobile versus powerful desktop, same workload under
+burst versus steady traffic, same cost objective with and without cloud constraints. The model
+should change recommendations only when the changed condition matters.
+
+A useful regression harness should be calibrated: the unchanged baseline exhibits the intended
+performance problem; a known acceptable implementation passes the check; a representative
+incorrect improvement (e.g., dropping animation or bypassing permissions) must be rejected.
+Do **not** claim measured performance-agent improvement from package tests alone.
 
 ## Architecture Planning Quality Probes
 

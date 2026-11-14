@@ -29,6 +29,10 @@ justify them. Explain the evidence, rather than forcing an example's outcome.
 | Decide or evaluate an interface, boundary, or architecture option | Resolve the consequential decision and its rationale; avoid an unnecessary full project plan |
 | Implement a cross-module feature or fix | Follow existing owners and contracts; avoid introducing scattered rules, hidden coordination, or surplus abstractions |
 
+Performance-sensitive design questions may involve both architecture and execution, but
+`performance-engineering` owns profiling, bottleneck attribution, runtime responsiveness and
+before/after performance evidence. Do not invoke it solely because this skill mentions latency.
+
 An isolated edit with an established owner does not need this workflow. Pure behavior-preserving
 restructuring belongs to `refactoring`; unexplained failures to `systematic-debugging`; an explicitly
 requested patch review to `change-verification`; and specialist security investigation to
