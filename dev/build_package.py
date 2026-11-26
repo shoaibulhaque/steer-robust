@@ -7,7 +7,7 @@ import re
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "0.7.0-candidate"
+VERSION = "0.8.0-candidate"
 NAME = f"steer-robust-v{VERSION}"
 SKILLS = ("architecture-engineering", "refactoring", "systematic-debugging",
           "test-driven-development", "change-verification", "security-engineering")

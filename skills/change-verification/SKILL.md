@@ -83,6 +83,15 @@ verified bypass. A dedicated deep review remains the security skill's responsibi
 - When performance justifies complexity, is there a representative workload, a baseline, and a
   measured result? Metric scores, small functions, and extra layers do not establish better engineering.
 
+- Check new lifecycle representations and mutation paths for contradictory states, illegal transitions
+  and hidden ordering. Trace the actual protection rather than assuming an enum or type proves it.
+- Trace realistic input growth across CPU, memory, database, network and concurrency boundaries.
+  Distinguish obvious repeated work from a performance hypothesis; state assumptions and obtain
+  measurement when a consequential claim depends on it.
+- Follow the complete reading path: excessive nesting, ambient mutable context, fragmented helpers
+  and incoherent ownership can raise cognitive load. Report a concrete consequence and a simpler
+  feasible alternative, not a metric threshold or a preference about file layout.
+
 Recommend a simplification only when it preserves the required guarantees and has a concrete benefit.
 Do not raise speculative architecture or unrelated cleanup as findings.
 

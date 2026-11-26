@@ -3,7 +3,7 @@
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
 every repository. Six focused skills are available for task-specific selection.
 
-**Status:** v0.7.0 candidate. Structural checks run in GitHub Actions; agent skill-selection
+**Status:** v0.8.0 candidate. Structural checks run in GitHub Actions; agent skill-selection
 and security-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
@@ -35,6 +35,16 @@ A task can use more than one skill, but no skill loads another automatically. **
 illustrative, not prescriptive:** select technologies and workflows from the real requirements and
 project constraints, rather than copying the sample architecture or completing an irrelevant
 comparison checklist.
+
+## Preventive Code Quality
+
+The universal defaults apply during ordinary implementation, even when no skill is selected.
+Make lifecycle and domain invariants explicit; choose naturally efficient algorithms and access
+patterns; keep data flow, responsibilities and dependencies understandable. Review introduced
+complexity before completion. Existing architecture references provide deeper, conditional guidance
+for state, performance and structural decisions; refactoring and review retain their separate roles.
+Metrics and patterns are diagnostic aids, not universal targets. No mandatory analyzer, state-machine
+library, folder layout or additional skill is introduced.
 
 ## Secure by Default, Specialized When Needed
 
@@ -155,7 +165,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 dev/build_package.py
 ```
 
 The builder checks skill metadata, local links, code fences, and the exact set of files in each skill.
-It then writes `dist/steer-robust-v0.7.0-candidate.zip` from an explicit allowlist with deterministic
+It then writes `dist/steer-robust-v0.8.0-candidate.zip` from an explicit allowlist with deterministic
 metadata. The tests extract the archive and validate the extracted copy. Development files, design
 notes, raw traces, and local configuration are excluded from the archive, and `dist/` is not committed.
 
