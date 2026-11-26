@@ -33,6 +33,28 @@ A one-caller helper can isolate a difficult effect or explain an independent con
 do not prove that a shared helper is correct. Judge the change in caller knowledge, change surface,
 state to hold and dependencies to trace; do not substitute caller counts or line limits for that judgment.
 
+## Local Reasoning and Cognitive Cost
+
+Trace one concrete operation as a new maintainer would: where it begins, what data it consumes,
+which decisions it makes, which state it reads or changes, and what it returns or throws. Reduce
+knowledge that a reader must retain across unrelated files, callbacks, hidden mutable context
+or undocumented call sequences. Prefer explicit dependencies and data flow over ambient state;
+keep non-obvious reasons and contractual ordering near their owner.
+
+Nested branching, compound conditions, mixed abstraction levels and flag-selected behavior may
+make control flow hard to follow. Early exits, named domain predicates or coherent phases can help
+when they preserve short-circuiting, cleanup, effects and errors. Do not extract every expression:
+a reader should not have to follow a chain of shallow helpers to understand one decision.
+
+A calculation or domain rule may be easier to reason about when separated from I/O, but a pure
+functional core, dependency injection framework or class hierarchy is not a requirement. An
+interface should express what callers need to know (including relevant units, absence, errors and
+effects) and hide what they should not have to reconstruct.
+
+Cyclomatic and cognitive complexity, coupling, and size metrics are useful investigation signals.
+They are not proofs of understandability; a lower per-function score can conceal a worse
+system-wide reading path. Judge the whole operation and its actual change scenarios.
+
 ## 3. Compare a Real Alternative
 
 For a material decision, contrast the proposed boundary with a plausible simpler solution. Consider

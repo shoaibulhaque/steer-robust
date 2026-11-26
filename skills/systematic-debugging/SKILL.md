@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "Use when diagnosing or planning investigation of a failure with unclear cause: flaky tests, environment-specific regressions, recurring failures, or fixes that did not hold. Find causal evidence before proposing fixes. Not when cause and failing test are established."
+description: "Use when diagnosing or planning investigation of a failure with unclear cause: flaky tests, environment-specific regressions, recurring failures, or fixes that did not hold. Find causal evidence before proposing fixes. Not when cause and failing test are established, or when the primary task is focused performance diagnosis."
 ---
 
 # Systematic Debugging
@@ -31,6 +31,10 @@ Use when the cause is unclear, especially when:
 - Time pressure makes guessing tempting. Pressure calls for a smaller decisive probe, not a guess.
 
 If the cause and a failing test are already established, proceed with the correction.
+
+For a primarily latency, throughput, resource-cost or responsiveness investigation, use the
+performance engineering workflow. If an unexplained correctness failure accompanies a slowdown,
+diagnose the correctness failure here when it is a distinct problem. Do not load both by default.
 
 ## Plan-Only Requests
 

@@ -16,8 +16,19 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
-| I: historical consolidation | Pre-merge seven-skill kit versus v0.7 six-skill kit | Historical architecture consolidation comparison; do not mix with v0.8 results |
-| J: performance | v0.7 six-skill baseline versus v0.8 with performance-engineering | Does a distinct profiling/efficiency workflow improve user outcomes without overactivation? |
+| I: consolidation | Historical seven-skill kit versus six-skill kit | Does consolidation improve routing, plans and cost without losing preventive change-locality discipline? |
+| J: preventive defaults | v0.7 six-skill setup with only AGENTS.md replaced by the six-skill preventive revision | Does ordinary implementation improve without more false activations or cost? |
+| K: preventive full kit | v0.7 six-skill setup versus the six-skill preventive revision | Do revised conditional guides and defaults improve consequential work beyond J? |
+| L: combined defaults | K with only AGENTS.md replaced by the integrated defaults | Does scheduling and resource-lifetime guidance improve routine work without profiling ceremony? |
+| M: performance specialist | L plus performance-engineering and the updated architecture/debugging routing and architecture performance reference | Does the specialist and its routing improve focused performance outcomes beyond L? |
+
+Pin v0.7 to `2ed09b83fb5456e79fea06266c2bd4883c6df62f` and the six-skill preventive
+revision to `7625825238e8bf146c3f78f97cd697bd5bce8db9` for J/K. Record the exact
+integrated revision used for L/M. In L the six original skills and references are identical to K;
+in M only the specialist and its routing/reference boundary differ from L. Keep project-specific
+instructions, including any performance-budget appendix, constant unless explicitly testing them.
+Compare J/K for preventive quality, L/K for defaults, and M/L for the added specialist and routing.
+Compare the full integrated kit with v0.7 only as an aggregate result, not evidence for one component.
 
 Compare architecture cases with the existing seven-skill installation as a separate baseline. Record
 whether both former architecture skills were selected and whether they contributed unique value. Run
@@ -39,11 +50,12 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | Skill | Positive scenario | Adjacent negative control |
 | --- | --- | --- |
 | Architecture engineering | Plan a greenfield service with measurable constraints, or implement a multi-consumer rule without duplicating decisions | Mechanical local rename, pure refactoring, causal debugging, or PR readiness review |
-| Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause |
+| Systematic debugging | Intermittent duplicate effects survive earlier fixes; response can be lost after a write | Supplied failing example with already established cause; focused latency investigation |
 | TDD | Implement testable behavior with a discriminating new example, including an access rule changed only in configuration | Prose-only correction; a pure refactor should not trigger it |
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
 | Change verification | Review a patch for PR readiness against actual contribution/CI rules | Routine implementation or merely running a specified test |
 | Security engineering | Explicit scoped security review, secure-coding request or threat model | Ordinary feature work touching an authenticated route; still preserve security without starting a full audit |
+
 | Performance engineering | Diagnose scroll jank despite green Lighthouse; profile slow API p95 under load; plan performance-sensitive mobile startup work | CSS typo, generic system architecture choice, unexplained nonperformance crash, or review-only PR |
 
 A typo-only task should load none of these workflows. Include tasks where two responsibilities really
@@ -73,8 +85,8 @@ Include mixed-domain cases where two skills genuinely apply without expanding th
 ## Runtime Performance and Engineering Judgment Probes
 
 Test the **observed outcome**, not whether an agent names common optimization patterns.
-Use the current v0.7 six-skill `main` as baseline and the candidate v0.8 seven-skill package as
-the intervention. Keep model, prompt, fixture, permissions, hardware and tool visibility comparable;
+Use L as the six-skill baseline and M as the seven-skill intervention. Compare K and L separately
+for ordinary implementation, and M versus v0.7 only for aggregate outcomes. Keep model, prompt, fixture, permissions, hardware and tool visibility comparable;
 no skill names in blind task prompts. Skill metadata activation and actual output quality are separate
 metrics.
 
@@ -221,6 +233,40 @@ For TDD, verify the intended behavioral assertion fails before implementation an
 setup/import failures are not the red evidence. Observe artifact and command history, not self-reported
 compliance. Include a preservation case where no new feature test is needed and a pre-existing dirty
 worktree that must not be deleted to recreate an ideal sequence.
+
+## Preventive Quality Probes (v0.8)
+
+Compare J with the identical v0.7 installation and K with J as well as v0.7.
+Repeat the routine cases for L/K and M/L to detect over-activation. Use fresh isolated
+profiles and the same fixture, model/effort and permissions. Do not mention intended techniques in
+implementation prompts. Seed independent acceptance checks and keep them outside the agent checkout.
+For ordinary local changes, expect no architecture or review activation just to check code quality;
+for genuinely cross-module or lifecycle-heavy work, record relevant conditional reference reads.
+
+| Fixture / request | Acceptance evidence | Negative control / trap |
+| --- | --- | --- |
+| Implement a document lifecycle with exclusive stages and state-specific results | Allowed and rejected transitions, persisted invariants, no side effect on rejection | Independent preference flags remain independent; no mandatory machine library |
+| Add a payment/delivery status feature with independent lifecycles | Valid combinations remain representable; transitions have correct owners | A single flattened status loses meaningful combinations |
+| Match orders to users in large local inputs | Independent join oracle, duplicates/missing/order semantics as specified, growth at multiple sizes | Tiny bounded lists or required Cartesian product do not mandate indexing |
+| Add enrichment to a list endpoint | Real query/call counts at different result sizes, authorization and output equivalence | Batch fetch that overfetches or bypasses tenant scope fails |
+| Import a large stream with bounded resources | Peak retained items, bounded concurrency, failure/cancellation cleanup and complete results | No extra queue or cache for a fixed small import |
+| Implement multi-branch validation | All permitted/rejected cases, error precedence and side-effect order; reviewer can trace decisions | Extracting shallow helpers to reduce a score is not improvement |
+| Add a rule consumed by API, worker and UI | One discoverable policy owner, actual enforcement and consumer behavior | Similar but independently governed policies stay separate |
+| Add a feature to an established small backend | Cohesive ownership, no new cycles, repository conventions, straightforward reader trace | Do not force feature folders, repositories, DI or factories |
+| Review a diff with an injected N+1 or contradictory transition | Reachable trigger and concrete consequence; actionable scoped finding | Equivalent safe diff does not attract metric-only findings |
+| Rename a local variable or fix a typo | Correct minimal diff and existing required checks | No quality report, benchmark, architecture plan or extra skill activation |
+
+For code comprehension, use blind reviewers where practical: ask where a decision lives, which
+inputs and effects an operation has, and which files would need to change for a concrete new
+requirement. Record correct answers, time and unnecessary navigation; do not use line count or
+a cognitive-complexity score as the outcome. For resource claims, use operation counts or measured
+workloads with assumptions; do not grade all solutions against the same Big-O target regardless
+of required semantics. Include seeded wrong and known-correct implementations to validate graders.
+
+Track correctness and security regressions separately from quality improvements. Record extra
+instructions, tool calls, tokens, activation and elapsed time. A more elaborate implementation
+that passes tests but adds unsupported requirements or hidden coordination is not a success.
+These are proposed trials, not completed comparative results.
 
 ## Grade Outcomes, Not Ceremony
 

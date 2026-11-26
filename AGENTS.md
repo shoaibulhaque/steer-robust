@@ -42,28 +42,33 @@ never grants extra authorization.
 - **Fit the existing system.** Use the responsible module, established patterns, domain vocabulary, and
   available dependencies. Make the smallest coherent change. Do not build a parallel implementation;
   migrate callers and remove what the change supersedes.
-- **Make complexity earn its place.** Favor clear control flow, precise names, cohesive modules, and
-  interfaces that hide real complexity. Avoid speculative options, shallow wrappers, redundant guards,
-  and abstractions justified only by similar-looking code or size limits.
-- **Respect real boundaries.** Preserve public contracts, domain invariants, failure behavior, data
-  compatibility, and trust boundaries. Validate untrusted input where it enters. Keep state and side
-  effects explicit. Consider concurrency, persistence, and operations when the change affects them.
-- **Weigh consequential tradeoffs.** Balance correctness, actual time and space costs, user experience,
-  maintainer experience, and how easily agents can navigate the code. Surface a material conflict
-  instead of silently optimizing one at another's expense. Routine work needs no tradeoff report.
-
-## Resource Efficiency and Responsiveness
-
-- Design meaningful work to run at the right time and layer. Notice repeated computation, needless
-  fetches/queries, redundant state updates, expensive UI-thread work and unbounded background tasks
-  where they affect the requested feature. Do not add caching, parallelism or infrastructure by default.
-- Keep critical user interactions responsive and resource lifecycles explicit: initialize on demand,
-  recompute after relevant changes, bound admitted work, cancel truly obsolete tasks, and clean up
-  listeners/jobs/connections as applicable. Preserve correctness, security and required behavior.
-- For performance-sensitive features or reported slowdowns, define the actual experience/workload,
-  investigate the execution path, and verify with appropriate representative evidence. Benchmarks and
-  lab scores are partial signals; don't claim end-to-end smoothness from a single score. Trivial edits
-  do not require profiling or a performance report.
+- **Make complexity earn its place.** Favor direct control and data flow, meaningful names, cohesive
+  responsibilities and interfaces that hide real complexity. Reduce unnecessary nesting, compound
+  conditions, hidden dependencies and indirection; do not fragment code to improve a metric or
+  meet an arbitrary size limit. Avoid speculative layers, options and redundant guards.
+- **Organize for local reasoning and change.** Place rules and effects with their semantic owner;
+  follow repository conventions. Make dependencies, inputs, outputs and side effects discoverable.
+  Avoid catch-all modules, circular dependencies and copied decisions; keep independent policies
+  independent. Extract a boundary only when it hides knowledge, enforces a contract or otherwise pays.
+- **Make state and correctness explicit.** Preserve public contracts, domain invariants, failure
+  behavior, data compatibility and trust boundaries. Avoid contradictory flags, hidden lifecycles,
+  scattered transitions and implicit call ordering. Represent valid states and legal operations
+  at their owner; enforce invariants at real mutation boundaries, including persistence and
+  concurrency when affected. Derive rather than duplicate state when practical; do not merge
+  independent states or require a state-machine library. Validate untrusted input where it enters.
+- **Choose naturally efficient implementations.** Reason about realistic input sizes and growth in
+  time, memory, database queries, network calls, allocation and concurrent work. Avoid repeated
+  scans, N+1 I/O, redundant renders and unjustified unbounded work. Preserve ordering, precision,
+  security and other guarantees. Require evidence before paying substantial complexity for
+  optimization, not for obvious waste removal.
+- **Schedule work and own its lifetime.** Keep critical interactions responsive; avoid premature
+  initialization and unnecessary recomputation. Bound admitted work, cancel genuinely obsolete
+  tasks and release owned resources on relevant exits. Preserve durable effects and user progress.
+  For consequential performance work, verify the actual workload or experience; a lab score alone
+  cannot establish responsiveness. Routine edits need no profiling or performance report.
+- **Weigh consequential tradeoffs.** Balance correctness, actual resource costs, user experience,
+  maintainability and agent navigability. Surface material conflicts instead of silently optimizing
+  one at another's expense. Routine work needs no tradeoff report.
 
 ## Security by Default
 
@@ -83,7 +88,9 @@ Security is contextual: opaque identifiers are not authorization, validation is 
 - Run focused checks for what changed, plus the checks the repository requires. Prefer evidence that
   would fail if the behavior were still broken. Do not repeat runs without a reason.
 - Review the final diff for regressions, scope drift, leftover debugging code, avoidable complexity
-  and affected security invariants. Verify protected behavior at the real boundary when necessary;
+  including introduced state, resource growth, local reasoning and affected security invariants.
+  Correct task-introduced issues within scope; report material unrelated problems. Verify protected
+  behavior at the real boundary when necessary;
   do not infer safety from a passing mock or a clean scanner alone.
 
 ## Safety and Delivery

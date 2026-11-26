@@ -3,6 +3,10 @@
 **Read when:** performance is a requirement, a reported defect, or a consequential design tradeoff.
 This guide does not require benchmarking ordinary edits.
 
+This reference addresses architecture and implementation choices, not a full runtime profiling
+workflow. A focused performance investigation or measured optimization belongs to
+`performance-engineering`; consult it only when the requested task genuinely requires that depth.
+
 ## Overview
 
 **Core principle:** choose naturally efficient simple designs, and require evidence before paying
@@ -17,6 +21,30 @@ does not describe remote-call count or the tail latency of a heavily contended o
 For example, scanning a collection once may be simpler than maintaining an index for a small local
 list. Repeating a remote lookup per item can dominate a superficially linear function; a supported
 batch operation may remove that cost without creating a cache consistency problem.
+
+## Reason About Implementation Costs
+
+Trace actual work through loops, library calls, ORM access and remote boundaries. Name relevant
+input dimensions rather than using one n for unrelated sizes. Distinguish worst-case, expected and
+amortized cost when that changes the choice; include auxiliary space and the cost of producing the
+required output. A nested loop is not inherently wrong: a Cartesian-product result has a different
+lower bound from a lookup join. A small bounded list may not justify a hash index.
+
+For example, matching n orders to m uniquely identified users by repeated scanning costs O(n*m)
+comparisons in the worst case. Indexing users once costs expected O(n+m) time and O(m) auxiliary
+space with normal hash-table assumptions. Check whether duplicate keys, missing matches and ordering
+are meaningful before replacing the scan. For database-resident inputs, an appropriately scoped
+join or batch query may avoid materializing both collections; inspect the actual query and results.
+
+Look for repeated sorting or parsing, copies of growing collections, per-record I/O, unbounded
+pagination, queues or task fan-out, and resources retained past their lifetime. Bound work using
+the actual contract: chunk or stream large inputs when justified, preserve backpressure and
+cancellation, and close owned resources on relevant exits. A bounded workload can justify a simpler
+approach; no universal complexity target or benchmark is required for routine edits.
+
+For a consequential growth claim, verify with representative sizes or a discriminating operation
+count (e.g. queries for 1 versus 50 rows). Wall-clock measurements alone may hide scaling defects;
+operation counts alone do not establish latency. Use both only when they answer a real question.
 
 ## Establish a Comparison
 

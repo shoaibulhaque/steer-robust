@@ -1,6 +1,6 @@
 # Provenance — human reference, not runtime instructions
 
-The runtime contains only universal defaults and six focused candidate skills. Do not load this
+The runtime contains only universal defaults and seven focused candidate skills. Do not load this
 research folder for ordinary tasks or install it under a skill directory.
 
 ## Inputs inspected
@@ -232,6 +232,35 @@ with concrete boundary traces, safe test shapes and counterexamples. Extended th
 performance, state/failure and design-decision references with worked scenarios. Conditional
 reference loading and the six-skill activation boundary are unchanged.
 
+## Preventive Code Quality (2026-11-26)
+
+The v0.8 candidate moves preventive guidance into the universal defaults and extends existing
+conditional references, without adding a seventh skill or a mandatory analysis pass. Explicit state,
+real invariant enforcement, natural resource efficiency, local reasoning and cohesive organization
+apply proportionately even on routine implementation. Detailed guidance remains with architecture,
+refactoring, TDD and requested review. Examples are original illustrative cases, not prescribed
+patterns or copied skill bodies.
+
+Research informing this pass:
+
+- [Parnas, modular decomposition (1972)](https://doi.org/10.1145/361598.361623) and
+  [Ousterhout, Managing Complexity](https://web.stanford.edu/~ouster/cgi-bin/cs190-spring15/lecture.php?topic=complexity):
+  hide design knowledge and reduce the cost of understanding and changing a system.
+- [Google Engineering Practices, code review](https://google.github.io/eng-practices/review/reviewer/looking-for.html):
+  consider design, simplicity, tests and code health, rather than cosmetic conformity.
+- [React, Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure):
+  avoid contradictory and unnecessarily duplicated state. The principle is applied beyond UI without
+  prescribing React, reducers or a universal lifecycle library.
+- [Django, database access optimization](https://docs.djangoproject.com/en/6.0/topics/db/optimization/):
+  examine actual access patterns and profile consequential optimization; do not equate a linear
+  application loop with efficient remote access.
+- [Empirical evaluation of Cognitive Complexity](https://www.sciencedirect.com/science/article/pii/S0164121222002370):
+  motivates treating understandability metrics as signals rather than stand-alone acceptance targets.
+
+No blanket complexity threshold, state machine framework, folder taxonomy, static analyzer or
+new runtime dependency is required. J/K comparisons and counterfactual fixtures in EVAL_PLAN.md
+are designed to test benefits, costs and over-application; actual agent outcomes remain unmeasured.
+
 ## Performance Engineering and Modern Web Guidance (2026-11-14)
 
 The merged v0.7 kit includes architectural performance decisions but no dedicated workflow for
@@ -272,3 +301,16 @@ catalog of optimizations. Performance interventions can trade startup for later 
 throughput for first result, memory for CPU, or lower cost for weaker reliability. The user-visible
 contract, security and accessibility remain requirements. The EVAL_PLAN tests routing, negative
 controls, counterfactual workloads and measured behavioral outcomes, not merely document validity.
+
+## Integration of Preventive Quality and Performance (2026-11-26)
+
+PR #5 and the merged preventive-quality changes (PR #6) are complementary. The six-skill
+preventive revision remains a pinned evaluation baseline. The integrated v0.8 candidate adds
+the seventh skill for focused execution performance, retains the architecture performance guide
+for consequential design choices, and consolidates efficiency, scheduling and resource lifetime
+into the universal defaults rather than adding a competing section. Debugging and review keep
+their separate responsibilities. Historical counts above describe their respective revisions.
+
+The J/K/L/M comparisons distinguish preventive defaults, preventive specialist guidance,
+integrated scheduling defaults and the performance specialist with its routing changes.
+Structural checks and comparative agent outcomes remain distinct; no model trial is claimed.

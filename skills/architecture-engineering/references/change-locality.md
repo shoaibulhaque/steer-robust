@@ -39,6 +39,21 @@ When the change is consequential, trace a hypothetical next edit **within the kn
 
 This is a design probe, not a forecast of requirements. If it does not identify a credible synchronization cost, stop instead of manufacturing a new abstraction.
 
+## Organization and Dependency Direction
+
+Locate a new decision using the repository's vocabulary and established module boundaries. Keep
+domain rules with their owner and infrastructure-specific translation at the boundary that understands
+it. Group things that change for the same reason; separate policies that evolve independently.
+Avoid growing a miscellaneous utils or services module into an unowned collection of unrelated
+decisions. Name modules and entry points for their responsibilities, not their current size.
+
+A technical-layer layout can fit a small framework-driven application; capability-oriented modules
+can reduce navigation and coordination for larger independent domains. Neither is mandated. A
+change across several legitimate layers is not automatically a design defect. Check actual imports,
+public APIs and mutation paths; a folder tree does not establish cohesion. Avoid introducing
+dependency cycles or exposing internals just to reach a helper. Use the smallest coherent boundary
+that keeps the necessary dependency understandable.
+
 ## Special Cases Are Architectural Evidence
 
 An `if` for one value, a caller-specific option, a swallowed exception, a hardcoded wait, a retry, or a disabled test may indicate an unrepresented requirement or an ownership mistake. Ask:

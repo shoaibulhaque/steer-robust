@@ -3,8 +3,8 @@
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
 every repository. Seven focused skills are available for task-specific selection.
 
-**Status:** v0.8.0 candidate. Structural checks run in GitHub Actions; comparative
-agent-behavior and performance-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.8.0 candidate. Structural checks run in GitHub Actions; comparative agent skill-selection,
+code quality, security and performance-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
 orchestration. Development-only Python utilities validate and package it; CI runs those checks.
@@ -26,18 +26,28 @@ Each responsibility has one owner:
 
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
-- **Debugging** owns causal investigation.
+- **Debugging** owns causal investigation of unclear failures outside focused performance work.
 - **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, quality tradeoffs, and substantial worked plans.
 - **Change verification** owns requested review.
 - **Performance engineering** owns performance investigation, profiling, bottleneck removal and
   evidence that the resulting user experience, resource use and cost actually improve.
-- **Security engineering** owns specialist security analysis. All six workflows still preserve
+- **Security engineering** owns specialist security analysis. All seven workflows still preserve
   touched trust boundaries through the universal secure-by-default guidance; a deep audit is selective.
 
 A task can use more than one skill, but no skill loads another automatically. **Examples are
 illustrative, not prescriptive:** select technologies and workflows from the real requirements and
 project constraints, rather than copying the sample architecture or completing an irrelevant
 comparison checklist.
+
+## Preventive Code Quality
+
+The universal defaults apply during ordinary implementation, even when no skill is selected.
+Make lifecycle and domain invariants explicit; choose naturally efficient algorithms and access
+patterns; keep data flow, responsibilities and dependencies understandable. Review introduced
+complexity before completion. Existing architecture references provide deeper, conditional guidance
+for state, performance and structural decisions; refactoring and review retain their separate roles.
+Metrics and patterns are diagnostic aids, not universal targets. No mandatory analyzer, state-machine
+library or folder layout is prescribed.
 
 ## Performance by Construction, Measured in Use
 
@@ -86,7 +96,7 @@ stacks. Deep audit findings must remain separate from conditional hypotheses and
 
 ## Planning vs. Execution
 
-Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, security plans `security-engineering`, and performance-sensitive plans `performance-engineering`.
+Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, security plans `security-engineering`, and focused performance plans `performance-engineering`.
 
 Do not load every skill just because the user asks for a plan. Choose greenfield, brownfield, or hybrid guidance based on actual system context. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
 

@@ -112,6 +112,13 @@ Run the relevant suite and the repository's required checks. Review the diff as 
 behavior, changed error, reordered effect, or weakened assertion. Check performance only where it is
 part of the contract. Report the bugs you recorded.
 
+A complexity reduction must improve a concrete reader or change path, not just a score or line
+count. Trace the whole operation after extraction or inlining; preserve ordering, short-circuit
+behavior, errors and effects. For state restructuring, characterize relevant existing transitions
+and invalid-state behavior before changing representation. Enforcing a previously unenforced
+invariant or changing the supported transition set is a behavior change, not a pure refactor.
+Do not introduce new modules, layers or generalized helpers solely to make metrics improve.
+
 ## Choosing a Refactoring
 
 | Signal | Consider |
