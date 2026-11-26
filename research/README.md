@@ -1,6 +1,6 @@
 # Provenance — human reference, not runtime instructions
 
-The runtime contains only universal defaults and six focused candidate skills. Do not load this
+The runtime contains only universal defaults and seven focused candidate skills. Do not load this
 research folder for ordinary tasks or install it under a skill directory.
 
 ## Inputs inspected
@@ -260,3 +260,57 @@ Research informing this pass:
 No blanket complexity threshold, state machine framework, folder taxonomy, static analyzer or
 new runtime dependency is required. J/K comparisons and counterfactual fixtures in EVAL_PLAN.md
 are designed to test benefits, costs and over-application; actual agent outcomes remain unmeasured.
+
+## Performance Engineering and Modern Web Guidance (2026-11-14)
+
+The merged v0.7 kit includes architectural performance decisions but no dedicated workflow for
+profiling a runtime slowdown or proving a performance improvement. Added `performance-engineering`
+as a seventh, distinct skill for profiling and optimizing real execution across web, mobile, desktop,
+backend and AI/batch environments. The short universal AGENTS defaults make resource efficiency
+part of regular engineering without demanding audits on every change. Architecture still owns system
+boundaries; the new skill owns evidence about actual work, responsiveness, resources and regression.
+
+Conditional references cover measurement, browsers, native applications, services and data paths,
+AI/background processing, and worked case studies. The worked cases explicitly distinguish
+high Lighthouse/initial-loading scores from scroll/frame-time problems; startup improvements that
+move cost into lazy scrolling; throughput from first-result latency; and faster average response
+from worse tail latency.
+
+Primary sources used as technical starting points, subject to version verification:
+- [GoogleChrome Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance-src):
+  targeted modern browser API guidance, search/retrieve and behavior-based evaluation. Optional
+  separate installation; no automatic installation or execution of `npx @latest`.
+- [web.dev INP optimization](https://web.dev/articles/optimize-inp) and
+  [layout thrashing](https://web.dev/articles/avoid-large-complex-layouts-and-layout-thrashing):
+  runtime responsiveness requires attribution of work, not just loading scores.
+- [Apple UI Responsiveness](https://developer.apple.com/documentation/xcode/understanding-user-interface-responsiveness)
+  and [Apple Instruments Tutorials](https://developer.apple.com/tutorials/instruments/reducing-main-thread-work-by-doing-less):
+  main-thread hangs, hitches and deferred work can have different tradeoffs.
+- [Android performance overview](https://developer.android.com/topic/performance/overview),
+  [Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview):
+  release-like, device-representative profiling for startup and scroll.
+- [Azure performance antipatterns](https://learn.microsoft.com/en-us/azure/architecture/antipatterns/):
+  chatty I/O, extraneous fetching, repeated instantiation and retry storms.
+- [AWS Performance Efficiency](https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/design-principles.html):
+  workload-aligned technology and measurement, not universal product choices.
+- [Google SRE NALSD](https://sre.google/workbook/non-abstract-design/):
+  resource estimates and system feasibility rather than speculative architecture.
+
+The references are deliberately authored for *decision correctness* rather than a mandatory
+catalog of optimizations. Performance interventions can trade startup for later interaction,
+throughput for first result, memory for CPU, or lower cost for weaker reliability. The user-visible
+contract, security and accessibility remain requirements. The EVAL_PLAN tests routing, negative
+controls, counterfactual workloads and measured behavioral outcomes, not merely document validity.
+
+## Integration of Preventive Quality and Performance (2026-11-26)
+
+PR #5 and the merged preventive-quality changes (PR #6) are complementary. The six-skill
+preventive revision remains a pinned evaluation baseline. The integrated v0.8 candidate adds
+the seventh skill for focused execution performance, retains the architecture performance guide
+for consequential design choices, and consolidates efficiency, scheduling and resource lifetime
+into the universal defaults rather than adding a competing section. Debugging and review keep
+their separate responsibilities. Historical counts above describe their respective revisions.
+
+The J/K/L/M comparisons distinguish preventive defaults, preventive specialist guidance,
+integrated scheduling defaults and the performance specialist with its routing changes.
+Structural checks and comparative agent outcomes remain distinct; no model trial is claimed.

@@ -3,6 +3,10 @@
 **Read when:** performance is a requirement, a reported defect, or a consequential design tradeoff.
 This guide does not require benchmarking ordinary edits.
 
+This reference addresses architecture and implementation choices, not a full runtime profiling
+workflow. A focused performance investigation or measured optimization belongs to
+`performance-engineering`; consult it only when the requested task genuinely requires that depth.
+
 ## Overview
 
 **Core principle:** choose naturally efficient simple designs, and require evidence before paying

@@ -1,10 +1,10 @@
 # Steer Robust
 
 Portable engineering guidance for coding agents. One short `AGENTS.md` holds universal defaults for
-every repository. Six focused skills are available for task-specific selection.
+every repository. Seven focused skills are available for task-specific selection.
 
-**Status:** v0.8.0 candidate. Structural checks run in GitHub Actions; agent skill-selection
-and security-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
+**Status:** v0.8.0 candidate. Structural checks run in GitHub Actions; comparative agent skill-selection,
+code quality, security and performance-outcome evaluations remain pending. See [Evaluate before adoption](#evaluate-before-adoption).
 
 The runtime guidance is Markdown-only, with no runtime dependencies, hooks, installers, or
 orchestration. Development-only Python utilities validate and package it; CI runs those checks.
@@ -19,16 +19,19 @@ orchestration. Development-only Python utilities validate and package it; CI run
 | [systematic-debugging](skills/systematic-debugging/SKILL.md) | Diagnosing or planning investigation of an unclear failure | Defects with an established cause and failing test |
 | [architecture-engineering](skills/architecture-engineering/SKILL.md) | Greenfield/brownfield system planning, design choices, migrations, or preventing coupling in multi-module work | Routine local edits, pure refactoring, root-cause diagnosis, or patch-readiness review |
 | [change-verification](skills/change-verification/SKILL.md) | Patch or PR review, merge readiness, or specific change-verification plan | Routine implementation or generic planning |
+| [performance-engineering](skills/performance-engineering/SKILL.md) | Performance-sensitive planning, runtime profiling, responsiveness, efficiency improvements and regression evidence | Routine edits, general architecture, unrelated diagnosis or review-only tasks |
 | [security-engineering](skills/security-engineering/SKILL.md) | Explicit security design, audit, threat modeling, or hardening of application, AI, supply-chain or infrastructure boundaries | Automatic deep audits on ordinary coding or generic reviews |
 
 Each responsibility has one owner:
 
 - **TDD** owns the red–green–refactor cycle and test design.
 - **Refactoring** owns behavior-preserving restructuring and bringing legacy code under test.
-- **Debugging** owns causal investigation.
+- **Debugging** owns causal investigation of unclear failures outside focused performance work.
 - **Architecture engineering** owns architecture planning, consequential design decisions, and preventing new coordination or coupling. Conditional references handle new systems, existing systems, migrations, change locality, quality tradeoffs, and substantial worked plans.
 - **Change verification** owns requested review.
-- **Security engineering** owns specialist security analysis. All six workflows still preserve
+- **Performance engineering** owns performance investigation, profiling, bottleneck removal and
+  evidence that the resulting user experience, resource use and cost actually improve.
+- **Security engineering** owns specialist security analysis. All seven workflows still preserve
   touched trust boundaries through the universal secure-by-default guidance; a deep audit is selective.
 
 A task can use more than one skill, but no skill loads another automatically. **Examples are
@@ -44,7 +47,28 @@ patterns; keep data flow, responsibilities and dependencies understandable. Revi
 complexity before completion. Existing architecture references provide deeper, conditional guidance
 for state, performance and structural decisions; refactoring and review retain their separate roles.
 Metrics and patterns are diagnostic aids, not universal targets. No mandatory analyzer, state-machine
-library, folder layout or additional skill is introduced.
+library or folder layout is prescribed.
+
+## Performance by Construction, Measured in Use
+
+[AGENTS.md](AGENTS.md) includes lightweight efficiency and responsiveness defaults for ordinary
+engineering: avoid unnecessary work, respect execution/runtime lifecycles, preserve critical paths and
+select evidence proportionate to the task. The separate
+[performance-engineering](skills/performance-engineering/SKILL.md) workflow is for consequential
+performance-sensitive design, observed lag/jank/slowdowns, optimization or regression protection.
+Its conditional references cover browser rendering, mobile/desktop UI responsiveness, data/services,
+AI/batch workloads, measurements and worked cases.
+
+**Performance skill routing:** architecture owns system-wide design and contract tradeoffs;
+performance engineering owns measured execution and responsive outcomes; debugging owns unknown
+nonperformance failure causes; change verification owns review-only work. Do not load all of them
+for a small change. Keep required motion/visuals, accessibility, correctness and security intact.
+
+Google Chrome's [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance-src)
+offers up-to-date, targeted browser-platform advice. It is an **optional separate resource** for
+projects that have installed and trusted it; this package does not automatically execute `npx`,
+install plugins, or copy volatile platform rules into universal defaults. Browser feature adoption
+still depends on the supported browsers and project requirements.
 
 ## Secure by Default, Specialized When Needed
 
@@ -72,7 +96,7 @@ stacks. Deep audit findings must remain separate from conditional hypotheses and
 
 ## Planning vs. Execution
 
-Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, and security plans `security-engineering`.
+Skills apply to the *problem*, not just the act of coding. A plan-only request permits scoped investigation and proposed design, tests, or verification, **not implementation**. Architecture plans use `architecture-engineering`, refactor plans use `refactoring`, diagnosis plans `systematic-debugging`, test-first plans `test-driven-development`, specific patch verification plans `change-verification`, security plans `security-engineering`, and focused performance plans `performance-engineering`.
 
 Do not load every skill just because the user asks for a plan. Choose greenfield, brownfield, or hybrid guidance based on actual system context. Small plans may require none. Plans should distinguish evidence from assumptions, name meaningful owners and steps, and state how success would be checked without claiming the checks were run.
 

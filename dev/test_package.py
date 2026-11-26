@@ -165,6 +165,32 @@ class PackageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             kit.archive()
 
+    def test_performance_skill_and_references_are_distributed(self):
+        self.assertEqual(len(kit.SKILLS), 7)
+        self.assertIn("performance-engineering", kit.SKILLS)
+        with zipfile.ZipFile(io.BytesIO(kit.archive())) as archive:
+            prefix = f"{kit.NAME}/skills/performance-engineering/"
+            required = (
+                "SKILL.md",
+                "references/measurement-and-regressions.md",
+                "references/browser-rendering-and-interaction.md",
+                "references/native-app-responsiveness.md",
+                "references/services-and-data-paths.md",
+                "references/ai-batch-and-background-work.md",
+                "references/performance-casebook.md",
+            )
+            for name in required:
+                self.assertIn(prefix + name, archive.namelist())
+            skill = archive.read(prefix + "SKILL.md").decode("utf-8")
+            self.assertIn("not", skill.lower())
+            self.assertIn("performance", skill.lower())
+            self.assertIn("Plan-only", skill)
+
+    def test_missing_performance_reference_is_rejected(self):
+        (self.root / "skills/performance-engineering/references/browser-rendering-and-interaction.md").unlink()
+        with self.assertRaises(ValueError):
+            kit.archive()
+
     def test_missing_imported_license_is_rejected(self):
         (self.root / "skills/security-engineering/LICENSE.txt").unlink()
         with self.assertRaises(ValueError):

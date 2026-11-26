@@ -58,8 +58,14 @@ never grants extra authorization.
   independent states or require a state-machine library. Validate untrusted input where it enters.
 - **Choose naturally efficient implementations.** Reason about realistic input sizes and growth in
   time, memory, database queries, network calls, allocation and concurrent work. Avoid repeated
-  scans, N+1 I/O and unjustified unbounded work; preserve ordering, precision and other guarantees.
-  Require evidence before paying substantial complexity for optimization, not for obvious waste removal.
+  scans, N+1 I/O, redundant renders and unjustified unbounded work. Preserve ordering, precision,
+  security and other guarantees. Require evidence before paying substantial complexity for
+  optimization, not for obvious waste removal.
+- **Schedule work and own its lifetime.** Keep critical interactions responsive; avoid premature
+  initialization and unnecessary recomputation. Bound admitted work, cancel genuinely obsolete
+  tasks and release owned resources on relevant exits. Preserve durable effects and user progress.
+  For consequential performance work, verify the actual workload or experience; a lab score alone
+  cannot establish responsiveness. Routine edits need no profiling or performance report.
 - **Weigh consequential tradeoffs.** Balance correctness, actual resource costs, user experience,
   maintainability and agent navigability. Surface material conflicts instead of silently optimizing
   one at another's expense. Routine work needs no tradeoff report.
