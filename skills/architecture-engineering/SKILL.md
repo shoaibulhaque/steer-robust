@@ -92,6 +92,13 @@ it can plausibly satisfy the guarantees. Where a fixed contract or observed cons
 choice, verify it instead of inventing an alternative. Evaluate feasibility, growth, compatibility,
 operations, reversibility and failure windows proportionately. Accept necessary stateful components.
 
+For the affected design, make lifecycle states, legal transitions and their enforcement visible.
+Choose an organization that makes domain decisions, dependencies and effects easy to find without
+forcing unrelated consumers to change. Consider growth of work and retained state along the actual
+data path; avoid making a naturally efficient implementation depend on speculative infrastructure.
+Use the relevant references only for material questions. A routine local edit still uses the defaults,
+not this workflow.
+
 Inspect the **boundary where the design might fail**, not merely its happy-path diagram: an
 acknowledgment may be lost after a remote effect; concurrent actors may both believe they own work;
 a rolling deployment may mix old and new readers; a cache may serve stale authorization. Do not

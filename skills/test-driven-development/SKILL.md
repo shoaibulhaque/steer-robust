@@ -44,6 +44,20 @@ would miss a bypass.
 Do not manufacture security tests for unrelated edits or assume one authorization test protects
 every route. Test granularity follows the requirement; test-first discipline remains unchanged.
 
+## Invariants, Sequences and Resource Contracts
+
+For behavior involving a meaningful invariant, identify an independent expected property and a
+boundary that can observe it. For a lifecycle, select legal and illegal transitions and verify
+both the returned result and retained state/effects. Where order matters, use a discriminating
+sequence (including duplicate or concurrent operations when relevant); a single happy-path case
+cannot establish a sequence invariant. A property-based or stateful test may help when examples
+miss material combinations; do not require a new testing library.
+
+If a resource bound or scaling behavior is part of the contract, test an observable bound such as
+query count, maximum in-flight work or processed items using representative input sizes.
+Avoid brittle wall-clock assertions for routine tests and do not write tests for style metrics.
+Use the simplest test that would reject a plausible incorrect implementation.
+
 ## Plan-Only Requests
 
 For an explicitly requested test-first plan, identify observable acceptance cases, independent expected results, the smallest useful test boundary, and an ordered red–green–refactor sequence. Include material failure paths. These are proposed tests: do not edit files or claim RED/GREEN occurred. Do not load this workflow for every general architecture plan just because tests will eventually be needed.

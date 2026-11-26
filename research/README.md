@@ -231,3 +231,32 @@ Expanded the API/parser, AI tool, build/secrets, runtime/observability and audit
 with concrete boundary traces, safe test shapes and counterexamples. Extended the architecture
 performance, state/failure and design-decision references with worked scenarios. Conditional
 reference loading and the six-skill activation boundary are unchanged.
+
+## Preventive Code Quality (2026-11-26)
+
+The v0.8 candidate moves preventive guidance into the universal defaults and extends existing
+conditional references, without adding a seventh skill or a mandatory analysis pass. Explicit state,
+real invariant enforcement, natural resource efficiency, local reasoning and cohesive organization
+apply proportionately even on routine implementation. Detailed guidance remains with architecture,
+refactoring, TDD and requested review. Examples are original illustrative cases, not prescribed
+patterns or copied skill bodies.
+
+Research informing this pass:
+
+- [Parnas, modular decomposition (1972)](https://doi.org/10.1145/361598.361623) and
+  [Ousterhout, Managing Complexity](https://web.stanford.edu/~ouster/cgi-bin/cs190-spring15/lecture.php?topic=complexity):
+  hide design knowledge and reduce the cost of understanding and changing a system.
+- [Google Engineering Practices, code review](https://google.github.io/eng-practices/review/reviewer/looking-for.html):
+  consider design, simplicity, tests and code health, rather than cosmetic conformity.
+- [React, Choosing the State Structure](https://react.dev/learn/choosing-the-state-structure):
+  avoid contradictory and unnecessarily duplicated state. The principle is applied beyond UI without
+  prescribing React, reducers or a universal lifecycle library.
+- [Django, database access optimization](https://docs.djangoproject.com/en/6.0/topics/db/optimization/):
+  examine actual access patterns and profile consequential optimization; do not equate a linear
+  application loop with efficient remote access.
+- [Empirical evaluation of Cognitive Complexity](https://www.sciencedirect.com/science/article/pii/S0164121222002370):
+  motivates treating understandability metrics as signals rather than stand-alone acceptance targets.
+
+No blanket complexity threshold, state machine framework, folder taxonomy, static analyzer or
+new runtime dependency is required. J/K comparisons and counterfactual fixtures in EVAL_PLAN.md
+are designed to test benefits, costs and over-application; actual agent outcomes remain unmeasured.

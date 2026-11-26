@@ -16,7 +16,9 @@ safeguards to make candidates look better. Record all active instruction/skill v
 | F: security | B plus security-engineering | Grounded scoped analysis without false audit activation or inflated findings? |
 | G: packaged TDD | B with packaged TDD replacing baseline TDD | Does the packaged version improve feedback and test quality? Never load both TDD versions. |
 | H: refactoring | B plus refactoring | Safer behavior-preserving steps and legacy characterization without behavior drift? |
-| I: consolidation | Current seven-skill kit versus proposed six-skill kit | Does consolidation improve routing, plans and cost without losing preventive change-locality discipline? |
+| I: consolidation | Historical seven-skill kit versus six-skill kit | Does consolidation improve routing, plans and cost without losing preventive change-locality discipline? |
+| J: preventive defaults | v0.7 six-skill setup with only AGENTS.md replaced by v0.8 defaults | Does ordinary implementation improve without more false activations or cost? |
+| K: preventive full kit | v0.7 six-skill setup versus v0.8 six-skill setup | Do revised conditional guides and defaults improve consequential work beyond J? |
 
 Compare architecture cases with the existing seven-skill installation as a separate baseline. Record
 whether both former architecture skills were selected and whether they contributed unique value. Run
@@ -182,6 +184,39 @@ For TDD, verify the intended behavioral assertion fails before implementation an
 setup/import failures are not the red evidence. Observe artifact and command history, not self-reported
 compliance. Include a preservation case where no new feature test is needed and a pre-existing dirty
 worktree that must not be deleted to recreate an ideal sequence.
+
+## Preventive Quality Probes (v0.8)
+
+Compare J with the identical v0.7 installation and K with J as well as v0.7. Use fresh isolated
+profiles and the same fixture, model/effort and permissions. Do not mention intended techniques in
+implementation prompts. Seed independent acceptance checks and keep them outside the agent checkout.
+For ordinary local changes, expect no architecture or review activation just to check code quality;
+for genuinely cross-module or lifecycle-heavy work, record relevant conditional reference reads.
+
+| Fixture / request | Acceptance evidence | Negative control / trap |
+| --- | --- | --- |
+| Implement a document lifecycle with exclusive stages and state-specific results | Allowed and rejected transitions, persisted invariants, no side effect on rejection | Independent preference flags remain independent; no mandatory machine library |
+| Add a payment/delivery status feature with independent lifecycles | Valid combinations remain representable; transitions have correct owners | A single flattened status loses meaningful combinations |
+| Match orders to users in large local inputs | Independent join oracle, duplicates/missing/order semantics as specified, growth at multiple sizes | Tiny bounded lists or required Cartesian product do not mandate indexing |
+| Add enrichment to a list endpoint | Real query/call counts at different result sizes, authorization and output equivalence | Batch fetch that overfetches or bypasses tenant scope fails |
+| Import a large stream with bounded resources | Peak retained items, bounded concurrency, failure/cancellation cleanup and complete results | No extra queue or cache for a fixed small import |
+| Implement multi-branch validation | All permitted/rejected cases, error precedence and side-effect order; reviewer can trace decisions | Extracting shallow helpers to reduce a score is not improvement |
+| Add a rule consumed by API, worker and UI | One discoverable policy owner, actual enforcement and consumer behavior | Similar but independently governed policies stay separate |
+| Add a feature to an established small backend | Cohesive ownership, no new cycles, repository conventions, straightforward reader trace | Do not force feature folders, repositories, DI or factories |
+| Review a diff with an injected N+1 or contradictory transition | Reachable trigger and concrete consequence; actionable scoped finding | Equivalent safe diff does not attract metric-only findings |
+| Rename a local variable or fix a typo | Correct minimal diff and existing required checks | No quality report, benchmark, architecture plan or extra skill activation |
+
+For code comprehension, use blind reviewers where practical: ask where a decision lives, which
+inputs and effects an operation has, and which files would need to change for a concrete new
+requirement. Record correct answers, time and unnecessary navigation; do not use line count or
+a cognitive-complexity score as the outcome. For resource claims, use operation counts or measured
+workloads with assumptions; do not grade all solutions against the same Big-O target regardless
+of required semantics. Include seeded wrong and known-correct implementations to validate graders.
+
+Track correctness and security regressions separately from quality improvements. Record extra
+instructions, tool calls, tokens, activation and elapsed time. A more elaborate implementation
+that passes tests but adds unsupported requirements or hidden coordination is not a success.
+These are proposed trials, not completed comparative results.
 
 ## Grade Outcomes, Not Ceremony
 

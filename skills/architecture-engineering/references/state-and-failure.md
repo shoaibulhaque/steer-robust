@@ -18,6 +18,26 @@ For a job, distinguish accepted, executing, effect committed and acknowledged. A
 after commit is different from a job that never executed. Use an explicit state representation when
 it removes ambiguity; no state-machine library, diagram or formal checker is required by this guide.
 
+## Represent States and Operations, Not Flag Combinations
+
+When flags describe one mutually exclusive lifecycle, list the valid combinations and identify
+which invalid combinations the current representation admits. Prefer a status plus state-specific
+data, a tagged union, or another native representation that fits the domain. Independent facts
+(e.g. payment settlement and delivery status) may require separate state dimensions; do not collapse
+them into a Cartesian-product enum merely to remove flags. Derive display flags from authoritative
+state unless retention, performance or historical semantics justify a synchronized projection.
+
+Example: a document job has queued, running, completed (with a result) and failed (with an error)
+states. A tagged union can exclude simultaneous completion and failure in typed code. It cannot
+alone prevent an illegal transition, invalid external input, or two writers racing. Own transition
+guards at the mutation boundary; validate persisted/deserialized data and use the storage guarantee
+needed to protect concurrent transitions. Keep effect execution and retry semantics explicit.
+
+A lifecycle test should exercise allowed transitions, rejection of illegal transitions and the
+state/effects after rejection. Include duplicate, delayed and out-of-order events only where the
+system supports them. For a simple independent preference, a boolean remains the natural model.
+Do not require a framework, formal machine, diagram, or new type per primitive.
+
 ## Protect the Actual Consistency Rule
 
 State the invariant across the relevant records and operations. Separate atomicity, isolation and
