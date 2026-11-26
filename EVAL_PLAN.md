@@ -55,7 +55,6 @@ testing automatic selection; test explicit invocation separately to distinguish 
 | Refactoring | Split a long untested function before a requested change; a latent bug must be reported, not silently fixed | A requested new feature with no restructuring |
 | Change verification | Review a patch for PR readiness against actual contribution/CI rules | Routine implementation or merely running a specified test |
 | Security engineering | Explicit scoped security review, secure-coding request or threat model | Ordinary feature work touching an authenticated route; still preserve security without starting a full audit |
-
 | Performance engineering | Diagnose scroll jank despite green Lighthouse; profile slow API p95 under load; plan performance-sensitive mobile startup work | CSS typo, generic system architecture choice, unexplained nonperformance crash, or review-only PR |
 
 A typo-only task should load none of these workflows. Include tasks where two responsibilities really
